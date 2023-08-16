@@ -141,19 +141,14 @@ function Home() {
     <Container>
       <Img src={omg} alt="adorable"></Img>
       <Title>Copple</Title>
-
       <Input placeholder="ID"></Input>
       <Input placeholder="Password"></Input>
       <Button onClick={onClick}>login</Button>
-
     </Container>
-
     <ButtonBig ><Link to='/signup'>
       Sign up</Link>
     </ButtonBig>
-
     <Find><Link to='/find'>Forgot your id/password?</Link></Find>
-
   </Background>
 }
 

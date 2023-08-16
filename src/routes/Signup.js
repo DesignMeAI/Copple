@@ -150,34 +150,10 @@ export const main = async () => {
   return response;
 };
 
-// function getData() {
-//   const dynamo = new DynamoDBClient({
-//     region: 'ap-northeast-2',
-//     credentials: {
-//       accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-//       secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
-//     }
-//   }
-//   )
-
-//   console.log("Success", data);
-// }
-// getData();
-
-
-
-// async function fetchDataFromDynamoDB() {
-//   const command = new GetItemCommand(input);
-//   const result = await dynamo.send(command);
-//   console.log("Result data:", result); // Access the result data here
-// }
-
 function Signup() {
   const [username, setUsername] = useState("");
   const [userid, setUserid] = useState("");
   const [password, setPassword] = useState("");
-
-
 
   const onChange = (event) => {
     const className = event.target.className;
