@@ -73,6 +73,7 @@ function Signin() {
       })
       .catch(error => { console.log('error : ', error.response) });
   };
+
   useEffect(() => {
     if (localStorage.getItem("access_key") !== null) {
       navigate('/main');

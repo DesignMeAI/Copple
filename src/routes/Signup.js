@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { DynamoDBClient, DynamoDB, GetItemCommand, ListTablesCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
+// import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
 
 
 const Background = styled.div`
@@ -27,8 +28,7 @@ padding: 30px 0px;
   gap: 12px;
   border-radius: 15px;
   margin:25px 0px;
-`;
-const Input = styled.input`
+  input {
     width: 220px;
     padding-left: 20px;
 	height: 45px;
@@ -55,6 +55,8 @@ const Input = styled.input`
 		color: #363636;
 		border: 1px solid #F4C905 };
 	}
+
+  }
 `;
 const Title = styled.h1`
   color:#AEAA96;
@@ -65,7 +67,9 @@ const Title = styled.h1`
   margin-top:0px;
   margin-bottom:25px;
   padding:0px;
+
 `;
+
 const Button = styled.button`
 width: 155px;
 	height: 50px;
@@ -125,44 +129,42 @@ a {
 }
 
 `
-// const dynamo = new DynamoDBClient({
-//   region: 'ap-northeast-2',
-//   config: {
-//     region: process.env.REACT_APP_AWS_REGION,
-//     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-//     secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
-//   }
-// }
-// )
-const dynamo = new DynamoDBClient({
+const client = new DynamoDBClient({
   region: 'ap-northeast-2',
   credentials: {
     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
-  })
+  }
+})
 
 export const main = async () => {
   const command = new GetItemCommand({
-    TableName: "Accunt",
-    Key: {
-      UserId: "차아린바보"
-    }
-  });
-}
-const data = await dynamo.send(command);
-function getData() {
-  const dynamo = new DynamoDBClient({
-    region: 'ap-northeast-2',
-    credentials: {
-      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
-    }
-  }
-  )
+    TableName: "Account",
 
-  console.log("Success", data);
-}
-getData();
+    Key: {
+      UserId: { S: "차아린천재" },
+      UserName: { S: "만재" }
+    },
+  });
+
+  const response = await client.send(command);
+  console.log(response);
+  return response;
+};
+
+// function getData() {
+//   const dynamo = new DynamoDBClient({
+//     region: 'ap-northeast-2',
+//     credentials: {
+//       accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+//       secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
+//     }
+//   }
+//   )
+
+//   console.log("Success", data);
+// }
+// getData();
 
 
 
@@ -173,19 +175,11 @@ getData();
 // }
 
 function Signup() {
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (localStorage.getItem("access_key") !== null) {
-  //     console.log(localStorage.getItem("access_key"))
-  //     navigate('/main');
-  //   } else {
-  //     navigate('/signup')
-  //   }
-  // }, [])
-
   const [username, setUsername] = useState("");
   const [userid, setUserid] = useState("");
   const [password, setPassword] = useState("");
+
+
 
   const onChange = (event) => {
     const className = event.target.className;
@@ -198,30 +192,16 @@ function Signup() {
     };
   }
 
-  // const onClick = function (e) {
-  //   axios({
-  //     method: 'post',
-  //     url: 'https://www.pre-onboarding-selection-task.shop/auth/signup',
-  //     data: {
-  //       email: email,
-  //       password: passwd
-  //     }
-  //   }).then(function (response) { console.log(response); }).catch(error => { console.log('error : ', error.response) });
-  // };
-  // const gotoHome = function () {
-  //   navigate('/')
-  // }
-
   return (
     <Background>
       <Container>
         <Title>Sign Up</Title>
-        <Input className="username" placeholder="Name" value={username} onChange={onChange}></Input>
-        <Input className="userid" placeholder="ID" value={userid} onChange={onChange}></Input>
-        <Input className="password" type="password" placeholder="Password" value={password} onChange={onChange} minLength={4} maxLength={12}></Input>
-        <Button onClick={'s'}>Sign up</Button>
+        <input className="username" placeholder="Name" value={username} onChange={onChange} />
+        <input className="userid" placeholder="ID" value={userid} onChange={onChange} />
+        <input className="password" type="password" placeholder="Password" value={password} onChange={onChange} autoComplete="off" />
+        <Button>Sign up</Button>
       </Container>
-      <ButtonBig>
+      <ButtonBig onClick={main}>
         Home
       </ButtonBig>
 
