@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
-// import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
-
 
 const Background = styled.div`
 width: 400px;
@@ -199,10 +197,10 @@ function Signup() {
         <input className="username" placeholder="Name" value={username} onChange={onChange} />
         <input className="userid" placeholder="ID" value={userid} onChange={onChange} />
         <input className="password" type="password" placeholder="Password" value={password} onChange={onChange} autoComplete="off" />
-        <Button>Sign up</Button>
+        <Button><Link to='/'>Sign up</Link></Button>
       </Container>
-      <ButtonBig onClick={main}>
-        Home
+      <ButtonBig onClick={main}><Link to='/'>
+        Home</Link>
       </ButtonBig>
 
       <Find><Link to='/find'>Forgot your id/password?</Link></Find>

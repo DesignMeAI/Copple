@@ -121,7 +121,6 @@ a {
     color:#696969;
     text-decoration:none;
 }
-
 `
 function Home() {
   const navigate = useNavigate();
@@ -135,13 +134,8 @@ function Home() {
   }, [navigate])
   const onClick = (event) => {
     event.preventDefault();
-    navigate('/signin');
+    navigate('/main');
   }
-  // const gotoSignup = () {
-  //     return <div></div>
-
-  // }
-
 
   return <Background>
     <Container>
