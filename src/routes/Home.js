@@ -31,7 +31,7 @@ padding: 30px 0px;
   margin:10px 0px;
 `;
 const Input = styled.input`
-    width: 250px;
+    width: 220px;
     padding-left: 15px;
 	height: 40px;
 	border: 1.5px solid gray;

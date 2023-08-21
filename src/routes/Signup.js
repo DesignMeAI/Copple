@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
 const Background = styled.div`
@@ -136,7 +136,7 @@ const client = new DynamoDBClient({
   }
 })
 
-export const main = async () => {
+const main = async () => {
   const command = new GetItemCommand({
     TableName: "Account",
 
@@ -152,11 +152,13 @@ export const main = async () => {
 };
 
 function Signup() {
+  useEffect(() => { main() }, [])
   const [username, setUsername] = useState("");
   const [userid, setUserid] = useState("");
   const [password, setPassword] = useState("");
 
   const onChange = (event) => {
+
     const className = event.target.className;
     if (className === "username") {
       setUsername(event.target.value);
