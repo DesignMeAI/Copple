@@ -4,21 +4,21 @@ import { useState } from "react";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
 const Background = styled.div`
-width: 400px;
+width: 375px;
+height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   background-color:#FCE8A6 ;
   flex-direction: column;
-  gap: 15px;
-  border-radius: 5px;
-  margin:20px auto;
+  border-radius: 10px;
+  margin:10px auto;
 `;
 const Container = styled.form`
 box-shadow: 1px 2px #E4E3DF;
 padding: 30px 0px;
   display: flex;
-  width : 350px;
+  width : 320px;
   background-color:white ;
   align-items: center;
   justify-content: space-between;
@@ -54,7 +54,7 @@ padding: 30px 0px;
 		border: 1px solid #F4C905 };
 	}
 
-  }
+  
 `;
 const Title = styled.h1`
   color:#AEAA96;
@@ -70,13 +70,14 @@ const Title = styled.h1`
 
 const Button = styled.button`
 width: 155px;
+
 	height: 50px;
   background-color: white;
   border-radius: 12px;
   border: 1.5px solid #D5D4D1;
   font-size: 15px;
   font-weight: 400px;
-  margin-top: 30px;
+  margin:30px 0;
   color: #CCCBC7;
   padding: 7px 7px;
   &:hover {
@@ -86,14 +87,14 @@ width: 155px;
     color: white;
   }
   a {
-    color: white;
+    color: #CCCBC7;
     text-decoration: none;
   }
 `;
 const ButtonBig = styled.button`
 box-shadow: 1px 2px #E4E3DF;
 letter-spacing: 1px;
-width: 350px;
+width: 320px;
 	height: 65px;
     padding: 15px;
 margin-top:15px;

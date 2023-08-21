@@ -3,22 +3,21 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const Background = styled.div`
-width: 400px;
+width: 375px;
+height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   background-color:#FCE8A6 ;
   flex-direction: column;
-  gap: 15px;
-  border-radius: 5px;
-  margin:20px auto;
-  padding-bottom: 50px;
+  border-radius: 10px;
+  margin:10px auto;
 `;
 const Container = styled.form`
 box-shadow: 1px 2px #E4E3DF;
-padding: 30px 0px;
+padding: 50px 0px;
   display: flex;
-  width : 350px;
+  width : 320px;
   background-color:white ;
   align-items: center;
   justify-content: space-between;
@@ -54,11 +53,11 @@ padding: 30px 0px;
 		border: 1px solid #F4C905 };
 	}
     span {
-        margin: 0px; 0px;
+        margin: 0px 0px;
 
     }
 
-  }
+  
 `;
 const ContainerB = styled.div`
 padding:0px 35px;
@@ -88,7 +87,7 @@ width: 155px;
   border: 1.5px solid #D5D4D1;
   font-size: 15px;
   font-weight: 400px;
-  margin-top: 30px;
+  margin:30px 0;
   color: #CCCBC7;
   padding: 7px 7px;
 
@@ -111,7 +110,7 @@ width: 155px;
 const ButtonBig = styled.button`
 box-shadow: 1px 2px #E4E3DF;
 letter-spacing: 1px;
-width: 350px;
+width: 320px;
 	height: 65px;
     padding: 15px;
 margin-top:15px;
@@ -147,42 +146,42 @@ margin-top:15px;
 // `
 
 function Finding() {
-    const [username, setUsername] = useState("");
-    const [useremail, setUseremail] = useState("");
-    const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [useremail, setUseremail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const onChange = (event) => {
-        const className = event.target.className;
-        if (className === "username") {
-            setUsername(event.target.value);
-        } else if (className === "userid") {
-            setUseremail(event.target.value);
-        } else if (className === "password") {
-            setPassword(event.target.value);
-        };
-    }
+  const onChange = (event) => {
+    const className = event.target.className;
+    if (className === "username") {
+      setUsername(event.target.value);
+    } else if (className === "userid") {
+      setUseremail(event.target.value);
+    } else if (className === "password") {
+      setPassword(event.target.value);
+    };
+  }
 
-    return (
-        <Background>
-            <Container>
-                <Title>Sign Up</Title>
-                <ContainerB>
-                    <span>이름을 입력하세요</span>
-                    <input className="username" value={username} onChange={onChange} />
-                </ContainerB>
-                <ContainerB>
-                    <span>이메일을 입력하세요</span>
-                    <input className="useremail" value={useremail} onChange={onChange} />
-                </ContainerB>
-                {/* <input className="password" type="password" placeholder="Password" value={password} onChange={onChange} autoComplete="off" /> */}
-                <Button><Link to='/'>찾기</Link></Button>
-            </Container>
-            <ButtonBig >
-                <Link to='/'>
-                    Home</Link>
-            </ButtonBig>
-        </Background>
-    );
+  return (
+    <Background>
+      <Container>
+        <Title>Sign Up</Title>
+        <ContainerB>
+          <span>이름을 입력하세요</span>
+          <input className="username" value={username} onChange={onChange} />
+        </ContainerB>
+        <ContainerB>
+          <span>이메일을 입력하세요</span>
+          <input className="useremail" value={useremail} onChange={onChange} />
+        </ContainerB>
+        {/* <input className="password" type="password" placeholder="Password" value={password} onChange={onChange} autoComplete="off" /> */}
+        <Button><Link to='/'>찾기</Link></Button>
+      </Container>
+      <ButtonBig >
+        <Link to='/'>
+          Home</Link>
+      </ButtonBig>
+    </Background>
+  );
 
 }
 
