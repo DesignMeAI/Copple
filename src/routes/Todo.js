@@ -1,91 +1,114 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "./Home.module.css";
 import Selectop from "../components/Select"
+import styled from "styled-components";
+import { useForm } from "react-hook-form";
 
+const Container = styled.div`
+    display: flex;
+    width: 375px;
+    height: 100vh;
+    flex-direction: column;
+    margin:10px auto;
+`
+const Form = styled.form`
+ display: flex;
+ align-items: center;
+ flex-direction: column;
+`
+const Tag = styled.div`
+    font-style: bold;
+    width: 375px;
+    font-size: 20px;
+    font-weight:600;
+    margin-bottom:15px;
+    text-align: left;
 
-function Todo(props) {
-
-    const [enteredTitle, setEnteredTitle] = useState('');
-    const [enteredGoal, setEnteredGoal] = useState('');
-    const [enteredAdress, setEnteredAdress] = useState('');
-    const [enteredContent, setEnteredContent] = useState('');
-
-
-    const titleChangeHandler = (event) => {
-        setEnteredTitle(event.target.value);
-    }
-
-    const goalChangeHandler = (data) => {
-        setEnteredGoal(data);
-    }
-
-    const adressChangeHandler = (event) => {
-        setEnteredAdress(event.target.value);
-    };
-    const contentChangeHandler = (event) => {
-        setEnteredContent(event.target.value);
-    };
-    const changeHandler = (data) => {
-        setEnteredGoal(data);
-    }
-
-
-
-
-    const submitHandler = (event) => {
-        event.preventDefault();
-
-        const TodoData = {
-            title: enteredTitle,
-            goal: enteredGoal,
-            adress: enteredAdress,
-            content: enteredContent
-
-        };
-
-        props.onSaveTodoData(TodoData);
-        setEnteredTitle('');
-        setEnteredAdress('');
-        setEnteredGoal('');
-        setEnteredContent('');
-    }
-
-    return (
-        <form onSubmit={submitHandler}>
-            <div className={styles.container}>
-                <div className={styles.flex}></div>
-                <div className={styles.nav_container}>
-                    <button className={styles.other_button}><Link to={`/goal`}>목표</Link></button>
-                    <button className={styles.other_button}><Link to={`/plan`}>일정</Link></button>
-                    <button className={styles.main_button}>할 일</button>
-                    <button className={styles.save_button}>저장</button>
-                </div>
-                <div className={styles.input_container}>
-                    <div className={styles.space}>
-                        <label className={styles.label}>제목</label>
-                        <input type="text" className={styles.input} value={enteredTitle} onChange={titleChangeHandler}></input>
-                    </div>
-                    <div className={styles.space}>
-                        <label className={styles.label}>목표</label>
-                        <Selectop onSelectedData={goalChangeHandler} />
-                    </div>
-
-                    {/* <input type="text" className={styles.input} value={enteredGoal} onChange={goalChangeHandler}></input> */}
-
-                    <div className={styles.space}>
-                        <label className={styles.label}>장소</label>
-                        <input type="text" className={styles.input} value={enteredAdress} onChange={adressChangeHandler}></input>
-                    </div>
-                    <div className={styles.space}>
-                        <label className={styles.label}>내용</label>
-                        <input type="text" className={styles.input_large} value={enteredContent} onChange={contentChangeHandler}></input>
-                    </div>
-                    <div className={styles.space}>
-                    </div>
-                </div>
-
-            </div></form>
-    );
+`
+const Input = styled.input`
+    width: 345px;
+    height: 55px;
+    color: rgba(0, 0, 0, 0.596);
+    border: 2px solid #55555550;
+    border-radius: 11px;
+    margin-bottom:30px;
+    padding: 5px 15px;
+    caret-color: transparent;
+    font-size: 17px;
+    &:focus {
+    outline: none;
 }
+`
+const Navbar = styled.div`
+display: flex;
+width:375px;
+justify-content: space-around;
+margin: 20px 0px;
+flex-direction: row;
+div {
+    flex-grow:2;
+}`
+
+const Btn = styled.button`
+font-size: 25px;
+letter-spacing: 1px;
+    font-style: bold;
+    border-radius: 30px;
+    background-color: white;
+    color: none;
+    border: none;
+    padding: 7px 0px;
+    margin-right: 35px;
+    &.selected{
+        a{
+            color:black;
+        }
+    }
+    &:hover {
+        cursor: pointer;
+    }
+a {
+    font-size: 25px;
+    font-weight: 600;
+    color: #d3d3d3;
+    text-decoration: none;}
+    &:last-child {
+        background-color: rgba(0, 255, 255, 0.527);
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 30px;
+    padding: 0px 12px;
+    margin-left:30x;
+    margin-right:0px;
+    &:hover {
+        cursor: pointer;
+    }
+    }
+`
+function Todo() {
+    const { register, handleSubmit, setValue } = useForm();
+    return (<Container><Form>
+        <Navbar><Btn><Link to='/goal'>목표</Link></Btn>
+            <Btn className="selected"><Link to='/todo'>할일</Link></Btn>
+            <Btn><Link to='/plan'>일정</Link></Btn>
+            <div></div>
+            <Btn>저장</Btn></Navbar>
+        <Tag>제목</Tag>
+        <Input required></Input>
+        <Tag>목표</Tag>
+        <Selectop/>
+        <Tag>장소</Tag>
+        <Input></Input>
+        <Tag>내용</Tag>
+        <Input required></Input>
+
+
+    </Form></Container>
+    )
+}
+
 export default Todo;
+
+
+                        
+

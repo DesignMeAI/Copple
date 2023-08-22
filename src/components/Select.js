@@ -1,8 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
+import styled from "styled-components";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
 
+const SelectDiv = styled.div`
+width:375px;
+margin-bottom:30px;
+`
 
 const client = new DynamoDBClient({
     region: "ap-northeast-2",
@@ -64,7 +69,7 @@ const Selectop = (props) => {
     // props.onSelectedData(selectValue)
 
     return (
-        <div>
+        <SelectDiv>
             <Select
                 ref={selectInputRef}
                 onChange={(e) => {
@@ -81,7 +86,7 @@ const Selectop = (props) => {
             {/* <button onClick={() => onClearSelect()}>
                 초기화
             </button> */}
-        </div>
+        </SelectDiv>
     )
 }
 
