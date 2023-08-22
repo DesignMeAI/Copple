@@ -1,0 +1,133 @@
+/* PinkCalendar.css */
+.pink-calendar {
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f5f5f5;
+    color: #333;
+    width: 400px;
+    /* Adjust the width as needed */
+    max-width: 100%;
+    margin: 0 auto;
+    /* To center the calendar horizontally */
+}
+
+.react-calendar__navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+}
+
+.react-calendar__navigation button {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ff69b4;
+    /* Pink color */
+    transition: color 0.2s ease-in-out;
+}
+
+.react-calendar__navigation button:hover {
+    color: #ff1493;
+    /* Darker pink color on hover */
+}
+
+.react-calendar__navigation__label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff69b4;
+    /* Pink color */
+}
+
+.react-calendar__month-view__weekdays {
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 5px;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+    flex: 1;
+    padding: 5px;
+    text-align: center;
+    color: #666;
+}
+
+.react-calendar__month-view__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* Display 7 days in one line */
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.react-calendar__tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.react-calendar__tile--now {
+    background-color: #ff69b4;
+    /* Pink color for the current day */
+    color: #fff;
+}
+
+.react-calendar__tile--now:hover {
+    background-color: #ff1493;
+    /* Darker pink color on hover for the current day */
+}
+
+.react-calendar__tile--active,
+.react-calendar__tile--activeStart,
+.react-calendar__tile--activeEnd,
+.react-calendar__tile--rangeStart,
+.react-calendar__tile--rangeEnd,
+.react-calendar__tile--range {
+    background-color: #ff1493;
+    /* Darker pink color for selected and range days */
+    color: #fff;
+}
+
+.react-calendar__tile--active:hover,
+.react-calendar__tile--activeStart:hover,
+.react-calendar__tile--activeEnd:hover,
+.react-calendar__tile--rangeStart:hover,
+.react-calendar__tile--rangeEnd:hover,
+.react-calendar__tile--range:hover {
+    background-color: #e60073;
+    /* Darker pink color on hover for selected and range days */
+}
+
+.react-calendar__tile--hasActive,
+.react-calendar__tile--rangeStart:has(.react-calendar__tile--active),
+.react-calendar__tile--rangeEnd:has(.react-calendar__tile--active) {
+    background-color: #ff69b4;
+    /* Pink color for the days within the active range */
+    color: #fff;
+}
+
+.react-calendar__tile--weekend {
+    color: #ff69b4;
+    /* Pink color for weekend days */
+}
+
+.react-calendar__tile--neighboringMonth {
+    color: #ccc;
+    /* Gray color for days from the previous and next months */
+}
+
+.react-calendar__tile--neighboringMonth:hover {
+    background-color: #f0f0f0;
+    /* Light gray color on hover for days from the previous and next months */
+}

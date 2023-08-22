@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import omg from "../omg.jpg"
+import axios from 'axios';
+
 const Img = styled.img`
 width:170px;
 height:auto;

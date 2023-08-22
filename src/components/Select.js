@@ -13,51 +13,33 @@ const client = new DynamoDBClient({
 });
 const docClient = DynamoDBDocumentClient.from(client);
 
-
 const Selectop = (props) => {
     const [selectValue, setSelectValue] = useState('')
     const selectInputRef = useRef(null);
     const [options, setOptions] = useState([]);
-    const goals = []
-    useEffect(() => {
-        const getData = async function () {
-            const command = new GetCommand({
-                TableName: "Account",
-                Key: {
-                    UserId: "차아린천재",
-                    UserName: "만재"
-                }
-            });
-            const response = await docClient.send(command);
-            goals.push(response.Item.UserId)
-            console.log(goals)
+    const command = new GetCommand({
+        TableName: "Account",
+        Key: {
+            UserId: "차아린천재",
+            UserName: "만재"
         }
-        getData()
-        setOptions(goals)
+    })
+    async function getData() {
+        const response = await docClient.send(command);
+    
+        setOptions([{value: response.Item.UserId, label: response.Item.UserId}])
+    }
+    useEffect(()=>{getData();
+        setOptions(options);
 },[])
-
-
-
-
-
-
-
-
-
-
-    // const titles = items.map(item => ({
+        console.log(options);
+// const titles = items.map(item => ({
     //     value: item.UserId,
     //     label: item.UserName
     // }));
     // console.log(titles)
     // return titles;
-
-
-
-    //     }
-
-
-
+ //     }
     //     const dataget = async function fetchDataAndProcess() {
     //         try {
     //             const titles = await getScannedGoals();
@@ -79,7 +61,7 @@ const Selectop = (props) => {
     //             selectInputRef.current.clearValue();
     //         }
     //     }
-    props.onSelectedData(selectValue)
+    // props.onSelectedData(selectValue)
 
     return (
         <div>

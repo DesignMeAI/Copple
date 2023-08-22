@@ -4,6 +4,8 @@ import Finding from "./routes/Finding";
 import Todo from "./routes/Todo";
 import Home from "./routes/Home"
 import Main from "./routes/Main"
+import Plan from "./routes/Plan"
+import Goal from "./routes/Goal"
 
 function Router() {
   return (
@@ -12,6 +14,8 @@ function Router() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/main" element={<Main />} />
         <Route path="/todo" element={<Todo />} />
+        <Route path="/plan" element={<Plan/>} />
+        <Route path="/goal" element={<Goal />} />
         <Route path="/find" element={<Finding />} />
         <Route path="/" element={<Home />} />
       </Routes>
