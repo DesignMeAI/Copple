@@ -92,7 +92,7 @@ function Todo() {
             <Btn className="selected"><Link to='/todo'>할일</Link></Btn>
             <Btn><Link to='/plan'>일정</Link></Btn>
             <div></div>
-            <Btn>저장</Btn></Navbar>
+            <Btn type="submit">저장</Btn></Navbar>
         <Tag>제목</Tag>
         <Input required></Input>
         <Tag>목표</Tag>

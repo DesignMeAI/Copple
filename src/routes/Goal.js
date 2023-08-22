@@ -1,6 +1,18 @@
 import styled from "styled-components";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
+import {useEffect} from "react";
 import { Link } from "react-router-dom";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+
+const client = new DynamoDBClient({
+    region: "ap-northeast-2",
+    credentials: {
+        accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
+    }
+});
+const docClient = DynamoDBDocumentClient.from(client);
 
 const Container = styled.div`
     display: flex;
@@ -8,7 +20,7 @@ const Container = styled.div`
     height: 100vh;
     flex-direction: column;
     margin:10px auto;
-`   
+`
 const Form = styled.form`
  display: flex;
  align-items: center;
@@ -113,28 +125,52 @@ display: inline-block;
     height: 22px;
     margin-left: 10px;`
 function Goal() {
+    // const command = new GetCommand({
+    //     TableName: "Account",
+    //     Key: {
+    //         UserId: "차아린천재",
+    //         UserName: "만재"
+    //     }
+    // })
+    async function getData() {
+        const command = new PutCommand({
+            TableName: "Account",
+            Item: {
+                UserId: "은재",
+                UserName: "최은재"
+            },
+        });
+        const response = await docClient.send(command);
+        console.log(response)  }
+    
+    useEffect(() => {
+        getData();},[])
+    
     const { register, handleSubmit, setValue } = useForm();
-return (<Container><Form>
-    <Navbar><Btn className="selected"><Link to='/goal'>목표</Link></Btn>
-        <Btn><Link to='/todo'>할일</Link></Btn>
-        <Btn><Link to='/plan'>일정</Link></Btn>
-        <div></div>
-        <Btn>저장</Btn></Navbar>
-    <Tag>제목</Tag>
-    <Input required></Input>
-    <Tag>기간</Tag>
-    <Input required></Input>
-    <Tag>장소</Tag>
-    <Input></Input>
-    <Tag>내용</Tag>
-    <Input required></Input>
-    <Tag>사진</Tag>
-    <PCon>
-    <Picture class="upload-name" value="첨부파일" placeholder="첨부파일"/>
-        <Label for="file">파일찾기</Label>
-        <None type="file" id="file"/></PCon>
-                
-</Form></Container>
+    // const handleValid = 
+    return (<Container>
+        <Form onSubmit={handleSubmit()}>
+            <Navbar><Btn className="selected"><Link to='/goal'>목표</Link></Btn>
+                <Btn><Link to='/todo'>할일</Link></Btn>
+                <Btn><Link to='/plan'>일정</Link></Btn>
+                <div></div>
+                <Btn type="submit">저장</Btn>
+            </Navbar>
+            <Tag>제목</Tag>
+            <Input {...register("title",{required: "Please write a title"})} placeholder="제목을 써 주세요"/>
+            <Tag>기간</Tag>
+            <Input {...register("period", { required: "Please write a period" })}/>
+            <Tag>장소</Tag>
+            <Input {...register("address")}/>
+            <Tag>내용</Tag>
+            <Input {...register("content", { required: "Please write a content" })}/>
+            <Tag>사진</Tag>
+            <PCon>
+                <Picture className="upload-name" placeholder="첨부파일" />
+                <Label htmlFor="file">파일찾기</Label>
+                <None type="file" id="file" /></PCon>
+        </Form>
+    </Container>
     )
 }
 

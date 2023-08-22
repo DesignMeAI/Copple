@@ -95,9 +95,6 @@ flex-direction: row;
 background-color: none;
 border-radius: 0px;
 `
-
-
-
 function Main() {
     return (
         <Background>
