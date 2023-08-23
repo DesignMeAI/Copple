@@ -31,11 +31,11 @@ function Goal() {
         getData();
     }, []);
 
-    const { register, handleSubmit, setValue } = useForm();
-    // const handleValid = 
+    const { register, handleSubmit, setValue, formState } = useForm();
+    const onSubmit = (data) => { console.log(data) }
     return (
         <div className={styles.Container}>
-            <form onSubmit={handleSubmit()}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.Navbar}><button className={styles.selected}><Link to='/goal'>목표</Link></button>
                     <button className={styles.Btn}><Link to='/todo'>할일</Link></button>
                     <button className={styles.Btn}><Link to='/plan'>일정</Link></button>
@@ -43,18 +43,19 @@ function Goal() {
                     <button className={styles.Btn} type="submit">저장</button>
                 </div>
                 <div className={styles.Tag}>제목</div>
-                <input className={styles.Input} {...register("title", { required: "Please write a title" })} placeholder="제목을 써 주세요" />
+                <input className={styles.Input} {...register("title", { required: "Please write a title" })} placeholder={formState.errors.title && formState.errors.title.message} />
+
                 <div className={styles.Tag}>기간</div>
-                <input className={styles.Input} {...register("period", { required: "Please write a period" })} />
+                <input className={styles.Input} {...register("period", { required: "Please write a period" })} placeholder={formState.errors.period && formState.errors.period.message} />
                 <div className={styles.Tag}>장소</div>
                 <input className={styles.Input} {...register("address")} />
                 <div className={styles.Tag}>내용</div>
-                <input className={styles.Input} {...register("content", { required: "Please write a content" })} />
+                <input className={styles.Input} {...register("content", { required: "Please write a content" })} placeholder={formState.errors.content && formState.errors.content.message} />
                 <div className={styles.Tag}>사진</div>
                 <div className={styles.PCon}>
                     <input className={styles.Picture} id="upload-name" placeholder="첨부파일" />
                     <label htmlFor="file">파일찾기</label>
-                    <input className={styles.None} type="file" id="file" /></div>
+                    <input className={styles.None} type="file" id="file" {...register("picture")} /></div>
             </form>
         </div>
     )

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
 import styled from "styled-components";
+import { useRecoilState } from "recoil";
+import { goalState } from "./atoms";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 
 const SelectDiv = styled.div`
 width:375px;
@@ -19,54 +21,25 @@ const client = new DynamoDBClient({
 const docClient = DynamoDBDocumentClient.from(client);
 
 const Selectop = (props) => {
+    const [goal, setGoal] = useRecoilState(goalState);
     const [selectValue, setSelectValue] = useState('')
     const selectInputRef = useRef(null);
     const [options, setOptions] = useState([]);
-    const command = new GetCommand({
+    const command = new ScanCommand({
+        ProjectionExpression: "#UserId, UserName",
+        ExpressionAttributeNames: { "#UserId": "UserId" },
         TableName: "Account",
-        Key: {
-            UserId: "차아린천재",
-            UserName: "만재"
-        }
     })
     async function getData() {
         const response = await docClient.send(command);
-    
-        setOptions([{value: response.Item.UserId, label: response.Item.UserId}])
+        const Items = response.Items
+        const lists = Items.map(data => data['UserId'])
+        const list = lists.map(data => ({ "value": data, "label": data }))
+        setOptions(list)
     }
-    useEffect(()=>{getData();
-        setOptions(options);
-},[])
-        console.log(options);
-// const titles = items.map(item => ({
-    //     value: item.UserId,
-    //     label: item.UserName
-    // }));
-    // console.log(titles)
-    // return titles;
- //     }
-    //     const dataget = async function fetchDataAndProcess() {
-    //         try {
-    //             const titles = await getScannedGoals();
-    //             // const data = JSON.stringify(titles);
-    //             setOptions(titles);
-
-    //             return titles
-    //         } catch (error) {
-    //             console.error('An error occurred:', error);
-    //             throw error; // Re-throw the error to be handled at a higher level
-    //         }
-    //     }
-
-
-
-
-    //     const onClearSelect = () => {
-    //         if (selectInputRef.current) {
-    //             selectInputRef.current.clearValue();
-    //         }
-    //     }
-    // props.onSelectedData(selectValue)
+    useEffect(() => {
+        getData();
+    }, [])
 
     return (
         <SelectDiv>
@@ -75,6 +48,7 @@ const Selectop = (props) => {
                 onChange={(e) => {
                     if (e) {
                         setSelectValue(e.value);
+                        setGoal(e.value)
                     } else {
                         setSelectValue("");
                     }

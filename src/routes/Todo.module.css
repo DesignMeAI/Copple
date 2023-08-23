@@ -8,6 +8,9 @@ label {
   height: 22px;
   margin-left: 10px;
 }
+.dis {
+  display: none;
+}
 .None {
   position: absolute;
   width: 0;
