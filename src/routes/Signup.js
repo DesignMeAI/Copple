@@ -139,7 +139,6 @@ const client = new DynamoDBClient({
 const main = async () => {
   const command = new GetItemCommand({
     TableName: "Account",
-
     Key: {
       UserId: { S: "차아린천재" },
       UserName: { S: "만재" }

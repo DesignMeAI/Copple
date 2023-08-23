@@ -1,13 +1,16 @@
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import omg from "../omg.jpg"
 import axios from 'axios';
 
+
 const Img = styled.img`
 width:170px;
 height:auto;
-margin:15px 20px;`
+margin:15px 20px;
+`;
 const Background = styled.div`
 width: 375px;
 height: 100vh;
@@ -113,7 +116,7 @@ margin-top:15px;
     color: #CCCBC7;
     text-decoration: none;
   }
-`
+`;
 const Find = styled.span`
 text-align:center;
 color:#696969 ;
@@ -123,9 +126,11 @@ a {
     color:#696969;
     text-decoration:none;
 }
-`
+`;
+
 function Home() {
   const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
   useEffect(() => {
     if (localStorage.getItem("id") !== null) {
       console.log(localStorage.getItem("id"))
@@ -134,21 +139,41 @@ function Home() {
       navigate('/')
     }
   }, [navigate])
-  const onClick = (event) => {
-    event.preventDefault();
-    navigate('/main');
+
+  const onSubmit = (data) => {
+    console.log(data.UserId)
+    axios({
+      method: 'post',
+      url: 'http://54.180.206.223:8000/account/login',
+      data: {
+        user_id: data.UserId,
+        password: data.Password
+      },
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:3000"
+      }
+    },
+    ).then(function (response) {
+      console.log(response);
+      // navigate('/main')
+
+    })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   return <Background>
-    <Container>
+    <Container onSubmit={handleSubmit(onSubmit)}>
       <Img src={omg} alt="adorable"></Img>
       <Title>Copple</Title>
-      <Input placeholder="ID"></Input>
-      <Input placeholder="Password"></Input>
-      <Button onClick={onClick}>login</Button>
+      <Input placeholder="ID" {...register("UserId", { required: "Please write ID" })}></Input>
+      <Input type="password" placeholder="Password" {...register("Password", { required: "Please write password" })}></Input>
+      <Button type="submit">login</Button>
     </Container>
-    <ButtonBig ><Link to='/signup'>
-      Sign up</Link>
+    <ButtonBig >
+      <Link to='/signup'>Sign up</Link>
     </ButtonBig>
     <Find><Link to='/find'>Forgot your id/password?</Link></Find>
   </Background>

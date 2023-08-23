@@ -15,24 +15,25 @@ const client = new DynamoDBClient({
 const docClient = DynamoDBDocumentClient.from(client);
 
 function Goal() {
-    async function getData() {
+    async function SendGoal(data) {
         const command = new PutCommand({
             TableName: "Account",
             Item: {
                 UserId: "은재",
-                UserName: "최은재"
+                UserName: "최은재",
+                Title: data.title,
+                Peroid: data.period,
+                Address: data.address,
+                Content: data.content,
+                Picture: data?.picture
             },
         });
         const response = await docClient.send(command);
         console.log(response)
-    };
+    }
 
-    useEffect(() => {
-        getData();
-    }, []);
-
-    const { register, handleSubmit, setValue, formState } = useForm();
-    const onSubmit = (data) => { console.log(data) }
+    const { register, handleSubmit, formState } = useForm();
+    const onSubmit = (data) => { SendGoal(data) }
     return (
         <div className={styles.Container}>
             <form onSubmit={handleSubmit(onSubmit)}>
