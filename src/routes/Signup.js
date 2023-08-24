@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 const Background = styled.div`
 width: 375px;
@@ -67,7 +69,6 @@ const Title = styled.h1`
   padding:0px;
 
 `;
-
 const Button = styled.button`
 width: 155px;
 
@@ -136,48 +137,84 @@ const client = new DynamoDBClient({
   }
 })
 
-const main = async () => {
-  const command = new GetItemCommand({
-    TableName: "Account",
-    Key: {
-      UserId: { S: "차아린천재" },
-      UserName: { S: "만재" }
-    },
-  });
+const docClient = DynamoDBDocumentClient.from(client);
 
-  const response = await client.send(command);
-  console.log(response);
-  return response;
-};
+// scan command getting userinfo from Users table
+const scancom = new ScanCommand({
+  ProjectionExpression: "#UserName, #UserId",
+  ExpressionAttributeNames: {
+    "#UserName": "UserName",
+    "#UserId": "UserId"
+  },
+  TableName: "Users",
+})
+
+// function to get userid, usernames from Users table
+const getuserinfos = async () => {
+  const usernames = []
+  const userids = []
+  const response = await docClient.send(scancom);
+  response.Items.forEach((item) => {
+    usernames.push(item.UserName.S);
+    userids.push(item.UserId.S)
+  });
+  return { usernames: [...usernames], userids: [...userids] }
+}
 
 function Signup() {
-  useEffect(() => { main() }, [])
-  const [username, setUsername] = useState("");
-  const [userid, setUserid] = useState("");
-  const [password, setPassword] = useState("");
-
-  const onChange = (event) => {
-
-    const className = event.target.className;
-    if (className === "username") {
-      setUsername(event.target.value);
-    } else if (className === "userid") {
-      setUserid(event.target.value);
-    } else if (className === "password") {
-      setPassword(event.target.value);
-    };
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+  // Users table에 아이디, 이름 존재 확인 후 가입 진행
+  const onSubmit = (data) => {
+    getuserinfos()
+      .then((infos) => {
+        console.log( infos)
+        if (infos.userids.includes(data.UserId)) {
+          alert("이미 존재하는 아이디입니다.")
+          return false
+        } else if (infos.usernames.includes(data.UserName)) {
+          alert("이미 존재하는 사용자입니다.")
+          return false
+        } else {
+          axios({
+            method: 'post',
+            url: 'http://54.180.206.223:8000/account/signup',
+            data: {
+              user_id: data.UserId,
+              password: data.Password,
+              user_name: data.UserName
+            },
+            withCredentials: true,
+            headers: {
+              "Access-Control-Allow-Origin": "http://localhost:3000"
+            }
+          },
+          ).then(function (response) {
+            console.log(response);
+            if (response['data'] === "회원가입 성공!") {
+              navigate('/')
+            }
+          })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log("실패:", error);
+        alert("회원가입 실패")
+      })
   }
-
   return (
     <Background>
-      <Container>
+      <Container onSubmit={handleSubmit(onSubmit)} >
         <Title>Sign Up</Title>
-        <input className="username" placeholder="Name" value={username} onChange={onChange} />
-        <input className="userid" placeholder="ID" value={userid} onChange={onChange} />
-        <input className="password" type="password" placeholder="Password" value={password} onChange={onChange} autoComplete="off" />
-        <Button><Link to='/'>Sign up</Link></Button>
+        <input className="username" placeholder="Name"  {...register("UserName", { required: "Please write your name" })} />
+        <input className="userid" placeholder="ID" {...register("UserId", { required: "Please write your id" })} />
+        <input className="password" type="password" placeholder="Password" autoComplete="off" {...register("Password", { required: "Please write password" })} />
+        <Button type="submit">Sign up</Button>
       </Container>
-      <ButtonBig onClick={main}><Link to='/'>
+      <ButtonBig><Link to='/'>
         Home</Link>
       </ButtonBig>
 

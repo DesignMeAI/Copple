@@ -1,6 +1,4 @@
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import styles from "./Goal.module.css"
+import { useForm } from "react-hook-form";import styles from "./Goal.module.css"
 import { Link } from "react-router-dom";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";

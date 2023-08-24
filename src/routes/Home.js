@@ -156,8 +156,13 @@ function Home() {
     },
     ).then(function (response) {
       console.log(response);
-      // navigate('/main')
-
+      if (response['data'] === "로그인 성공!") {
+        navigate('/main')
+      } else if (
+        response['data'] === "failed"
+      ) {
+        alert("올바르지 않은 회원정보입니다.")
+      }
     })
       .catch(function (error) {
         console.log(error);

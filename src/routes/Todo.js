@@ -20,7 +20,7 @@ const docClient = DynamoDBDocumentClient.from(client);
 function Todo() {
     async function SendTodo(data) {
         const command = new PutCommand({
-            TableName: "Account",
+            TableName: "Users",
             Item: {
                 UserId: "은재",
                 UserName: "최은재",
