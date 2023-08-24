@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import Selectop from "../components/Select"
 import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { goalState } from "../components/atoms";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 
@@ -99,12 +102,12 @@ a {
 function Plan() {
     async function SendPlan(data) {
         const command = new PutCommand({
-            TableName: "Account",
+            TableName: "Record",
             Item: {
-                UserId: "은재",
+                UserId: "eun7263",
                 UserName: "최은재",
                 Title: data.title,
-                Goal: data.goal,
+                Goal: goals,
                 Address: data.address,
                 Period: data.period
             },
@@ -114,8 +117,8 @@ function Plan() {
     }
     const onSubmit = (data) => {
         SendPlan(data)
-        console.log(data)
     }
+    const goals = useRecoilValue(goalState);
     const { register, handleSubmit } = useForm();
     return (
         <Container>
@@ -132,7 +135,7 @@ function Plan() {
                 <Tag>기간</Tag>
                 <Input {...register("period", { required: "Please write period" })}></Input>
                 <Tag>목표</Tag>
-                <Input {...register("goal", { required: "Please write goal" })}></Input>
+                <Selectop />
                 <Tag>장소</Tag>
                 <Input {...register("address", { required: "Please write address" })}></Input>
             </Form>

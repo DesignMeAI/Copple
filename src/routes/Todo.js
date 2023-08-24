@@ -14,20 +14,23 @@ const client = new DynamoDBClient({
         secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
     }
 });
+
 const docClient = DynamoDBDocumentClient.from(client);
 
 
 function Todo() {
     async function SendTodo(data) {
         const command = new PutCommand({
-            TableName: "Users",
+            TableName: "Record",
             Item: {
-                UserId: "은재",
+                eventId: Date().toString(),
+                evnet:"Todo",
+                Goal: goals,
+                UserId: "eun7263",
                 UserName: "최은재",
                 Title: data.title,
-                Goal: goals,
                 Address: data.address,
-                Content: data.content
+                Content: data.content,
             },
         });
         const response = await docClient.send(command);
@@ -42,7 +45,6 @@ function Todo() {
         <div className={styles.Container}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.Navbar}>
-
                     <button className={styles.Btn}><Link to='/goal'>목표</Link></button>
                     <button className={styles.selected}><Link to='/todo'>할일</Link></button>
                     <button className={styles.Btn}><Link to='/plan'>일정</Link></button>

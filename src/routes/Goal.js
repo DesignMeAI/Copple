@@ -15,15 +15,17 @@ const docClient = DynamoDBDocumentClient.from(client);
 function Goal() {
     async function SendGoal(data) {
         const command = new PutCommand({
-            TableName: "Account",
+            TableName: "Record",
             Item: {
-                UserId: "은재",
+                eventId:Date().toString(),
+                event: "Goal",
+                UserId: "eun7263",
                 UserName: "최은재",
                 Title: data.title,
                 Peroid: data.period,
                 Address: data.address,
                 Content: data.content,
-                Picture: data?.picture
+                // Picture: data.picture
             },
         });
         const response = await docClient.send(command);
@@ -51,10 +53,10 @@ function Goal() {
                 <div className={styles.Tag}>내용</div>
                 <input className={styles.Input} {...register("content", { required: "Please write a content" })} placeholder={formState.errors.content && formState.errors.content.message} />
                 <div className={styles.Tag}>사진</div>
-                <div className={styles.PCon}>
+                {/* <div className={styles.PCon}>
                     <input className={styles.Picture} id="upload-name" placeholder="첨부파일" />
                     <label htmlFor="file">파일찾기</label>
-                    <input className={styles.None} type="file" id="file" {...register("picture")} /></div>
+                    <input className={styles.None} type="file" id="file" {...register("picture")} /></div> */}
             </form>
         </div>
     )

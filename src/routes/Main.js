@@ -22,7 +22,6 @@ height: 100vh;
   margin:10px auto;
 `;
 const Container = styled.div`
-
     padding: 20px 5px;
     height:72vh;
     display: flex;
@@ -87,6 +86,11 @@ border: none;
     padding: 5px 10px;
     border-radius: 30px;
 }
+a {
+    display:block;
+    color: #CCCBC7;
+    text-decoration: none;
+  }
 `
 const GCon = styled.div`
 height : auto;
@@ -106,7 +110,7 @@ function Main() {
             </Container>
             <Container>
                 <RCon>
-                    <SBtn>지금 진행중</SBtn><SBtn className="last">완료</SBtn><div> </div><SBtn className="black">┼ 추가</SBtn>
+                    <SBtn>지금 진행중</SBtn><SBtn className="last">완료</SBtn><div> </div><SBtn className="black"><Link to='/goal'>➕ 추가</Link></SBtn>
                 </RCon>
                 <GCon><Goalitem /><Goalitem /></GCon>
                 <RCon>
