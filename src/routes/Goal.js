@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";import styles from "./Goal.module.css"
 import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import { userIdState, userNameState } from "../atoms.js";
 
 const client = new DynamoDBClient({
     region: "ap-northeast-2",
@@ -13,16 +15,19 @@ const client = new DynamoDBClient({
 const docClient = DynamoDBDocumentClient.from(client);
 
 function Goal() {
+    const username = useRecoilValue(userNameState);
+    const userId = useRecoilValue(userIdState);
+    console.log(username, userId)
     async function SendGoal(data) {
         const command = new PutCommand({
             TableName: "Record",
             Item: {
-                eventId:Date().toString(),
-                event: "Goal",
-                UserId: "eun7263",
-                UserName: "최은재",
+                Index:Date().toString(),
+                Event: "Goal",
+                UserId: userId,
+                UserName: username,
                 Title: data.title,
-                Peroid: data.period,
+                Period: data.period,
                 Address: data.address,
                 Content: data.content,
                 // Picture: data.picture

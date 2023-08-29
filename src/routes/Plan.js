@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Selectop from "../components/Select"
 import { Link } from "react-router-dom";
+import { userNameState , userIdState} from "../atoms.js";
 import { useRecoilValue } from "recoil";
 import { goalState } from "../components/atoms";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
@@ -100,13 +101,17 @@ a {
     }
 `
 function Plan() {
+    const username = useRecoilValue(userNameState);
+    const userId = useRecoilValue(userIdState);
     async function SendPlan(data) {
         const command = new PutCommand({
             TableName: "Record",
             Item: {
-                UserId: "eun7263",
-                UserName: "최은재",
+                Index: Date().toString(),
+                UserId: userId,
+                UserName: username,
                 Title: data.title,
+                Event:"Plan",
                 Goal: goals,
                 Address: data.address,
                 Period: data.period

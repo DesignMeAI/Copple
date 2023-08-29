@@ -168,7 +168,7 @@ function Signup() {
   const onSubmit = (data) => {
     getuserinfos()
       .then((infos) => {
-        console.log( infos)
+        console.log(infos)
         if (infos.userids.includes(data.UserId)) {
           alert("이미 존재하는 아이디입니다.")
           return false
@@ -178,7 +178,8 @@ function Signup() {
         } else {
           axios({
             method: 'post',
-            url: 'http://54.180.206.223:8000/account/signup',
+            // url: 'http://54.180.206.223:8000/account/signup',
+            url: 'http://3.34.209.20:8000/account/signup',
             data: {
               user_id: data.UserId,
               password: data.Password,
@@ -186,7 +187,7 @@ function Signup() {
             },
             withCredentials: true,
             headers: {
-              "Access-Control-Allow-Origin": "http://localhost:3000"
+              "Access-Control-Allow-Origin": "http://3.34.209.20:3000"
             }
           },
           ).then(function (response) {
