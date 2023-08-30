@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
+import shortid from "shortid";
+import { recoilPersist } from 'recoil-persist'
 import styled from "styled-components";
 import omg from "../omg.jpg"
 import Goalitem from "../components/Goalitem";
 import { useEffect } from "react";
 import { useRecoilState } from 'recoil';
-import { userIdState, userNameState, GoalState } from '../atoms.js';
+import { infoState, GoalState } from '../atoms.js';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
-
 const Img = styled.img`
 width:100px;
 height:auto;
@@ -119,46 +120,49 @@ const client = new DynamoDBClient({
 const docClient = DynamoDBDocumentClient.from(client);
 
 function Main() {
-    const [userId, setUserId] = useRecoilState(userIdState);
-    const [userName, setUserName] = useRecoilState(userNameState);
-    const [goaldetail, setGoaldetail] = useRecoilState(GoalState);
+    const [info, setInfo] = useRecoilState(infoState);
+    const [goals, setGoals] = useRecoilState(GoalState)
+
     async function getData() {
         const command = new QueryCommand({
-            "ExpressionAttributeValues": {
-                ":v1": {
-                    "S": "Goal"
-                }
+            TableName: "Records",
+            KeyConditionExpression:
+                "UserId = :UserId AND begins_with (EventId, :event)",
+            ExpressionAttributeValues: {
+                ":UserId": info['uuid'],
+                ":event": "Goal",
             },
-            "KeyConditionExpression": "Event = :v1",
-            "ProjectionExpression": "Title, Event, Period, Index",
-            "TableName": "Record"
+            "ProjectionExpression": "Title, Period, Content",
+            ConsistentRead: true,
         });
         const response = await docClient.send(command);
-        const Items = response;
-        console.log(Items)
-        console.log("id는", userId)
-        // const list = Items.map((data) => [data.Title.S, data.Period.S, data.Content.S]);
-        // return list
-    }
-    useEffect(() => {
-        getData().then(value => setGoaldetail('sdfsdfsdf')).catch(error => console.log(error))
-        console.log('목표', goaldetail)
-    }, [])
+        const list = response.Items.map((data) => [data.Title, data.Period, data.Content]);
+        console.log(list, 'list')
 
+        return list
+    };
+
+    useEffect(() => {
+        getData().then(value => {
+            setGoals(value)
+
+            console.log('goals', goals)
+        }).catch(error => console.log(error))
+    }, []);
     return (
         <Background>
             <Container className="first">
-                <SmallContainer><Link>프로필 편집 ⚙️</Link></SmallContainer>
+                <SmallContainer><Link to={'/'}>프로필 편집 ⚙️</Link></SmallContainer>
                 <RCon><span><Img src={omg} alt="adorable"></Img></span>
-                    <Profile><strong>{userName}</strong><br />@ {userId}</Profile></RCon>
+                    <Profile><strong>{info['name']}</strong><br />@ {info['id']}</Profile></RCon>
                 <ProfileMsg>일단 해보자</ProfileMsg>
             </Container>
             <Container>
                 <RCon>
-                    <SBtn>지금 진행중</SBtn><SBtn className="last">완료</SBtn><div> </div><SBtn className="black"><Link to='/goal'>➕ 추가</Link></SBtn>
+                    <SBtn>지금 진행중</SBtn><SBtn className="last">완료</SBtn><div> </div><SBtn className="black"><Link to={'/goal'}>➕ 추가</Link></SBtn>
                 </RCon>
                 <GCon>
-                    {goaldetail.map(one => <Goalitem key={Date()} goaltitle={one[0][0]} goalperiod={one[0][1]} />)}
+                    {goals.map(one => <Goalitem key={shortid.generate()} goaltitle={one[0]} goalperiod={one[1]} />)}
                 </GCon>
                 <RCon >
                     <SBtn><Svg style={{ fill: "#ffd952" }} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M160 368c26.5 0 48 21.5 48 48v16l72.5-54.4c8.3-6.2 18.4-9.6 28.8-9.6H448c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h96zm48 124l-.2 .2-5.1 3.8-17.1 12.8c-4.8 3.6-11.3 4.2-16.8 1.5s-8.8-8.2-8.8-14.3V474.7v-6.4V468v-4V416H112 64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0H448c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H309.3L208 492z" /></Svg></SBtn><div></div>

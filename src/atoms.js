@@ -1,16 +1,19 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
-export const userIdState = atom({
-    key: "userId",
-    default: null,
+const { persistAtom } = recoilPersist({
+    key: "sessionStorage", // 고유한 key 값
+    storage: sessionStorage,
 })
 
-export const userNameState = atom({
-    key:"userName",
-    default: null,
+export const infoState = atom({
+    key: "infoState",
+    default: [],
+    effects_UNSTABLE: [persistAtom]
 })
 
 export const GoalState = atom({
-    key:"goal",
-    default : [],
+    key: "goal",
+    default: [],
 })
+

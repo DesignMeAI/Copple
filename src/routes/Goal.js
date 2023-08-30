@@ -1,9 +1,13 @@
-import { useForm } from "react-hook-form";import styles from "./Goal.module.css"
-import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useForm } from "react-hook-form";
+import styles from "./Goal.module.css";
+import { v4 } from 'uuid';
+import axios from 'axios';
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilState } from 'recoil';
+import { infoState } from '../atoms.js';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { userIdState, userNameState } from "../atoms.js";
+
 
 const client = new DynamoDBClient({
     region: "ap-northeast-2",
@@ -14,18 +18,19 @@ const client = new DynamoDBClient({
 });
 const docClient = DynamoDBDocumentClient.from(client);
 
+
 function Goal() {
-    const username = useRecoilValue(userNameState);
-    const userId = useRecoilValue(userIdState);
-    console.log(username, userId)
+    const [info, setInfo] = useRecoilState(infoState);
+    const navigate = useNavigate();
+    const user_uuid2 = v4();
     async function SendGoal(data) {
         const command = new PutCommand({
-            TableName: "Record",
+            TableName: "Records",
             Item: {
-                Index:Date().toString(),
-                Event: "Goal",
-                UserId: userId,
-                UserName: username,
+                UserId: info.uuid,
+                EventId: `Goal${user_uuid2}`,
+                UserName: info.id,
+                Name: info.name,
                 Title: data.title,
                 Period: data.period,
                 Address: data.address,
@@ -34,17 +39,31 @@ function Goal() {
             },
         });
         const response = await docClient.send(command);
-        console.log(response)
-    }
-
+        console.log(response, info);
+    };
     const { register, handleSubmit, formState } = useForm();
-    const onSubmit = (data) => { SendGoal(data) }
+    const onSubmit = (data) => {
+        SendGoal(data).then(navigate('/main'))
+        // .then(axios({
+        //     method: 'get',
+        //     url: 'http://3.34.209.20:8000/user/main',
+        //     data: info,
+        //     withCredentials: true,
+        //     headers: {
+        //         "Access-Control-Allow-Origin": "http://3.34.209.20:3000"
+        //     }
+        // },
+        // ).then(function (response) {
+        //     console.log(response);
+        // }));
+    };
+
     return (
         <div className={styles.Container}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.Navbar}><button className={styles.selected}><Link to='/goal'>목표</Link></button>
-                    <button className={styles.Btn}><Link to='/todo'>할일</Link></button>
-                    <button className={styles.Btn}><Link to='/plan'>일정</Link></button>
+                    <button className={styles.Btn}><Link to={'/'}>할일</Link></button>
+                    <button className={styles.Btn}><Link to={'/'}>일정</Link></button>
                     <div></div>
                     <button className={styles.Btn} type="submit">저장</button>
                 </div>

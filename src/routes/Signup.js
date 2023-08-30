@@ -135,7 +135,7 @@ const client = new DynamoDBClient({
     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
   }
-})
+});
 
 const docClient = DynamoDBDocumentClient.from(client);
 
@@ -183,7 +183,7 @@ function Signup() {
             data: {
               user_id: data.UserId,
               password: data.Password,
-              user_name: data.UserName
+              user_name: data.UserName,
             },
             withCredentials: true,
             headers: {

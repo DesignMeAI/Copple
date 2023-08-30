@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useLocation } from 'react-router-dom';
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { userinfoState, infoState } from "../atoms";
 import omg from "../omg.jpg"
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
-import { userIdState, userNameState } from '../atoms.js';
 
 const Img = styled.img`
 width:170px;
@@ -129,19 +130,19 @@ a {
 }
 `;
 
-function Home() {
 
-  const [userId, setUserId] = useRecoilState(userIdState)
-  const [userName, setUserName] = useRecoilState(userNameState)
+function Home() {
+  const [info, setInfo] = useRecoilState(infoState);
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
-  if (userId !== null) {
-    navigate('/main')
-  }
+  // if (userid !== null) {
+  //   navigate('/main')
+  //   console.log(userid)
+  // }
   useEffect(() => {
     if (localStorage.getItem("id") !== null) {
-      console.log(localStorage.getItem("id"))
       navigate('/main');
+      console.log(localStorage.getItem("id"))
     } else {
       navigate('/')
     }
@@ -162,13 +163,14 @@ function Home() {
       }
     },
     ).then(function (response) {
-      if (response['data'].message === "로그인 성공") {
+      console.log(response)
+      if (response.data['message'] === "로그인 성공") {
+        const info = response.data['data']
+        setInfo(info);
         const setCookieHeader = response.headers['Set-Cookie'];
         navigate('/main')
+        console.log(response.data['data'])
         document.cookie = setCookieHeader;
-        setUserName(response['data'].name);
-        setUserId(data.UserId);
-        console.log(document.cookie)
       } else if (
         response['data'] === "failed"
       ) {

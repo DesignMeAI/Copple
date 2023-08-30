@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Selectop from "../components/Select"
 import { useForm } from "react-hook-form";
 import styles from "./Todo.module.css"
+import { v4 } from 'uuid';
 import { userNameState, userIdState } from "../atoms.js";
 import { useRecoilValue } from "recoil";
 import { goalState } from "../components/atoms";
@@ -19,21 +20,27 @@ const client = new DynamoDBClient({
 const docClient = DynamoDBDocumentClient.from(client);
 
 function Todo() {
-    const username = useRecoilValue(userNameState);
-    const userId = useRecoilValue(userIdState);
+    const user_uuid2 = v4();
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const name = urlSearchParams.get('name');
+    const id = urlSearchParams.get('id');
+    const uuid = urlSearchParams.get('uuid');
     async function SendTodo(data) {
         const command = new PutCommand({
-            TableName: "Record",
+            TableName: "Records",
             Item: {
-                Index: Date().toString(),
-                Evnet:"Todo",
-                Goal: goals,
-                UserId: userId,
-                UserName: username,
+                UserId: uuid,
+                EventId: `Todo${user_uuid2}`,
+                UserName: id,
+                Name: name,
                 Title: data.title,
+                Goal: goals,
+                Period: data.period,
                 Address: data.address,
                 Content: data.content,
-            },
+            }
+            // Picture: data.picture
+
         });
         const response = await docClient.send(command);
         console.log(response)
