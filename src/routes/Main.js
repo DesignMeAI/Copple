@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
+import axios from 'axios';
 import shortid from "shortid";
-import { recoilPersist } from 'recoil-persist'
 import styled from "styled-components";
 import omg from "../omg.jpg"
 import Goalitem from "../components/Goalitem";
@@ -42,6 +42,12 @@ const Container = styled.div`
 background: linear-gradient(42deg, rgba(248,245,167,1) 0%, rgba(253,187,45,1) 100%);
 }
 `;
+const Pbutton = styled.button`
+background-color: transparent;
+border: none;
+cursor: pointer;
+
+`
 const SmallContainer = styled.div`
 text-align: right;
 background: none;
@@ -122,7 +128,20 @@ const docClient = DynamoDBDocumentClient.from(client);
 function Main() {
     const [info, setInfo] = useRecoilState(infoState);
     const [goals, setGoals] = useRecoilState(GoalState)
-
+    const gotoArin = () => {
+        axios({
+            method: 'post',
+            url: 'http://3.34.209.20:8000/account/profile',
+            data: info,
+            // withCredentials: true,
+            // headers: {
+            //     "Access-Control-Allow-Origin": "http://3.34.209.20:3000"
+            // }
+        },
+        ).then(function (response) {
+            console.log(response)
+        })
+    }
     async function getData() {
         const command = new QueryCommand({
             TableName: "Records",
@@ -152,7 +171,7 @@ function Main() {
     return (
         <Background>
             <Container className="first">
-                <SmallContainer><Link to={'/'}>프로필 편집 ⚙️</Link></SmallContainer>
+                <SmallContainer><Link to='http://43.201.223.238:8080/profile'>프로필 편집 ⚙️</Link></SmallContainer>
                 <RCon><span><Img src={omg} alt="adorable"></Img></span>
                     <Profile><strong>{info['name']}</strong><br />@ {info['id']}</Profile></RCon>
                 <ProfileMsg>일단 해보자</ProfileMsg>

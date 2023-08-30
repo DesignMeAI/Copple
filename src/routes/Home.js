@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useLocation } from 'react-router-dom';
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { userinfoState, infoState } from "../atoms";
+import { infoState } from "../atoms";
 import omg from "../omg.jpg"
 import axios from 'axios';
 
