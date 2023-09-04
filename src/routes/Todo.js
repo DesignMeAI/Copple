@@ -3,7 +3,6 @@ import Selectop from "../components/Select"
 import { useForm } from "react-hook-form";
 import styles from "./Todo.module.css"
 import { v4 } from 'uuid';
-import { userNameState, userIdState } from "../atoms.js";
 import { useRecoilValue } from "recoil";
 import { goalState } from "../components/atoms";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";

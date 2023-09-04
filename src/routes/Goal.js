@@ -61,8 +61,8 @@ function Goal() {
         <div className={styles.Container}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.Navbar}><button className={styles.selected}><Link to='/goal'>목표</Link></button>
-                    <button className={styles.Btn}><Link to={'/'}>할일</Link></button>
-                    <button className={styles.Btn}><Link to={'/'}>일정</Link></button>
+                    <button className={styles.Btn}><Link to={'/todo'}>할일</Link></button>
+                    <button className={styles.Btn}><Link to={'/plan'}>일정</Link></button>
                     <div></div>
                     <button className={styles.Btn} type="submit">저장</button>
                 </div>

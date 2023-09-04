@@ -22,6 +22,7 @@ const Container = styled.div`
     height: 100vh;
     flex-direction: column;
     margin:10px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
 `
 const Form = styled.form`
  display: flex;
@@ -32,7 +33,7 @@ const Tag = styled.div`
     font-style: bold;
     width: 375px;
     font-size: 20px;
-    font-weight:600;
+    font-weight:500;
     margin-bottom:15px;
     text-align: left;
 
@@ -75,6 +76,7 @@ letter-spacing: 1px;
         &.selected{
         a{
             color:black;
+            font-weight: 500;
         }
     }
     &:hover {
@@ -82,7 +84,7 @@ letter-spacing: 1px;
     }
 a {
     font-size: 25px;
-    font-weight: 600;
+    font-weight: 500;
     color: #d3d3d3;
     text-decoration: none;}
     &:last-child {

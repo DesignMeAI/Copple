@@ -49,14 +49,14 @@ const Selectop = (props) => {
         }
     };
     const command = new ScanCommand({
-        ProjectionExpression: "#Content, eventId",
-        ExpressionAttributeNames: { "#Content": "Content" },
-        TableName: "Record",
+        ProjectionExpression: "#Title, Content",
+        ExpressionAttributeNames: { "#Title": "Title" },
+        TableName: "Records",
     });
     async function getData() {
         const response = await docClient.send(command);
         const Items = response.Items
-        const lists = Items.map(data => data['Content'])
+        const lists = Items.map(data => data['Title'])
         const list = lists.map(data => ({ "value": data, "label": data }))
         setOptions(list)
     };
@@ -67,21 +67,21 @@ const Selectop = (props) => {
     return (
         <SelectDiv>
             <Container>
-            <Select 
-                ref={selectInputRef}
-                onChange={(e) => {
-                    if (e) {
-                        setSelectValue(e.value);
-                        setGoal(e.value)
-                    } else {
-                        setSelectValue("");
-                    }
-                }}
-                options={options}
-                placeholder="목표를 선택하세요."    
-            />
-            <Btn onClick={() => onClearSelect()}>
-                없음
+                <Select
+                    ref={selectInputRef}
+                    onChange={(e) => {
+                        if (e) {
+                            setSelectValue(e.value);
+                            setGoal(e.value)
+                        } else {
+                            setSelectValue("");
+                        }
+                    }}
+                    options={options}
+                    placeholder="목표를 선택하세요."
+                />
+                <Btn onClick={() => onClearSelect()}>
+                    없음
                 </Btn></Container>
         </SelectDiv>
     )
