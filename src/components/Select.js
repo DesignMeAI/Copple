@@ -7,12 +7,15 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 
 const SelectDiv = styled.div`
-width:375px;
+width:95%;
 margin-bottom:30px;
 `;
 const Container = styled.div`
+width:100%;
 display:flex;
-align-items: stretch;
+justify-content: space-between;
+align-items: start;
+
 :first-child{
 flex-grow: 6;
 };
@@ -82,7 +85,8 @@ const Selectop = (props) => {
                 />
                 <Btn onClick={() => onClearSelect()}>
                     없음
-                </Btn></Container>
+                </Btn>
+                </Container>
         </SelectDiv>
     )
 }

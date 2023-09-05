@@ -10,7 +10,7 @@ import Goal from "./routes/Goal"
 function Router() {
   return (
     <BrowserRouter>
-      <Routes>
+      <Routes >
         <Route path="/signup" element={<Signup />} />
         <Route path="/main" element={<Main />} />
         <Route path="/todo" element={<Todo />} />

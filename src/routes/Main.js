@@ -33,13 +33,13 @@ const Row = styled(motion.div)`
 `;
 const rowVariants = {
     hidden: {
-        x: window.outerWidth + 5,
+        x:  500,
     },
     visible: {
         x: 0
     },
     exit: {
-        x: -window.outerWidth - 5
+        x: - 500
     },
 };
 const BoxVariants = {
@@ -68,6 +68,7 @@ height: 100vh;
   margin:10px auto;
 `;
 const Container = styled.div`
+  border-radius: 10px;
 position: relative;
 overflow: hidden;
     padding: 20px 5px;

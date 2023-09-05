@@ -63,7 +63,6 @@ div {
 }`
 
 const Btn = styled.button`
-
 font-size: 25px;
 letter-spacing: 1px;
     font-style: bold;

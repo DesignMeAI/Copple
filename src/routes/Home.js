@@ -131,7 +131,6 @@ a {
 }
 `;
 
-
 function Home() {
   const [info, setInfo] = useRecoilState(infoState);
   const navigate = useNavigate();

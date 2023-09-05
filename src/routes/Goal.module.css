@@ -8,6 +8,9 @@ label {
   height: 22px;
   margin-left: 10px;
 }
+form {
+  padding:1.5rem;
+}
 .None {
   position: absolute;
   width: 0;
@@ -22,6 +25,7 @@ label {
   margin: 0px;
 }
 .Container {
+  border-radius:15px;
   display: flex;
   width: 375px;
   height: 100vh;
@@ -37,20 +41,21 @@ form {
 
 .Tag {
   font-style: bold;
-  width: 375px;
+  width: 98%;
+  text-align: start;
   font-size: 20px;
   font-weight: 500;
-  margin-bottom: 15px;
+  margin: 15px 0;
   text-align: left;
 }
 
 .Input {
-  width: 345px;
-  height: 55px;
+  width: 90%;
+  height: 50px;
+  margin-bottom: 15px;;
   color: rgba(0, 0, 0, 0.596);
-  border: 2px solid #55555550;
+  border: 1.7px solid #55555550;
   border-radius: 11px;
-  margin-bottom: 30px;
   padding: 5px 15px;
   caret-color: transparent;
   font-size: 17px;
@@ -65,10 +70,10 @@ form {
 }
 .Navbar {
   display: flex;
-  width: 375px;
+  width: 95%;
   justify-content: space-around;
-  margin: 20px 0px;
   flex-direction: row;
+  margin-bottom:15px;
 }
 .Navbar > div {
   flex-grow: 2;
@@ -85,7 +90,7 @@ form {
 }
 
 .Btn {
-  font-size: 25px;
+  font-size: 23px;
   letter-spacing: 1px;
   font-style: bold;
   border-radius: 30px;
@@ -93,11 +98,10 @@ form {
   color: none;
   border: none;
   padding: 7px 0px;
-  margin-right: 35px;
+  margin-right: 20px;
 }
 
 button.Btn > a {
-  font-size: 25px;
   font-weight: 500;
   color: #d3d3d3;
   text-decoration: none;
@@ -115,7 +119,7 @@ button.Btn:last-child {
   margin-right: 0px;
 }
 .selected {
-  font-size: 25px;
+  font-size: 23px;
   letter-spacing: 1px;
   font-style: bold;
   border-radius: 30px;

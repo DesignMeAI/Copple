@@ -63,7 +63,7 @@ function Todo() {
                 <input className={styles.Input} {...register("title", { required: "Please write title" })} placeholder={formState.errors.title && formState.errors.title.message}></input>
                 <span></span>
                 <div className={styles.Tag}>목표</div>
-                <Selectop />
+                <Selectop/>
                 <div className={styles.Tag}>장소</div>
                 <input className={styles.Input}{...register("address",)}></input>
                 <div className={styles.Tag}>내용</div>
