@@ -19,89 +19,95 @@ const client = new DynamoDBClient({
 const docClient = DynamoDBDocumentClient.from(client);
 
 const Container = styled.div`
-    display: flex;
-    width: 375px;
-    height: 100vh;
-    flex-direction: column;
-    margin:10px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
+   border-radius:15px;
+  display: flex;
+  width: 375px;
+  height: 97vh;
+  flex-direction: column;
+  margin: 10px auto;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
 `
 const Form = styled.form`
- display: flex;
- align-items: center;
- flex-direction: column;
+ padding:1.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 `
 const Tag = styled.div`
     font-style: bold;
-    width: 375px;
-    font-size: 20px;
-    font-weight:500;
-    margin-bottom:15px;
-    text-align: left;
+  width: 98%;
+  text-align: start;
+  font-size: 20px;
+  font-weight: 500;
+  margin: 15px 0;
+  text-align: left;
 
 `
 const Input = styled.input`
-    width: 345px;
-    height: 55px;
-    color: rgba(0, 0, 0, 0.596);
-    border: 2px solid #55555550;
-    border-radius: 11px;
-    margin-bottom:30px;
-    padding: 5px 15px;
-    caret-color: transparent;
-    font-size: 17px;
+    width: 90%;
+  height: 50px;
+  margin-bottom: 15px;;
+  color: rgba(0, 0, 0, 0.596);
+  border: 1.7px solid #55555550;
+  border-radius: 11px;
+  padding: 5px 15px;
+  caret-color: transparent;
+  font-size: 17px;
     &:focus {
     outline: none;
 }
 `
 const Navbar = styled.div`
 display: flex;
-width:375px;
-justify-content: space-around;
-margin: 20px 0px;
-flex-direction: row;
+  width: 95%;
+  justify-content: space-around;
+  flex-direction: row;
+  margin-bottom:15px;
 div {
     flex-grow:2;
 }`
 
 const Btn = styled.button`
-font-size: 25px;
-letter-spacing: 1px;
-    font-style: bold;
-    border-radius: 30px;
-    background-color: white;
-    color: none;
-    border: none;
-    padding: 7px 0px;
-    margin-right: 35px;
-        &.selected{
-        a{
-            color:black;
-            font-weight: 500;
+ font-size: 23px;
+  letter-spacing: 1px;
+  font-style: bold;
+  border-radius: 30px;
+  background-color: white;
+  color: none;
+  border: none;
+  padding: 7px 0px;
+  margin-right: 20px;
+&.selected{
+    a{
+  color: black;
+  text-decoration: none;
+  font-size: 23px;
         }
     }
-    &:hover {
+&:hover {
         cursor: pointer;
     }
 a {
-    font-size: 25px;
+    font-size: 23px;
     font-weight: 500;
     color: #d3d3d3;
     text-decoration: none;}
-    &:last-child {
-        background-color: rgba(0, 255, 255, 0.527);
-    color: white;
-    font-size: 20px;
-    border: none;
-    border-radius: 30px;
-    padding: 0px 12px;
-    margin-left:30x;
-    margin-right:0px;
-    &:hover {
+&:last-child {
+  background-color: rgba(0, 255, 255, 0.527);
+  color: white;
+  font-size: 20px;
+  border: none;
+  font-weight: 500;
+  border-radius: 30px;
+  padding: 0px 12px;
+  margin-left: 30x;
+  margin-right: 0px;
+}
+&:hover {
         cursor: pointer;
     }
-    }
-`
+`;
+
 function Plan() {
     const [info, setInfo] = useRecoilState(infoState);
     const goal = useRecoilValue(goalState);
@@ -142,7 +148,7 @@ function Plan() {
                 <Tag >제목</Tag>
                 <Input {...register("title", { required: "Please write title" })}></Input>
                 <Tag>기간</Tag>
-                <Input {...register("period", { required: "Please write period" })}></Input>
+                <Input type="date" {...register("period", { required: "Please write period" })}></Input>
                 <Tag>목표</Tag>
                 <Selectop />
                 <Tag>장소</Tag>

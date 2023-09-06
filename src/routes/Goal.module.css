@@ -10,6 +10,9 @@ label {
 }
 form {
   padding:1.5rem;
+  display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 .None {
   position: absolute;
@@ -28,17 +31,11 @@ form {
   border-radius:15px;
   display: flex;
   width: 375px;
-  height: 100vh;
+  height: 97vh;
   flex-direction: column;
   margin: 10px auto;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
-    }
-form {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 }
-
 .Tag {
   font-style: bold;
   width: 98%;
@@ -48,7 +45,6 @@ form {
   margin: 15px 0;
   text-align: left;
 }
-
 .Input {
   width: 90%;
   height: 50px;
@@ -78,7 +74,6 @@ form {
 .Navbar > div {
   flex-grow: 2;
 }
-
 .Picture {
   display: inline-block;
   height: 40px;
@@ -102,6 +97,7 @@ form {
 }
 
 button.Btn > a {
+  font-size: 23px;
   font-weight: 500;
   color: #d3d3d3;
   text-decoration: none;

@@ -70,7 +70,7 @@ function Goal() {
                 <input className={styles.Input} {...register("title", { required: "Please write a title" })} placeholder={formState.errors.title && formState.errors.title.message} />
 
                 <div className={styles.Tag}>기간</div>
-                <input className={styles.Input} {...register("period", { required: "Please write a period" })} placeholder={formState.errors.period && formState.errors.period.message} />
+                <input type="date" className={styles.Input} {...register("period", { required: "Please write a period" })} placeholder={formState.errors.period && formState.errors.period.message} />
                 <div className={styles.Tag}>장소</div>
                 <input className={styles.Input} {...register("address")} />
                 <div className={styles.Tag}>내용</div>

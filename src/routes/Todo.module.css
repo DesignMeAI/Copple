@@ -27,10 +27,11 @@ label {
 .Container {
   display: flex;
   width: 375px;
-  height: 100vh;
+  height: 97vh;
   flex-direction: column;
   margin: 10px auto;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 form {
     padding: 1.5rem;
@@ -122,7 +123,7 @@ button.Btn:last-child {
   margin-right: 0px;
 }
 .selected {
-  font-size: 25px;
+  font-size: 23px;
   letter-spacing: 1px;
   font-style: bold;
   border-radius: 30px;
