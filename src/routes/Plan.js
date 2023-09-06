@@ -1,8 +1,10 @@
 import styled from "styled-components";
+import { v4 } from 'uuid';
 import { useForm } from "react-hook-form";
 import Selectop from "../components/Select"
 import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { infoState } from '../atoms.js';
+import { useRecoilValue, useRecoilState } from "recoil";
 import { goalState } from "../components/atoms";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
@@ -101,27 +103,31 @@ a {
     }
 `
 function Plan() {
+    const [info, setInfo] = useRecoilState(infoState);
+    const goal = useRecoilValue(goalState);
+    const user_uuid2 = v4();
     async function SendPlan(data) {
         const command = new PutCommand({
-            TableName: "Record",
+            TableName: "Records",
             Item: {
-                Index: Date().toString(),
-                UserId: '',
-                UserName: '',
+                UserId: info.uuid,
+                EventId: `Plan${user_uuid2}`,
+                UserName: info.id,
+                Name: info.name,
+                Goal: goal,
                 Title: data.title,
-                Event: "Plan",
-                Goal: goals,
+                Period: data.period,
                 Address: data.address,
-                Period: data.period
+               
             },
         });
         const response = await docClient.send(command);
         console.log(response)
     }
     const onSubmit = (data) => {
-        SendPlan(data)
+        SendPlan(data);
     }
-    const goals = useRecoilValue(goalState);
+    
     const { register, handleSubmit } = useForm();
     return (
         <Container>

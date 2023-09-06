@@ -58,19 +58,19 @@ const BoxVariants = {
 const Background = styled.div`
 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
 width: 375px;
-height: 100vh;
+height: 95vh;
   display: flex;
   align-items: stretch;
   justify-content: default;
   background-color:#FCE8A6 ;
   flex-direction: column;
   border-radius: 10px;
-  margin:10px auto;
+  margin:0px auto;
 `;
 const Container = styled.div`
   border-radius: 10px;
-position: relative;
-overflow: hidden;
+  position: relative;
+  overflow: hidden;
     padding: 20px 5px;
     height:72vh;
     display: flex;
@@ -113,7 +113,7 @@ div{
 }
 &:last-child{
     position:fixed;
-    bottom:20px;
+    bottom:50px;
     width:375px;
     justify-content: center;
     align-items: space-between;
@@ -228,7 +228,7 @@ function Main() {
     return (
         <Background>
             <Container className="first">
-                <SmallContainer><Link to='http://43.201.223.238:8080/profile'>프로필 편집 ⚙️</Link></SmallContainer>
+                <SmallContainer><Link to='http://43.201.223.238:3000/profile'>프로필 편집 ⚙️</Link></SmallContainer>
                 <RCon><span><Img src={omg} alt="adorable" onClick={increaseIndex}></Img></span>
                     <Profile><strong>{info['name']}</strong><br />@ {info['id']}</Profile></RCon>
                 <ProfileMsg>일단 해보자</ProfileMsg>
