@@ -5,18 +5,8 @@ import styles from "./Todo.module.css";
 import { v4 } from "uuid";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { goalState, infoState } from "../atoms";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-
-const client = new DynamoDBClient({
-  region: "ap-northeast-2",
-  credentials: {
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  },
-});
-
-const docClient = DynamoDBDocumentClient.from(client);
+import docClient from "../components/client";
+import { PutCommand } from "@aws-sdk/lib-dynamodb";
 
 function Todo() {
   const [info, setInfo] = useRecoilState(infoState);
@@ -64,6 +54,7 @@ function Todo() {
         </div>
         <div className={styles.Tag}>제목</div>
         <input
+          maxLength={20}
           className={styles.Input}
           {...register("title", { required: "Please write title" })}
           placeholder={formState.errors.title && formState.errors.title.message}

@@ -8,18 +8,8 @@ import Goalitem from "../components/Goalitem";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { infoState, goalState } from "../atoms.js";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
-
-const client = new DynamoDBClient({
-  region: "ap-northeast-2",
-  credentials: {
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  },
-});
-
-const docClient = DynamoDBDocumentClient.from(client);
+import docClient from "../components/client";
+import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 
 const Img = styled.img`
   width: 100px;
@@ -30,7 +20,6 @@ const Img = styled.img`
 `;
 const Slider = styled.div`
   position: absolute;
-  padding-top: 0px;
   padding: 0px;
   top: 60px;
   width: 100%;
@@ -38,7 +27,6 @@ const Slider = styled.div`
 const Row = styled(motion.div)`
   display: grid;
   padding-bottom: 0px;
-  padding-right: 15px;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   position: absolute;
@@ -75,6 +63,7 @@ const Background = styled.div`
   height: 97vh;
   display: flex;
   align-items: stretch;
+  padding: 0px;
   justify-content: default;
   background-color: #fce8a6;
   flex-direction: column;
@@ -85,7 +74,7 @@ const Background = styled.div`
 const Container = styled.div`
   position: relative;
   overflow: hidden;
-  padding: 15px 5px;
+  padding: 15px 0px;
   height: 560px;
   display: flex;
   width: auto;
@@ -121,7 +110,7 @@ const RCon = styled.div`
   div {
     padding: 0px;
     margin: 0px;
-    flex-grow: 3.5;
+    flex-grow: 0.9;
   }
   &:last-child {
     position: fixed;
@@ -209,14 +198,12 @@ function Main() {
       data.Content,
     ]);
     console.log(list, "list");
-
     return list;
   }
   useEffect(() => {
     getData()
       .then((value) => {
         setGoals(value);
-        console.log("goals", goals);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -225,7 +212,7 @@ function Main() {
     if (goals) {
       toggleLeaving();
       const totlaGoals = goals.length - 1;
-      const maxIndex = Math.floor(totlaGoals / offset) - 1;
+      const maxIndex = Math.ceil(totlaGoals / offset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
@@ -249,7 +236,9 @@ function Main() {
       </Container>
       <Container>
         <RCon>
-          <SBtn onClick={doneHandler}>지금 진행중</SBtn>
+          <SBtn style={{ paddingLeft: "13px" }} onClick={doneHandler}>
+            지금 진행중
+          </SBtn>
           <SBtn onClick={doneHandler} className="last">
             완료
           </SBtn>
@@ -285,9 +274,6 @@ function Main() {
             </Row>
           </AnimatePresence>
         </Slider>
-        {/* <GCon>
-                    {goals.map(one => <Goalitem key={} goaltitle={one[0]} goalperiod={one[1]} />)}
-                </GCon> */}
         <RCon>
           <SBtn>
             <Svg

@@ -6,18 +6,8 @@ import { Link } from "react-router-dom";
 import { infoState } from "../atoms.js";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { goalState } from "../atoms";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-
-const client = new DynamoDBClient({
-  region: "ap-northeast-2",
-  credentials: {
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  },
-});
-const docClient = DynamoDBDocumentClient.from(client);
-
+import docClient from "../components/client";
+import { PutCommand } from "@aws-sdk/lib-dynamodb";
 function Plan() {
   const [info, setInfo] = useRecoilState(infoState);
   const goal = useRecoilValue(goalState);
@@ -32,7 +22,7 @@ function Plan() {
         Name: info.name,
         Goal: goal,
         Title: data.title,
-        StartDate: data.StartDate,
+        StartDate: data.startDate,
         EndDate: data.endDate,
         Address: data.address,
       },
@@ -65,6 +55,7 @@ function Plan() {
         </nav>
         <div>제목</div>
         <input
+          maxLength={20}
           {...register("title", { required: "Please write title" })}
         ></input>
         <div>시작일</div>

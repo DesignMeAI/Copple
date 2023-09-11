@@ -4,18 +4,8 @@ import { v4 } from "uuid";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { infoState } from "../atoms.js";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-
-const client = new DynamoDBClient({
-  region: "ap-northeast-2",
-  credentials: {
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  },
-});
-
-const docClient = DynamoDBDocumentClient.from(client);
+import docClient from "../components/client";
+import { PutCommand } from "@aws-sdk/lib-dynamodb";
 
 function Goal() {
   const changeHandler = (e) => {
@@ -70,6 +60,7 @@ function Goal() {
         </div>
         <div className={styles.Tag}>제목</div>
         <input
+          maxLength={20}
           className={styles.Input}
           {...register("title", { required: "Please write a title" })}
           placeholder={formState.errors.title && formState.errors.title.message}

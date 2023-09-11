@@ -13,6 +13,7 @@ const Img = styled.img`
   margin: 15px 20px;
 `;
 const Background = styled.div`
+  box-sizing: border-box;
   width: 375px;
   height: 100vh;
   display: flex;

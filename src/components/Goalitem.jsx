@@ -12,8 +12,10 @@ const Img = styled.img`
 const GoalContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
+  gap: 3px;
   align-items: center;
   margin: 12px 0px;
+  padding: 0px 15px;
   span.title {
     font-weight: 600;
     font-size: 16px;
