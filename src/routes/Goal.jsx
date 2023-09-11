@@ -48,19 +48,6 @@ function Goal() {
   const { register, handleSubmit, formState } = useForm();
   const onSubmit = (data) => {
     SendGoal(data).then(navigate("/main"));
-
-    // .then(axios({
-    //     method: 'get',
-    //     url: 'http://3.34.209.20:8000/user/main',
-    //     data: info,
-    //     withCredentials: true,
-    //     headers: {
-    //         "Access-Control-Allow-Origin": "http://3.34.209.20:3000"
-    //     }
-    // },
-    // ).then(function (response) {
-    //     console.log(response);
-    // }));
   };
 
   return (
