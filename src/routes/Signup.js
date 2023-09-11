@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
-import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import Dynamoclient from "../components/Dynamoclient";
+import { ScanCommand } from "@aws-sdk/client-dynamodb";
 
 const Background = styled.div`
 width: 375px;
@@ -129,15 +129,7 @@ a {
 }
 
 `
-const client = new DynamoDBClient({
-  region: 'ap-northeast-2',
-  credentials: {
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
-  }
-});
-
-const docClient = DynamoDBDocumentClient.from(client);
+const docClient = Dynamoclient();
 
 // scan command getting userinfo from Users table
 const scancom = new ScanCommand({

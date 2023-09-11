@@ -31,7 +31,6 @@ border: none;
      cursor: pointer;
 };
 `;
-
 const client = new DynamoDBClient({
     region: "ap-northeast-2",
     credentials: {
@@ -86,7 +85,7 @@ const Selectop = (props) => {
                 <Btn onClick={() => onClearSelect()}>
                     없음
                 </Btn>
-                </Container>
+            </Container>
         </SelectDiv>
     )
 }

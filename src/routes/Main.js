@@ -8,8 +8,8 @@ import Goalitem from "../components/Goalitem";
 import { useEffect, useState } from "react";
 import { useRecoilState } from 'recoil';
 import { infoState, GoalState } from '../atoms.js';
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { QueryCommand } from "@aws-sdk/client-dynamodb";
+import Dynamoclient from "../components/Dynamoclient";
 const Img = styled.img`
 width:100px;
 height:auto;
@@ -33,7 +33,7 @@ const Row = styled(motion.div)`
 `;
 const rowVariants = {
     hidden: {
-        x:  500,
+        x: 500,
     },
     visible: {
         x: 0
@@ -161,15 +161,8 @@ grid-template-columns: repeat(2, 1fr);
 background-color: none;
 border-radius: 0px;
 `;
-const client = new DynamoDBClient({
-    region: "ap-northeast-2",
-    credentials: {
-        accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
-    }
-});
 
-const docClient = DynamoDBDocumentClient.from(client);
+const docClient = Dynamoclient();
 
 function Main() {
     const [info, setInfo] = useRecoilState(infoState);
@@ -258,7 +251,7 @@ function Main() {
                                         whileHover="hover"
                                         initial="normal"
                                         transition={{ type: "tween" }}
-                                        >                                    
+                                    >
                                     </Goalitem>))}
                         </Row>
                     </AnimatePresence>

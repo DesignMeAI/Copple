@@ -14,7 +14,7 @@ margin:15px 20px;
 `;
 const Background = styled.div`
 width: 375px;
-height: 100vh;
+height: 96vh;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
