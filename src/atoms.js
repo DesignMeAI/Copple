@@ -12,7 +12,7 @@ export const infoState = atom({
     effects_UNSTABLE: [persistAtom]
 })
 
-export const GoalState = atom({
+export const goalState = atom({
     key: "goal",
     default: [],
 })
