@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Selectop from "../components/Select";
 import { useForm } from "react-hook-form";
-import styles from "./Todo.module.css";
+import styles from "../css/Todo.module.css";
 import { v4 } from "uuid";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { goalState, infoState } from "../atoms";

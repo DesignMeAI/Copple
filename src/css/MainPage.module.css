@@ -1,0 +1,86 @@
+.mainWrapper {
+
+  background-color: rgb(247, 247, 247);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; 
+}
+
+.mainContainer {
+  width: 375px;
+  height: 100vh;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden; 
+  max-height: 100vh; 
+}
+
+.scheduleTodoRow {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-direction: column;
+  position: absolute;
+  top: 310px;
+}
+
+.mainSchedule,
+.mainTodo {
+  flex: 1;
+}
+
+.mainweeklyCalendar {
+  width: 100%;
+  position: absolute;
+  top: 25px;
+  left: 12px;
+  padding: 0 10px;
+}
+
+.mainThumbnails {
+  margin-top: 130px;
+  padding-bottom: 20px;
+  position: absolute;
+  top: 180px;
+}
+
+
+
+/* 스마트폰 가로 */
+/* @media screen and (min-width:576px) {
+  .main-container {
+    max-width: 540px;
+  }
+  .schedule-todo-row {
+    flex-direction: row; 
+  }
+} */
+
+/* 타블렛 */
+/* @media screen and (min-width:768px) {
+  .main-container {
+    max-width: 720px;
+  }
+} */
+
+/* 데스크탑 */
+/* @media screen and (min-width:992px) {
+  .main-container {
+    max-width: 960px;
+  }
+} */
+
+/* 큰 데스크탑 */
+/* @media screen and (min-width:1200px) {
+  .main-container {
+    max-width: 1140px;
+  }
+} */

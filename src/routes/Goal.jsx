@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import styles from "./Goal.module.css";
+import styles from "../css/Goal.module.css";
 import { v4 } from "uuid";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";

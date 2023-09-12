@@ -1,208 +1,316 @@
-import styled from "styled-components";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { infoState } from "../atoms";
-import omg from "../omg.jpg";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import shortid from "shortid";
+import styled from "styled-components";
+import omg from "../omg.jpg";
+import Goalitem from "../components/Goalitem";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { infoState, goalState } from "../atoms.js";
+import docClient from "../components/client";
+import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 
 const Img = styled.img`
-  width: 170px;
+  width: 100px;
   height: auto;
-  margin: 15px 20px;
+  margin: 20px 5px;
+  border-radius: 50px;
+  border: solid 3px white;
 `;
+const Slider = styled.div`
+  position: absolute;
+  padding: 0px;
+  top: 60px;
+  width: 100%;
+`;
+const Row = styled(motion.div)`
+  display: grid;
+  padding-bottom: 0px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  position: absolute;
+  width: 100%;
+  height: 200px;
+`;
+const rowVariants = {
+  hidden: {
+    x: 500,
+  },
+  visible: {
+    x: 0,
+  },
+  exit: {
+    x: -500,
+  },
+};
+const BoxVariants = {
+  normal: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.3,
+    y: -50,
+    transition: {
+      delay: 0.3,
+      type: "tween",
+    },
+  },
+};
 const Background = styled.div`
-  box-sizing: border-box;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
   width: 375px;
-  height: 100vh;
+  height: 97vh;
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+  align-items: stretch;
+  padding: 0px;
+  justify-content: default;
   background-color: #fce8a6;
   flex-direction: column;
   border-radius: 10px;
-  margin: 10px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  margin: 0px auto;
 `;
-const Container = styled.form`
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
-  padding: 30px 0px;
+const Container = styled.div`
+  position: relative;
+  overflow: hidden;
+  padding: 15px 0px;
+  height: 560px;
   display: flex;
-  width: 320px;
+  width: auto;
   background-color: white;
-  align-items: center;
-  justify-content: space-between;
   flex-direction: column;
-  gap: 12px;
-  border-radius: 15px;
-  margin: 10px 0px;
-`;
-const Input = styled.input`
-  width: 220px;
-  padding-left: 15px;
-  height: 40px;
-  border: 1px solid rgb(210, 210, 210);
-  border-radius: 10px;
-  margin: 12px 0px;
-  outline: none;
-  font-family: "Noto Sans KR";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 15px;
-  color: #363636;
-
-  &::placeholder {
-    color: #d5d4d1;
-  }
-
-  &:hover {
-    border: 1px solid black;
-  }
-
-  &:focus {
-    color: #363636;
-    border: 1px solid red;
+  &.first {
+    padding: 20px 20px;
+    margin-bottom: 0px;
+    height: 200px;
+    background: rgb(248, 245, 167);
+    background: linear-gradient(
+      42deg,
+      rgba(248, 245, 167, 1) 0%,
+      rgba(253, 187, 45, 1) 100%
+    );
   }
 `;
-const Title = styled.h1`
-  font-size: 22px;
-  text-align: center;
-  font-weight: 500;
-  display: block;
-  margin: 0px;
-  padding: 0px;
-`;
-const Button = styled.button`
-  width: 150px;
-  height: 48px;
-  background-color: white;
-  border-radius: 12px;
-  border: 1.5px solid #d5d4d1;
-  font-size: 18px;
-  font-weight: 200px;
-  margin: 15px;
-  color: #cccbc7;
-  padding: 7px 7px;
-  &:hover {
-    cursor: pointer;
-    border: none;
-    background-color: #f9e092;
-    color: white;
-  }
+const SmallContainer = styled.div`
+  text-align: right;
+  background: none;
   a {
-    color: white;
+    color: #7e7e7e;
     text-decoration: none;
   }
 `;
-const ButtonBig = styled.button`
-  box-shadow: 1px 2px #e4e3df;
-  width: 320px;
-  height: 65px;
-  padding: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
-  margin-top: 15px;
+const RCon = styled.div`
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  background-color: none;
+  border-radius: 0px;
+  padding-right: 10px;
+  div {
+    padding: 0px;
+    margin: 0px;
+    flex-grow: 0.9;
+  }
+  &:last-child {
+    position: fixed;
+    bottom: 30px;
+    width: 375px;
+    justify-content: center;
+    align-items: space-between;
+  }
+`;
+const Profile = styled.span`
+  display: block;
+  padding: 50px 30px;
+`;
+const ProfileMsg = styled.span`
+  padding-left: 15px;
+`;
+const SBtn = styled.button`
+  font-weight: 600;
+  font-size: 17px;
   background-color: white;
-  border-radius: 15px;
+  margin: 0px 10px;
   border: none;
-  font-size: 18px;
-  font-weight: 200px;
-  color: #cccbc7;
   &:hover {
     cursor: pointer;
+  }
+  &.black {
+    margin: 0px;
+    font-weight: 350;
+    background-color: black;
     color: white;
-    border: none;
-    background-color: #f9e092;
+    padding: 5px 10px;
+    border-radius: 30px;
   }
   a {
+    display: block;
     color: #cccbc7;
     text-decoration: none;
   }
 `;
-const Find = styled.span`
-  text-align: center;
-  color: #696969;
-  display: block;
-  margin-bottom: 30px;
-  a {
-    color: #696969;
-    text-decoration: none;
-  }
+const Svg = styled.svg`
+  width: 30px;
+  height: 30px;
 `;
-
-function Home() {
+function Main() {
   const [info, setInfo] = useRecoilState(infoState);
-  const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
-  // if (userid !== null) {
-  //   navigate('/main')
-  //   console.log(userid)
-  // }
-  useEffect(() => {
-    if (localStorage.getItem("id") !== null) {
-      navigate("/main");
-      console.log(localStorage.getItem("id"));
-    } else {
-      navigate("/");
-    }
-  }, [navigate]);
-
-  const onSubmit = (data) => {
-    console.log(data.UserId);
+  const [goals, setGoals] = useRecoilState(goalState);
+  const [leaving, setLeaving] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [done, setDone] = useState(false);
+  const toggleLeaving = () => setLeaving((prev) => !prev);
+  const gotoArin = () => {
     axios({
       method: "post",
-      url: "http://3.34.209.20:8000/account/login",
-      data: {
-        user_id: data.UserId,
-        password: data.Password,
+      url: "http://3.34.209.20:8000/account/profile",
+      data: info,
+      // withCredentials: true,
+      // headers: {
+      //     "Access-Control-Allow-Origin": "http://3.34.209.20:3000"
+      // }
+    }).then(function (response) {
+      console.log(response);
+    });
+  };
+  const doneHandler = (e) => {
+    {
+      e.target.textContent === "지금 진행중" ? setDone(false) : setDone(true);
+    }
+  };
+  async function getData() {
+    const command = new QueryCommand({
+      TableName: "Records",
+      KeyConditionExpression:
+        "UserId = :UserId AND begins_with (EventId, :event)",
+      ExpressionAttributeValues: {
+        ":UserId": info["uuid"],
+        ":event": "Goal",
       },
-      withCredentials: true,
-      headers: {
-        "Access-Control-Allow-Origin": "http://3.34.209.20:3000",
-      },
-    })
-      .then(function (response) {
-        console.log(response);
-        if (response.data["message"] === "로그인 성공") {
-          const info = response.data["data"];
-          setInfo(info);
-          const setCookieHeader = response.headers["Set-Cookie"];
-          navigate("/main");
-          console.log(response.data["data"]);
-          document.cookie = setCookieHeader;
-        } else if (response["data"] === "failed") {
-          alert("올바르지 않은 회원정보입니다.");
-        }
+      ProjectionExpression: "Title, Period, Content",
+      ConsistentRead: true,
+    });
+    const response = await docClient.send(command);
+    const list = response.Items.map((data) => [
+      data.Title,
+      data.Period,
+      data.Content,
+    ]);
+    console.log(list, "list");
+    return list;
+  }
+  useEffect(() => {
+    getData()
+      .then((value) => {
+        setGoals(value);
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
+  }, []);
+  const offset = 4;
+  const increaseIndex = () => {
+    if (goals) {
+      toggleLeaving();
+      const totlaGoals = goals.length - 1;
+      const maxIndex = Math.ceil(totlaGoals / offset) - 1;
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
   };
 
   return (
     <Background>
-      <Container onSubmit={handleSubmit(onSubmit)}>
-        <Img src={omg} alt="adorable"></Img>
-        <Title>Copple</Title>
-        <Input
-          placeholder="ID"
-          {...register("UserId", { required: "Please write ID" })}
-        ></Input>
-        <Input
-          type="password"
-          placeholder="Password"
-          {...register("Password", { required: "Please write password" })}
-        ></Input>
-        <Button type="submit">login</Button>
+      <Container className="first">
+        <SmallContainer>
+          <Link to="http://43.201.223.238:3000/profile">프로필 편집 ⚙️</Link>
+        </SmallContainer>
+        <RCon>
+          <span>
+            <Img src={omg} alt="adorable" onClick={increaseIndex}></Img>
+          </span>
+          <Profile>
+            <strong>{info["name"]}</strong>
+            <br />@ {info["id"]}
+          </Profile>
+        </RCon>
+        <ProfileMsg>{new Date().toLocaleDateString()}</ProfileMsg>
       </Container>
-      <ButtonBig>
-        <Link to="/signup">Sign up</Link>
-      </ButtonBig>
-      <Find>
-        <Link to="/find">Forgot your id/password?</Link>
-      </Find>
+      <Container>
+        <RCon>
+          <SBtn style={{ paddingLeft: "13px" }} onClick={doneHandler}>
+            지금 진행중
+          </SBtn>
+          <SBtn onClick={doneHandler} className="last">
+            완료
+          </SBtn>
+          <div> </div>
+          <SBtn className="black">
+            <Link to={"/goal"}>➕ 추가</Link>
+          </SBtn>
+        </RCon>
+        <Slider>
+          <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+            <Row
+              variants={rowVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={{ type: "tween", duration: 0.5 }}
+              key={index}
+            >
+              {done === false &&
+                goals
+                  .slice(offset * index, offset * index + offset)
+                  .map((goal) => (
+                    <Goalitem
+                      key={shortid.generate()}
+                      variants={BoxVariants}
+                      goaltitle={goal[0]}
+                      goalperiod={goal[1]}
+                      whileHover="hover"
+                      initial="normal"
+                      transition={{ type: "tween" }}
+                    ></Goalitem>
+                  ))}
+            </Row>
+          </AnimatePresence>
+        </Slider>
+        <RCon>
+          <SBtn>
+            <Svg
+              style={{ fill: "#ffd952" }}
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 512 512"
+            >
+              <path d="M160 368c26.5 0 48 21.5 48 48v16l72.5-54.4c8.3-6.2 18.4-9.6 28.8-9.6H448c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h96zm48 124l-.2 .2-5.1 3.8-17.1 12.8c-4.8 3.6-11.3 4.2-16.8 1.5s-8.8-8.2-8.8-14.3V474.7v-6.4V468v-4V416H112 64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0H448c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H309.3L208 492z" />
+            </Svg>
+          </SBtn>
+          <div></div>
+          <SBtn>
+            <Svg
+              style={{ fill: "#ffd952" }}
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 448 512"
+            >
+              <path d="M224 112c-8.8 0-16-7.2-16-16V80c0-44.2 35.8-80 80-80h16c8.8 0 16 7.2 16 16V32c0 44.2-35.8 80-80 80H224zM0 288c0-76.3 35.7-160 112-160c27.3 0 59.7 10.3 82.7 19.3c18.8 7.3 39.9 7.3 58.7 0c22.9-8.9 55.4-19.3 82.7-19.3c76.3 0 112 83.7 112 160c0 128-80 224-160 224c-16.5 0-38.1-6.6-51.5-11.3c-8.1-2.8-16.9-2.8-25 0c-13.4 4.7-35 11.3-51.5 11.3C80 512 0 416 0 288z" />
+            </Svg>
+          </SBtn>
+          <div></div>
+          <SBtn>
+            <Svg
+              style={{ fill: "#ffd952" }}
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 576 512"
+            >
+              <path d="M528 160V416c0 8.8-7.2 16-16 16H320c0-44.2-35.8-80-80-80H176c-44.2 0-80 35.8-80 80H64c-8.8 0-16-7.2-16-16V160H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM272 256a64 64 0 1 0 -128 0 64 64 0 1 0 128 0zm104-48c-13.3 0-24 10.7-24 24s10.7 24 24 24h80c13.3 0 24-10.7 24-24s-10.7-24-24-24H376zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24h80c13.3 0 24-10.7 24-24s-10.7-24-24-24H376z" />
+            </Svg>
+          </SBtn>
+        </RCon>
+      </Container>
     </Background>
   );
 }
 
-export default Home;
+export default Main;

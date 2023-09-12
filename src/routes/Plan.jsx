@@ -1,4 +1,4 @@
-import styles from "./Plan.module.css";
+import styles from "../css/Plan.module.css";
 import { v4 } from "uuid";
 import { useForm } from "react-hook-form";
 import Selectop from "../components/Select";
@@ -38,33 +38,36 @@ function Plan() {
   return (
     <div className={styles.Container}>
       <form className={styles.Form} onSubmit={handleSubmit(onSubmit)}>
-        <nav className={styles.navbar}>
-          <button className={styles.btn}>
+        <nav className={styles.Navbar}>
+          <button className={styles.Btn}>
             <Link to="/goal">목표</Link>
           </button>
-          <button className={styles.btn}>
+          <button className={styles.Btn}>
             <Link to="/todo">할일</Link>
           </button>
-          <button className={styles.selected}>
+          <button className={styles.Selected}>
             <Link to="/plan">일정</Link>
           </button>
           <div></div>
-          <button className={styles.btn} type="submit">
+          <button className={styles.Btn} type="submit">
             저장
           </button>
         </nav>
         <div>제목</div>
         <input
+          className={styles.Input}
           maxLength={20}
           {...register("title", { required: "Please write title" })}
         ></input>
         <div>시작일</div>
         <input
+          className={styles.Input}
           type="date"
           {...register("startDate", { required: "Please write period" })}
         ></input>
         <div>종료일</div>
         <input
+          className={styles.Input}
           type="date"
           {...register("endDate", { required: "Please write period" })}
         ></input>
@@ -72,6 +75,7 @@ function Plan() {
         <Selectop />
         <div>장소</div>
         <input
+          className={styles.Input}
           {...register("address", { required: "Please write address" })}
         ></input>
       </form>

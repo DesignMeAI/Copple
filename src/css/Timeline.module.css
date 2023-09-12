@@ -1,0 +1,150 @@
+.app {
+  font-family: 'Arial', sans-serif;
+  width: 400px;
+  margin-left: 40px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-x: hidden; 
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.inputArea {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 5px;
+  top:10px;
+}
+
+.inputArea select, 
+.inputArea input {
+  flex: 1;
+}
+
+.inputArea input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  margin: 0 8px;
+  transition: border-color 0.3s;
+  width: 178px;
+  outline: none;
+  background: none;
+}
+
+.inputArea input:focus {
+  border-color: rgb(0, 183, 255);
+}
+
+.timeSelector span {
+  margin-right: 15px;
+}
+
+.inputArea button {
+  font-family: Arial, sans-serif;
+  background-color: transparent;
+  color:rgb(0, 162, 255);
+  border: none;
+  width: 20px;
+  height: 20px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputArea button:hover {
+  background-color:rgb(0, 183, 255);
+  color: #fff;
+}
+
+.eventList {
+  list-style-type: none;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 300px;
+  overflow-y:scroll;
+}
+
+.eventList li {
+  display: flex;
+  padding: 10px 10px;
+  border-bottom: 1px solid #e1e1e1;
+  position: relative;
+}
+
+.eventTime {
+  font-weight: 700;
+}
+
+.eventTitle {
+  flex: 1;
+  cursor: pointer;
+}
+
+.options {
+  position: relative;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.dropdownOptions {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;  
+  z-index: 999;
+}
+
+.dropdownOptions button {
+  margin: 0; 
+  padding: 10px 10px;  
+  text-align: center;
+  white-space: nowrap;
+  border: none;  
+  border-radius: 0; 
+  width: 100%;
+  box-sizing: border-box; 
+  transition: background-color 0.3s;
+}
+
+.dropdownOptions button:hover {
+  background-color: rgb(0, 183, 255); 
+  color: white;
+}
+
+.editInput {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 0.4rem;
+  background-color: #ffffff;
+  outline: none;
+  border-radius: 4px;
+  transition: border-color 0.2s ease;
+  width: 100%;
+}
+
+.editInput:focus {
+  border-color: rgb(241, 248, 254);
+}
+
+.timelineContainer {
+  position: relative;
+  top: 20px;
+  right: 20px;
+}
