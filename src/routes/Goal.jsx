@@ -59,49 +59,63 @@ function Goal() {
           </button>
         </div>
         <div className={styles.Tag}>제목</div>
-        <input
-          maxLength={20}
-          className={styles.Input}
-          {...register("title", { required: "Please write a title" })}
-          placeholder={formState.errors.title && formState.errors.title.message}
-        />
+        <div className={styles.Tag}>
+          <input
+            maxLength={20}
+            className={styles.Input}
+            {...register("title", { required: "Please write a title" })}
+            placeholder={
+              formState.errors.title && formState.errors.title.message
+            }
+          />
+        </div>
 
         <div className={styles.Tag}>시작일</div>
-        <input
-          type="date"
-          className={styles.Input}
-          {...register("startDate", { required: "Please write a period" })}
-          placeholder={
-            formState.errors.period && formState.errors.startDate.message
-          }
-        />
+        <div className={styles.Tag}>
+          <input
+            type="date"
+            className={styles.Input}
+            {...register("startDate", { required: "Please write a period" })}
+            placeholder={
+              formState.errors.period && formState.errors.startDate.message
+            }
+          />
+        </div>
         <div className={styles.Tag}>종료일</div>
-        <input
-          type="date"
-          className={styles.Input}
-          {...register("endDate", { required: "Please write a period" })}
-          placeholder={
-            formState.errors.period && formState.errors.endDate.message
-          }
-        />
+        <div className={styles.Tag}>
+          <input
+            type="date"
+            className={styles.Input}
+            {...register("endDate", { required: "Please write a period" })}
+            placeholder={
+              formState.errors.period && formState.errors.endDate.message
+            }
+          />
+        </div>
         <div className={styles.Tag}>장소</div>
-        <input className={styles.Input} {...register("address")} />
+        <div className={styles.Tag}>
+          <input className={styles.Input} {...register("address")} />
+        </div>
         <div className={styles.Tag}>내용</div>
-        <input
-          className={styles.Input}
-          {...register("content", { required: "Please write a content" })}
-          placeholder={
-            formState.errors.content && formState.errors.content.message
-          }
-        />
+        <div className={styles.Tag}>
+          <input
+            className={styles.Input}
+            {...register("content", { required: "Please write a content" })}
+            placeholder={
+              formState.errors.content && formState.errors.content.message
+            }
+          />{" "}
+        </div>
         <div className={styles.Tag}>완료</div>
         <div style={{ width: "100%" }}>
-          <input
-            onClick={changeHandler}
-            className={styles.check}
-            type="checkbox"
-            {...register("isDone")}
-          />
+          <div className={styles.Tag}>
+            <input
+              onClick={changeHandler}
+              className={styles.check}
+              type="checkbox"
+              {...register("isDone")}
+            />
+          </div>
         </div>
       </form>
     </div>

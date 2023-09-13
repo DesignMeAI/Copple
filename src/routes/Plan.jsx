@@ -53,31 +53,41 @@ function Plan() {
             저장
           </button>
         </nav>
-        <div>제목</div>
-        <input
-          className={styles.Input}
-          maxLength={20}
-          {...register("title", { required: "Please write title" })}
-        ></input>
-        <div>시작일</div>
-        <input
-          className={styles.Input}
-          type="date"
-          {...register("startDate", { required: "Please write period" })}
-        ></input>
-        <div>종료일</div>
-        <input
-          className={styles.Input}
-          type="date"
-          {...register("endDate", { required: "Please write period" })}
-        ></input>
-        <div>목표</div>
-        <Selectop />
-        <div>장소</div>
-        <input
-          className={styles.Input}
-          {...register("address", { required: "Please write address" })}
-        ></input>
+        <div className={styles.Tag}>제목</div>
+        <div className={styles.Tag}>
+          <input
+            className={styles.Input}
+            maxLength={20}
+            {...register("title", { required: "Please write title" })}
+          ></input>
+        </div>
+        <div className={styles.Tag}>시작일</div>
+        <div className={styles.Tag}>
+          <input
+            className={styles.Input}
+            type="date"
+            {...register("startDate", { required: "Please write period" })}
+          ></input>
+        </div>
+        <div className={styles.Tag}>종료일</div>
+        <div className={styles.Tag}>
+          <input
+            className={styles.Input}
+            type="date"
+            {...register("endDate", { required: "Please write period" })}
+          ></input>
+        </div>
+        <div className={styles.Tag}>목표</div>
+        <div className={styles.Tag}>
+          <Selectop />
+        </div>
+        <div className={styles.Tag}>장소</div>
+        <div className={styles.Tag}>
+          <input
+            className={styles.Input}
+            {...register("address", { required: "Please write address" })}
+          ></input>
+        </div>
       </form>
     </div>
   );

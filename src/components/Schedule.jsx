@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../css/GoalSchedule.module.css";
+import styles from "../css/Schedule.module.css";
 
 function GoalSchedule() {
   const [selectedCategory, setSelectedCategory] = useState("일정");
@@ -47,13 +47,13 @@ function GoalSchedule() {
           {" "}
           {/* 이 div를 추가하여 일정과 할일 버튼을 함께 묶기*/}
           <button
-            className={selectedCategory === "일정" ? "active" : ""}
+            className={selectedCategory === "일정" ? "active" : "nonactive"}
             onClick={() => setSelectedCategory("일정")}
           >
             일정
           </button>
           <button
-            className={selectedCategory === "할일" ? "active" : ""}
+            className={selectedCategory === "할일" ? "active" : "nonactive"}
             onClick={() => setSelectedCategory("할일")}
           >
             할일

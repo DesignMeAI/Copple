@@ -120,6 +120,7 @@ function ProfilePhotoEdit() {
             {!imageURL && <span>+</span>}
           </div>
           <input
+            className={styles.justinput}
             type="file"
             ref={fileInput}
             style={{ display: "none" }}
@@ -136,16 +137,19 @@ function ProfilePhotoEdit() {
         </div>
         <div className={styles.inputBox}>
           <input
+            className={styles.justinput}
             placeholder="닉네임"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
           <input
+            className={styles.justinput}
             placeholder="유저 이름"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
           <textarea
+            className={styles.justtextarea}
             placeholder="자기소개"
             value={bio}
             onChange={(e) => setBio(e.target.value)}

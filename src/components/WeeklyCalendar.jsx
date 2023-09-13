@@ -134,12 +134,19 @@ function WeeklyCalendar() {
 
       {showMonthlyModal && (
         <div className={styles.monthlyModal}>
-          <button onClick={() => setShowMonthlyModal(false)}>Close</button>
+          <button
+            className={styles.calendarbtn}
+            onClick={() => setShowMonthlyModal(false)}
+          >
+            Close
+          </button>
         </div>
       )}
 
       <div className={styles.calendarNavigation}>
-        <button onClick={goToPreviousWeek}>◀</button>
+        <button className={styles.calendarbtn} onClick={goToPreviousWeek}>
+          ◀
+        </button>
         <div className={styles.calendarContainer}>
           {days.map((day, idx) => (
             <div
@@ -156,7 +163,9 @@ function WeeklyCalendar() {
             </div>
           ))}
         </div>
-        <button onClick={goToNextWeek}>▶</button>
+        <button className={styles.calendarbtn} onClick={goToNextWeek}>
+          ▶
+        </button>
       </div>
 
       {selectedDate && (

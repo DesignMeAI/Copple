@@ -74,16 +74,17 @@ const Background = styled.div`
 const Container = styled.div`
   position: relative;
   overflow: hidden;
-  padding: 15px 0px;
-  height: 560px;
+  padding: 10px 0px;
+  height: 540px;
   display: flex;
+  margin-top: 0px;
   width: auto;
   background-color: white;
   flex-direction: column;
   &.first {
     padding: 20px 20px;
     margin-bottom: 0px;
-    height: 200px;
+    height: 250px;
     background: rgb(248, 245, 167);
     background: linear-gradient(
       42deg,
@@ -100,7 +101,7 @@ const SmallContainer = styled.div`
     text-decoration: none;
   }
 `;
-const RCon = styled.div`
+const Index = styled.div`
   height: auto;
   display: flex;
   flex-direction: row;
@@ -119,6 +120,18 @@ const RCon = styled.div`
     justify-content: center;
     align-items: space-between;
   }
+`;
+const IconNav = styled.div`
+  height: auto;
+  display: flex;
+  background-color: transparent;
+  border-radius: 0px;
+  padding-right: 10px;
+  position: fixed;
+  bottom: 15px;
+  width: 375px;
+  justify-content: space-between;
+  align-items: center;
 `;
 const Profile = styled.span`
   display: block;
@@ -148,6 +161,17 @@ const SBtn = styled.button`
     display: block;
     color: #cccbc7;
     text-decoration: none;
+  }
+`;
+const Icon = styled.button`
+  font-size: 17px;
+  background-color: transparent;
+  margin: 0px;
+  border: none;
+  &:hover {
+    margin: 0px;
+    cursor: pointer;
+    background-color: transparent;
   }
 `;
 const Svg = styled.svg`
@@ -224,7 +248,7 @@ function Home() {
         <SmallContainer>
           <Link to="http://43.201.223.238:3000/profile">프로필 편집 ⚙️</Link>
         </SmallContainer>
-        <RCon>
+        <Index>
           <span>
             <Img src={omg} alt="adorable" onClick={increaseIndex}></Img>
           </span>
@@ -232,11 +256,11 @@ function Home() {
             <strong>{info["name"]}</strong>
             <br />@ {info["id"]}
           </Profile>
-        </RCon>
+        </Index>
         <ProfileMsg>{new Date().toLocaleDateString()}</ProfileMsg>
       </Container>
       <Container>
-        <RCon>
+        <Index>
           <SBtn style={{ paddingLeft: "13px" }} onClick={doneHandler}>
             지금 진행중
           </SBtn>
@@ -247,7 +271,7 @@ function Home() {
           <SBtn className="black">
             <Link to={"/goal"}>➕ 추가</Link>
           </SBtn>
-        </RCon>
+        </Index>
         <Slider>
           <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
             <Row
@@ -275,8 +299,8 @@ function Home() {
             </Row>
           </AnimatePresence>
         </Slider>
-        <RCon>
-          <SBtn>
+        <IconNav>
+          <Icon>
             <Svg
               style={{ fill: "#ffd952" }}
               xmlns="http://www.w3.org/2000/svg"
@@ -285,9 +309,8 @@ function Home() {
             >
               <path d="M160 368c26.5 0 48 21.5 48 48v16l72.5-54.4c8.3-6.2 18.4-9.6 28.8-9.6H448c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h96zm48 124l-.2 .2-5.1 3.8-17.1 12.8c-4.8 3.6-11.3 4.2-16.8 1.5s-8.8-8.2-8.8-14.3V474.7v-6.4V468v-4V416H112 64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0H448c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H309.3L208 492z" />
             </Svg>
-          </SBtn>
-          <div></div>
-          <SBtn>
+          </Icon>
+          <Icon>
             <Svg
               style={{ fill: "#ffd952" }}
               xmlns="http://www.w3.org/2000/svg"
@@ -296,9 +319,8 @@ function Home() {
             >
               <path d="M224 112c-8.8 0-16-7.2-16-16V80c0-44.2 35.8-80 80-80h16c8.8 0 16 7.2 16 16V32c0 44.2-35.8 80-80 80H224zM0 288c0-76.3 35.7-160 112-160c27.3 0 59.7 10.3 82.7 19.3c18.8 7.3 39.9 7.3 58.7 0c22.9-8.9 55.4-19.3 82.7-19.3c76.3 0 112 83.7 112 160c0 128-80 224-160 224c-16.5 0-38.1-6.6-51.5-11.3c-8.1-2.8-16.9-2.8-25 0c-13.4 4.7-35 11.3-51.5 11.3C80 512 0 416 0 288z" />
             </Svg>
-          </SBtn>
-          <div></div>
-          <SBtn>
+          </Icon>
+          <Icon>
             <Svg
               style={{ fill: "#ffd952" }}
               xmlns="http://www.w3.org/2000/svg"
@@ -307,8 +329,8 @@ function Home() {
             >
               <path d="M528 160V416c0 8.8-7.2 16-16 16H320c0-44.2-35.8-80-80-80H176c-44.2 0-80 35.8-80 80H64c-8.8 0-16-7.2-16-16V160H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM272 256a64 64 0 1 0 -128 0 64 64 0 1 0 128 0zm104-48c-13.3 0-24 10.7-24 24s10.7 24 24 24h80c13.3 0 24-10.7 24-24s-10.7-24-24-24H376zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24h80c13.3 0 24-10.7 24-24s-10.7-24-24-24H376z" />
             </Svg>
-          </SBtn>
-        </RCon>
+          </Icon>
+        </IconNav>
       </Container>
     </Background>
   );
