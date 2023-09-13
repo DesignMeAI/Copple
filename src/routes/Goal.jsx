@@ -33,7 +33,7 @@ function Goal() {
       },
     });
     const response = await docClient.send(command);
-    console.log(response, info);
+    console.log(command);
   }
   const { register, handleSubmit, formState } = useForm();
   const onSubmit = (data) => {

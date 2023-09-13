@@ -181,7 +181,7 @@ function Signup() {
               password: data.Password,
               user_name: data.UserName,
             },
-            withCredentials: true,
+            withCredentials: false,
             headers: {
               "Access-Control-Allow-Origin": "http://3.34.209.20:3000",
             },

@@ -154,7 +154,7 @@ const Svg = styled.svg`
   width: 30px;
   height: 30px;
 `;
-function Main() {
+function Home() {
   const [info, setInfo] = useRecoilState(infoState);
   const [goals, setGoals] = useRecoilState(goalState);
   const [leaving, setLeaving] = useState(false);
@@ -188,13 +188,14 @@ function Main() {
         ":UserId": info["uuid"],
         ":event": "Goal",
       },
-      ProjectionExpression: "Title, Period, Content",
+      ProjectionExpression: "Title, StartDate, EndDate, Content",
       ConsistentRead: true,
     });
     const response = await docClient.send(command);
     const list = response.Items.map((data) => [
       data.Title,
-      data.Period,
+      data.StartDate,
+      data.EndDate,
       data.Content,
     ]);
     console.log(list, "list");
@@ -313,4 +314,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Home;

@@ -130,7 +130,7 @@ const Find = styled.span`
   }
 `;
 
-function Home() {
+function Login() {
   const [info, setInfo] = useRecoilState(infoState);
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
@@ -156,9 +156,9 @@ function Home() {
         user_id: data.UserId,
         password: data.Password,
       },
-      withCredentials: true,
+      withCredentials: false,
       headers: {
-        "Access-Control-Allow-Origin": "http://3.34.209.20:3000",
+        "Access-Control-Allow-Origin": "*",
       },
     })
       .then(function (response) {
@@ -205,4 +205,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Login;

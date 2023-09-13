@@ -1,6 +1,6 @@
 import { RecoilRoot } from "recoil";
 import Router from "./Router";
-// import "./css/App.css";
+import "./css/App.css";
 function App() {
   return (
     <>
@@ -12,5 +12,3 @@ function App() {
 }
 
 export default App;
-
-//arin 43.201.223.238
