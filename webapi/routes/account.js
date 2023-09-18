@@ -21,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // 정적 파일 제공
 const dynamodb = new DynamoDBClient({ region: 'ap-northeast-2' }); // AWS DynamoDB 클라이언트 생성
 const tableName = 'Account'; // DynamoDB 테이블 이름
 
+
 // 사용자가 존재하는지 확인하는 비동기 함수
 async function isUserExists(userId) {
   const params = {
@@ -38,6 +39,7 @@ async function isUserExists(userId) {
     return false;
   }
 }
+
 
 // 사용자 이름이 이미 존재하는지 확인하는 비동기 함수
 async function isUserNameExists(userName) {
@@ -60,12 +62,14 @@ async function isUserNameExists(userName) {
 
 // 로그인이 필요한 미들웨어
 function requireLogin(req, res, next) {
-  const token = req.cookies.token;
-  console.log("토큰:", token);
+  const authorizationHeader = req.headers.authorization;
 
-  if (!token) {
+  if (!authorizationHeader) {
     return res.status(401).json({ detail: "인증되지 않았습니다 - 로그인이 필요합니다." });
   }
+
+  // "Bearer" 스킴으로 시작하는 Authorization 헤더를 파싱하여 토큰 추출
+  const token = authorizationHeader.replace('Bearer ', '');
 
   try {
     const decoded = jwt.verify(token, 'secret_key');
@@ -77,10 +81,11 @@ function requireLogin(req, res, next) {
   }
 }
 
+
 // 사용자 로그인 처리
 app.post("/account/login", async (req, res) => {
   const { user_id, password } = req.body;
-  const data = [user_id, password];
+  const data = { user_id }; // JSON 응답에 포함할 데이터 객체 생성
   console.log("사용자 ID를 사용하여 로그인 요청 받음:", user_id);
 
   if (!password) {
@@ -99,17 +104,21 @@ app.post("/account/login", async (req, res) => {
     const token = jwt.sign({ user_id }, 'secret_key', { expiresIn: '1h' });
     res.cookie("token", token);
 
-    return res.json(data);
+    // 데이터 객체에 token 추가
+    data.token = token;
+
+    return res.json(data); // JSON 응답으로 user_id와 token을 함께 반환
   } catch (error) {
     console.error('오류 발생:', error);
     return res.status(500).json({ detail: "내부 서버 오류" });
   }
 });
 
+
+
 // 사용자 로그아웃 처리
 app.post("/account/logout", requireLogin, (req, res) => {
   res.clearCookie("token");
-  res.clearCookie("eventData");
   return res.json({ message: "로그아웃 성공" });
 });
 
@@ -286,15 +295,16 @@ app.post("/account/profile", requireLogin, upload.single("profileImage"), async 
       profileImageUrl,
     };
 
-    res.cookie('profileData', JSON.stringify(profileData));
     return res.status(200).json({
-      message: "프로필이 성공적으로 생성되었습니다."
+      message: "프로필이 성공적으로 생성되었습니다.",
+      profileData
     });
   } catch (error) {
     console.error('프로필 생성 중 오류 발생: ', error);
     return res.status(500).json({ detail: "프로필을 생성하는 중 오류가 발생했습니다." });
   }
 });
+
 
 
 module.exports = app; // Express 애플리케이션을 내보내는 부분
