@@ -101,7 +101,7 @@ app.post("/account/login", async (req, res) => {
       return res.status(401).json({ detail: "사용자를 찾을 수 없습니다." });
     }
 
-    const token = jwt.sign({ user_id }, 'secret_key', { expiresIn: '1h' });
+    const token = jwt.sign({ user_id }, 'secret_key', { expiresIn: '10h' });
     res.cookie("token", token);
 
     // 데이터 객체에 token 추가
@@ -247,10 +247,10 @@ app.post("/account/find/id", async (req, res) => {
   }
 });
 
-// 사용자의 프로필 업데이트 
-app.post("/account/profile", requireLogin, upload.single("profileImage"), async (req, res) => {
-  const user = req.user;
-  const { user_id, user_name, introduction } = req.body;
+// 사용자 프로필 업데이트 API
+app.put("/account/profile", requireLogin, upload.single("profileImage"), async (req, res) => {
+  const { user_id, introduction } = req.body;
+  console.log(req.body)
 
   try {
     let profileImageUrl = null; // 프로필 사진 URL 초기화
@@ -272,39 +272,90 @@ app.post("/account/profile", requireLogin, upload.single("profileImage"), async 
       profileImageUrl = `https://${params.Bucket}.s3.ap-northeast-2.amazonaws.com/${params.Key}`;
     }
 
-    // 나머지 데이터와 함께 DynamoDB에 저장
-    const profileParams = {
+    // 기존 프로필 데이터를 먼저 가져옵니다.
+    const getParams = {
       TableName: 'Account',
-      Item: {
-        'UserId': { S: user_id },
-        'UserName': { S: user_name },
-        'Introduction': { S: introduction },
+      Key: {
+        'UserId': { S: user_id }, // 파티션 키 설정
+        'UserName': { S: user_id }, // 정렬 키 설정 (사용자의 정렬 키 값을 적절히 대체)
+      },
+    };
+
+    const getResponse = await dynamodb.send(new GetItemCommand(getParams));
+    const existingProfile = getResponse.Item;
+
+    // 비밀번호, 비밀번호 체크, UUID를 기존 값으로 설정합니다.
+    const updateParams = {
+      TableName: 'Account',
+      Key: {
+        'UserId': { S: user_id }, // 파티션 키 설정
+        'UserName': { S: user_id }, // 정렬 키 설정 (사용자의 정렬 키 값을 적절히 대체)
+      },
+      UpdateExpression: 'SET Introduction = :introduction',
+      ExpressionAttributeValues: {
+        ':introduction': { S: introduction },
       },
     };
 
     if (profileImageUrl) {
-      profileParams.Item['ProfileImageUrl'] = { S: profileImageUrl };
+      // 프로필 이미지 URL이 있는 경우 추가로 업데이트합니다.
+      updateParams.UpdateExpression += ', ProfileImageUrl = :profileImageUrl';
+      updateParams.ExpressionAttributeValues[':profileImageUrl'] = { S: profileImageUrl };
     }
 
-    await dynamodb.send(new PutItemCommand(profileParams));
+    await dynamodb.send(new UpdateItemCommand(updateParams));
 
-    const profileData = {
+    // 업데이트된 프로필 정보를 클라이언트에 반환합니다.
+    const updatedProfile = {
       user_id,
-      user_name,
       introduction,
       profileImageUrl,
     };
 
-    return res.status(200).json({
-      message: "프로필이 성공적으로 생성되었습니다.",
-      profileData
+    return res.json({
+      message: "프로필이 성공적으로 업데이트되었습니다.",
+      profile: updatedProfile
     });
   } catch (error) {
-    console.error('프로필 생성 중 오류 발생: ', error);
-    return res.status(500).json({ detail: "프로필을 생성하는 중 오류가 발생했습니다." });
+    console.error('프로필 업데이트 중 오류 발생: ', error);
+    return res.status(500).json({ detail: "프로필을 업데이트하는 중 오류가 발생했습니다." });
   }
 });
 
+// 사용자 프로필 조회 API
+app.get("/account/profile", requireLogin, async (req, res) => {
+  const { user_id } = req.user; // 로그인된 사용자의 정보는 `req.user`에서 얻을 수 있습니다.
 
+  try {
+    // 사용자 프로필 데이터를 가져옵니다.
+    const getParams = {
+      TableName: 'Account',
+      Key: {
+        'UserId': { S: user_id }, // 파티션 키 설정
+        'UserName': { S: user_id }, // 정렬 키 설정 (사용자의 정렬 키 값을 적절히 대체)
+      },
+    };
+
+    const getResponse = await dynamodb.send(new GetItemCommand(getParams));
+    const userProfile = getResponse.Item;
+
+    if (!userProfile) {
+      return res.status(404).json({ detail: "사용자 프로필을 찾을 수 없습니다." });
+    }
+
+    // 프로필 정보를 클라이언트에 반환합니다.
+    const profile = {
+      user_id: userProfile.UserId.S,
+      user_name: userProfile.UserName.S,
+      introduction: userProfile.Introduction ? userProfile.Introduction.S : null,
+      profileImageUrl: userProfile.ProfileImageUrl ? userProfile.ProfileImageUrl.S : null,
+    };
+
+    return res.json(profile);
+  } catch (error) {
+    console.error('프로필 조회 중 오류 발생: ', error);
+    return res.status(500).json({ detail: "프로필을 조회하는 중 오류가 발생했습니다." });
+  }
+});
 
 module.exports = app; // Express 애플리케이션을 내보내는 부분
