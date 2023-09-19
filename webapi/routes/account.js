@@ -170,6 +170,34 @@ function generateTemporaryPassword() {
   return temporaryPassword;
 }
 
+app.post("/account/find/id", async (req, res) => {
+  const { user_id } = req.body;
+
+  try {
+    const params = {
+      TableName: tableName,
+      FilterExpression: 'UserId = :id',
+      ExpressionAttributeValues: { ':id': { S: user_id } },
+    };
+
+    const command = new ScanCommand(params);
+    const response = await dynamodb.send(command);
+    const usersWithSameId = response.Items;
+
+    if (usersWithSameId.length === 0) {
+      return res.status(404).json({ detail: "해당 ID의 사용자가 없습니다." });
+    }
+
+    // 사용자 이름 반환
+    const userNames = usersWithSameId.map(user => user.UserName.S);
+
+    return res.json({ user_names: userNames });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    return res.status(500).json({ detail: "내부 서버 오류" });
+  }
+});
+
 // 사용자의 임시 비밀번호 발급 처리
 app.post("/account/find/pw", async (req, res) => {
   const { user_id, user_name } = req.body;
@@ -219,38 +247,8 @@ app.post("/account/find/pw", async (req, res) => {
 });
 
 // 사용자 ID 찾기 처리
-app.post("/account/find/id", async (req, res) => {
-  const { user_id } = req.body;
-
-  try {
-    const params = {
-      TableName: tableName,
-      FilterExpression: 'UserId = :id',
-      ExpressionAttributeValues: { ':id': { S: user_id } },
-    };
-
-    const command = new ScanCommand(params);
-    const response = await dynamodb.send(command);
-    const usersWithSameId = response.Items;
-
-    if (usersWithSameId.length === 0) {
-      return res.status(404).json({ detail: "해당 ID의 사용자가 없습니다." });
-    }
-
-    // 사용자 이름 반환
-    const userNames = usersWithSameId.map(user => user.UserName.S);
-
-    return res.json({ user_names: userNames });
-  } catch (error) {
-    console.error('오류 발생:', error);
-    return res.status(500).json({ detail: "내부 서버 오류" });
-  }
-});
-
-// 사용자 프로필 업데이트 API
 app.put("/account/profile", requireLogin, upload.single("profileImage"), async (req, res) => {
-  const { user_id, introduction } = req.body;
-  console.log(req.body)
+  const { user_id, user_name, introduction } = req.body;
 
   try {
     let profileImageUrl = null; // 프로필 사진 URL 초기화
@@ -272,28 +270,17 @@ app.put("/account/profile", requireLogin, upload.single("profileImage"), async (
       profileImageUrl = `https://${params.Bucket}.s3.ap-northeast-2.amazonaws.com/${params.Key}`;
     }
 
-    // 기존 프로필 데이터를 먼저 가져옵니다.
-    const getParams = {
-      TableName: 'Account',
-      Key: {
-        'UserId': { S: user_id }, // 파티션 키 설정
-        'UserName': { S: user_id }, // 정렬 키 설정 (사용자의 정렬 키 값을 적절히 대체)
-      },
-    };
-
-    const getResponse = await dynamodb.send(new GetItemCommand(getParams));
-    const existingProfile = getResponse.Item;
-
-    // 비밀번호, 비밀번호 체크, UUID를 기존 값으로 설정합니다.
+    // 업데이트할 프로필 데이터 생성
     const updateParams = {
       TableName: 'Account',
       Key: {
         'UserId': { S: user_id }, // 파티션 키 설정
-        'UserName': { S: user_id }, // 정렬 키 설정 (사용자의 정렬 키 값을 적절히 대체)
+        'UserName': { S: user_name }, // 정렬 키 설정 (사용자의 정렬 키 값을 적절히 대체)
       },
-      UpdateExpression: 'SET Introduction = :introduction',
+      UpdateExpression: 'SET Introduction = :introduction', // 비밀번호 필드를 업데이트하지 않음
       ExpressionAttributeValues: {
         ':introduction': { S: introduction },
+        // 비밀번호와 비밀번호 체크를 그대로 두기 위해 값을 설정하지 않음
       },
     };
 
@@ -308,6 +295,7 @@ app.put("/account/profile", requireLogin, upload.single("profileImage"), async (
     // 업데이트된 프로필 정보를 클라이언트에 반환합니다.
     const updatedProfile = {
       user_id,
+      user_name,
       introduction,
       profileImageUrl,
     };
@@ -322,7 +310,7 @@ app.put("/account/profile", requireLogin, upload.single("profileImage"), async (
   }
 });
 
-// 사용자 프로필 조회 API
+
 app.get("/account/profile", requireLogin, async (req, res) => {
   const { user_id } = req.user; // 로그인된 사용자의 정보는 `req.user`에서 얻을 수 있습니다.
 
@@ -357,5 +345,8 @@ app.get("/account/profile", requireLogin, async (req, res) => {
     return res.status(500).json({ detail: "프로필을 조회하는 중 오류가 발생했습니다." });
   }
 });
+
+
+
 
 module.exports = app; // Express 애플리케이션을 내보내는 부분
