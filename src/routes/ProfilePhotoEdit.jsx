@@ -1,113 +1,159 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  DynamoDBClient,
-  GetItemCommand,
-  UpdateItemCommand,
-} from "@aws-sdk/client-dynamodb";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/ProfilePhotoEdit.module.css";
-
-const client = new DynamoDBClient({ region: "ap-northeast-2" });
+import { useProfile } from "../components/ProfileContext";
 
 function ProfilePhotoEdit() {
+  const { profileImage, setProfileImage } = useProfile();
   const fileInput = useRef(null);
   const [imageURL, setImageURL] = useState(null);
-  const [nickname, setNickname] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [id, setId] = useState("");
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const command = new GetItemCommand({
-        TableName: "Users",
-        Key: { UserId: { S: "arin1234" } },
-      });
-
+    async function fetchUserProfile() {
       try {
-        const result = await client.send(command);
-        if (result.Item) {
-          setImageURL(result.Item.imageURL.S);
-          setNickname(result.Item.nickname.S);
-          setUsername(result.Item.UserName.S);
-          setBio(result.Item.bio.S);
+        const token =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYXJpbiIsImlhdCI6MTY5NTE3Njc1NiwiZXhwIjoxNjk1MjEyNzU2fQ.ZW3qCBzmRZZ8u2kdUPQ9-mxNfee4ETt4h2QUkMM8aZ4";
+
+        const response = await fetch("http://3.39.153.9:3000/account/profile", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setId(data.user_id);
+          setUsername(data.user_name);
+          setBio(data.introduction || "");
+          setImageURL(data.profileImageUrl);
+        } else {
+          console.error("Failed to fetch user information.");
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error(
+          "An error occurred while fetching user information:",
+          error
+        );
       }
-    };
+    }
 
-    fetchData();
-  }, []);
+    fetchUserProfile();
+    setImageURL(profileImage);
+  }, [profileImage]);
 
+  // 로그아웃 처리
   const handleLogout = () => {
     localStorage.removeItem("userId");
+    localStorage.removeItem("userToken");
     sessionStorage.removeItem("userId");
-    // navigate('/login');
+    navigate("/");
   };
 
+  // 파일 선택창 열기
   const handleFileSelect = () => {
     fileInput.current.click();
   };
 
+  // 이미지 파일이 선택되면 미리보기를 생성
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    const reader = new FileReader();
+
     if (file) {
-      const reader = new FileReader();
       reader.onloadend = () => {
-        setImageURL(reader.result);
+        const result = reader.result;
+        setImageURL(result);
+        setProfileImage(result);
       };
       reader.readAsDataURL(file);
+      setImageFile(file);
     }
   };
 
+  // 이미지 제거
   const handleRemoveImage = () => {
+    console.log("Removing image...");
     setImageURL(null);
+    setImageFile(null); // 추가된 이미지 파일 상태도 초기화 (위에서 추가한 상태 변수)
     fileInput.current.value = null;
   };
 
-  const handleSaveProfile = async () => {
-    if (!imageURL || !nickname || !username || !bio) {
-      alert("모든 필드를 입력해 주세요.");
+  // 프로필 정보를 업데이트하는 함수
+  const updateProfileInfo = async () => {
+    console.log("Updating profile info...");
+    if (!bio) {
+      alert("자기소개를 입력해 주세요.");
       return;
     }
 
-    const params = {
-      TableName: "Users",
-      Key: { UserId: { S: "arin1234" } },
-      UpdateExpression: "set #a = :a, #b = :b, #c = :c, #d = :d",
-      ExpressionAttributeNames: {
-        "#a": "UserName",
-        "#b": "nickname",
-        "#c": "bio",
-        "#d": "imageURL",
-      },
-      ExpressionAttributeValues: {
-        ":a": { S: username },
-        ":b": { S: nickname },
-        ":c": { S: bio },
-        ":d": { S: imageURL },
-      },
-    };
+    const formData = new FormData();
+    formData.append("user_id", id);
+    formData.append("user_name", username);
+    formData.append("introduction", bio);
 
-    const updateItemCommand = new UpdateItemCommand(params);
+    if (imageFile) {
+      formData.append("profileImage", imageFile);
+    } else {
+      // 만약 서버가 'null'을 받아서 이미지를 지우는 기능을 지원한다면
+      formData.append("profileImage", "null"); // 또는 formData.append("profileImage", null);
+    }
+
+    // if (imageURL) {
+    //     formData.append("profileImage", imageURL);
+    // }
 
     try {
-      await client.send(updateItemCommand);
-      alert("프로필 수정이 완료되었습니다!");
-      console.log("Navigating to /main");
-      navigate("/main");
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYXJpbiIsImlhdCI6MTY5NTE3Njc1NiwiZXhwIjoxNjk1MjEyNzU2fQ.ZW3qCBzmRZZ8u2kdUPQ9-mxNfee4ETt4h2QUkMM8aZ4";
+      const response = await fetch("http://3.39.153.9:3000/account/profile", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message);
+      } else {
+        console.error("Failed to update profile.");
+      }
     } catch (error) {
-      console.error("Error saving data:", error);
+      console.error("An error occurred while updating profile:", error);
+    }
+  };
+
+  // 프로필 저장 처리
+  const handleSaveProfile = async () => {
+    if (!bio) {
+      alert("자기소개를 입력해 주세요.");
+      return;
+    }
+
+    try {
+      await updateProfileInfo();
+      alert("프로필 수정이 완료되었습니다!");
+      navigate("/home");
+    } catch (error) {
+      console.error("An error occurred while saving profile:", error);
     }
   };
 
   return (
     <div className={styles.profileEditWrap}>
       <div className={styles.profileEdit}>
-        <div className={styles.header}>
+        <div className={styles.profileheader}>
           <h1>프로필 편집</h1>
-          <button className={styles.completeBtn} onClick={handleSaveProfile}>
+          <button
+            className={styles.profilecompleteBtn}
+            onClick={handleSaveProfile}
+          >
             완료
           </button>
         </div>
@@ -120,39 +166,48 @@ function ProfilePhotoEdit() {
             {!imageURL && <span>+</span>}
           </div>
           <input
-            className={styles.justinput}
             type="file"
             ref={fileInput}
             style={{ display: "none" }}
             onChange={handleImageChange}
+            className={styles.profileinput}
           />
           <div className={styles.imageAction}>
-            <button className={styles.photoBtn} onClick={handleFileSelect}>
+            <button
+              className={styles.profilephotoBtn}
+              onClick={handleFileSelect}
+            >
               사진 선택
             </button>
-            <button className={styles.photoBtn} onClick={handleRemoveImage}>
+            <button
+              className={styles.profilephotoBtn}
+              onClick={handleRemoveImage}
+            >
               지우기
             </button>
           </div>
         </div>
-        <div className={styles.inputBox}>
+        <div className={styles.profileinputBox}>
+          <h6>ID</h6>
           <input
-            className={styles.justinput}
-            placeholder="닉네임"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
+            placeholder="ID"
+            value={id}
+            readOnly
+            className={styles.profileinput}
           />
+          <h6>USER NAME</h6>
           <input
-            className={styles.justinput}
             placeholder="유저 이름"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            readOnly
+            className={styles.profileinput}
           />
+          <h6>BIO</h6>
           <textarea
-            className={styles.justtextarea}
             placeholder="자기소개"
             value={bio}
             onChange={(e) => setBio(e.target.value)}
+            className={styles.profiletextarea}
           ></textarea>
           <button className={styles.logoutBtn} onClick={handleLogout}>
             로그아웃

@@ -134,10 +134,7 @@ function Login() {
   const [info, setInfo] = useRecoilState(infoState);
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
-  // if (userid !== null) {
-  //   navigate('/main')
-  //   console.log(userid)
-  // }
+
   useEffect(() => {
     if (localStorage.getItem("id") !== null) {
       navigate("/home");
@@ -148,10 +145,9 @@ function Login() {
   }, [navigate]);
 
   const onSubmit = (data) => {
-    console.log(data.UserId);
     axios({
       method: "post",
-      url: "http://3.34.209.20:8000/account/login",
+      url: "http://3.39.153.9:3000/account/login",
       data: {
         user_id: data.UserId,
         password: data.Password,
@@ -162,14 +158,13 @@ function Login() {
       },
     })
       .then(function (response) {
-        console.log(response);
-        if (response.data["message"] === "로그인 성공") {
-          const info = response.data["data"];
-          setInfo(info);
-          const setCookieHeader = response.headers["Set-Cookie"];
+        if (response.data !== null) {
+          const info = data.UserId;
+          setInfo([info]);
+          const setCookie = response.data["token"];
           navigate("/home");
-          console.log(response.data["data"]);
-          document.cookie = setCookieHeader;
+          console.log(info);
+          document.cookie = `token=${setCookie}`;
         } else if (response["data"] === "failed") {
           alert("올바르지 않은 회원정보입니다.");
         }

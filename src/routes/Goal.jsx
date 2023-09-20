@@ -106,6 +106,8 @@ function Goal() {
             }
           />{" "}
         </div>
+        <div className={styles.Tag}>사진</div>
+        <input type="file" {...register("image")} />
         <div className={styles.Tag}>완료</div>
         <div style={{ width: "100%" }}>
           <div className={styles.Tag}>

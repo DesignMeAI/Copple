@@ -12,28 +12,27 @@
   height: 100vh;
   max-height: 100vh;
   margin: 0 auto;
-  padding: 0 40px;
   padding-top: 20px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
   overflow: scroll;
 }
 
-.header {
+.profileheader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: white;
-  padding: 10px 0;
+  margin: 10px;
 }
 
-.header h1 {
+.profileheader h1 {
   font-size: 1.2em;
   margin: 0;
   padding: 0 20px;
 }
 
-.completeBtn {
+.profilecompleteBtn {
   background-color: rgb(0, 183, 255);
   border: none;
   border-radius: 5px;
@@ -42,12 +41,14 @@
   cursor: pointer;
   font-size: 15px;
   width: 60px;
+  margin-right: 20px;
+  margin-bottom: 8px;
 }
 
 .profileImageSection {
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin: 20px 20px;
 }
 
 .imageCircle {
@@ -61,33 +62,40 @@
   cursor: pointer;
   background-size: cover;
   background-position: center;
+  margin-right: 20px;
 }
 
 .imageAction {
   display: flex;
   flex-direction: column;
   margin-left: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-.justinput {
-  margin-top: 20px;
-  margin-right: 30px;
+.profileinput,
+.profiletextarea {
   margin-bottom: 10px;
   padding: 13px;
-  width: 350px;
+  width: 300px;
   border: 1px solid gray;
   border-radius: 5px;
 }
 
-.justtextarea {
+.profileinput {
+  pointer-events: none;
+  user-select: none;
+  background-color: rgb(243, 243, 243);
+  color: rgb(122, 122, 122);
+}
+
+.profiletextarea {
   height: 100px;
   resize: none;
 }
 
-.photoBtn {
+.profilephotoBtn {
   width: 100px;
-  margin-top: 20px;
+  margin-top: 25px;
   margin-right: 30px;
   padding: 8px;
   border: 1px solid gray;
@@ -96,12 +104,18 @@
 }
 
 .logoutBtn {
-  width: 350px;
-  margin-top: 50px;
-  margin-left: 5px;
-  padding: 8px;
+  width: 300px;
+  margin-top: 80px;
+  padding: 10px;
   border: 1px solid gray;
   border-radius: 5px;
   font-size: 15px;
   margin-bottom: 30px;
+  background-color: rgb(240, 240, 240);
+}
+
+.profileinputBox h6 {
+  margin-left: 30px;
+  margin-bottom: 10px;
+  text-align: left;
 }

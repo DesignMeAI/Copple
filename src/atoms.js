@@ -8,9 +8,10 @@ const { persistAtom } = recoilPersist({
 
 export const infoState = atom({
     key: "infoState",
-    default: [],
+    default: "",
     effects_UNSTABLE: [persistAtom]
 })
+
 
 export const goalState = atom({
     key: "goal",

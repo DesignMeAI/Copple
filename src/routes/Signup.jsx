@@ -174,8 +174,8 @@ function Signup() {
         } else {
           axios({
             method: "post",
-            // url: 'http://54.180.206.223:8000/account/signup',
-            url: "http://3.34.209.20:8000/account/signup",
+
+            url: "http://3.39.153.9:3000/account/signup",
             data: {
               user_id: data.UserId,
               password: data.Password,

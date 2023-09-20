@@ -2,14 +2,13 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import shortid from "shortid";
+import styles from "../css/Home.module.css";
 import styled from "styled-components";
 import omg from "../omg.jpg";
 import Goalitem from "../components/Goalitem";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { infoState, goalState } from "../atoms.js";
-import docClient from "../components/client";
-import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 
 const Img = styled.img`
   width: 100px;
@@ -111,7 +110,7 @@ const Index = styled.div`
   div {
     padding: 0px;
     margin: 0px;
-    flex-grow: 0.9;
+    flex-grow: 0;
   }
   &:last-child {
     position: fixed;
@@ -178,61 +177,83 @@ const Svg = styled.svg`
   width: 30px;
   height: 30px;
 `;
-function Home() {
+
+export default function Home() {
+  const [imageURL, setImageURL] = useState(null);
   const [info, setInfo] = useRecoilState(infoState);
+  const fileInput = useRef(null);
   const [goals, setGoals] = useRecoilState(goalState);
   const [leaving, setLeaving] = useState(false);
   const [index, setIndex] = useState(0);
   const [done, setDone] = useState(false);
+  const [name, setName] = useState("");
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const gotoArin = () => {
-    axios({
+  const getName = async (id) => {
+    await axios({
       method: "post",
-      url: "http://3.34.209.20:8000/account/profile",
-      data: info,
-      // withCredentials: true,
-      // headers: {
-      //     "Access-Control-Allow-Origin": "http://3.34.209.20:3000"
-      // }
-    }).then(function (response) {
-      console.log(response);
-    });
-  };
-  const doneHandler = (e) => {
-    {
-      e.target.textContent === "지금 진행중" ? setDone(false) : setDone(true);
-    }
-  };
-  async function getData() {
-    const command = new QueryCommand({
-      TableName: "Records",
-      KeyConditionExpression:
-        "UserId = :UserId AND begins_with (EventId, :event)",
-      ExpressionAttributeValues: {
-        ":UserId": info["uuid"],
-        ":event": "Goal",
+      url: "http://3.39.153.9:3000/account/find/id",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
       },
-      ProjectionExpression: "Title, StartDate, EndDate, Content",
-      ConsistentRead: true,
-    });
-    const response = await docClient.send(command);
-    const list = response.Items.map((data) => [
-      data.Title,
-      data.StartDate,
-      data.EndDate,
-      data.Content,
-    ]);
-    console.log(list, "list");
-    return list;
+      data: {
+        user_id: id,
+      },
+      withCredentials: false,
+    }).then((response) => setName(response.data.user_names[0]));
+  };
+
+  const doneHandler = (e) => {
+    e.target.textContent === "지금 진행중" ? setDone(true) : setDone(false);
+    console.log(done);
+  };
+
+  async function getData() {
+    const tokenstring = document.cookie;
+    const token = tokenstring.split("=")[1];
+    console.log(tokenstring);
+    await axios({
+      method: "GET",
+      url: "http://3.39.153.9:3000/goal/read",
+      withCredentials: false, // 쿠키를 사용하므로 true로 설정
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => setGoals(response.data));
   }
+
   useEffect(() => {
-    getData()
-      .then((value) => {
-        setGoals(value);
-      })
-      .catch((error) => console.log(error));
+    async function fetchUserProfile() {
+      try {
+        const tokenstring = document.cookie;
+        const token = tokenstring.split("=")[1];
+        const response = await fetch("http://3.39.153.9:3000/account/profile", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setImageURL(data.profileImageUrl || "");
+        } else {
+          console.error("Failed to fetch user information.");
+        }
+      } catch (error) {
+        console.error(
+          "An error occurred while fetching user information:",
+          error
+        );
+      }
+    }
+    fetchUserProfile();
+    getData();
+    getName(info[0]);
   }, []);
+
   const offset = 4;
+  // 파일 선택창 열기
   const increaseIndex = () => {
     if (goals) {
       toggleLeaving();
@@ -241,20 +262,25 @@ function Home() {
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
-
   return (
     <Background>
       <Container className="first">
         <SmallContainer>
-          <Link to="http://43.201.223.238:3000/profile">프로필 편집 ⚙️</Link>
+          <Link to={"/profile"}>프로필 편집 ⚙️</Link>
         </SmallContainer>
         <Index>
-          <span>
-            <Img src={omg} alt="adorable" onClick={increaseIndex}></Img>
-          </span>
+          <div className={styles.profileImageSection}>
+            <div
+              onClick={increaseIndex}
+              className={styles.imageCircle}
+              style={imageURL ? { backgroundImage: `url(${imageURL})` } : {}}
+            >
+              {!imageURL && <span>+</span>}
+            </div>
+          </div>
           <Profile>
-            <strong>{info["name"]}</strong>
-            <br />@ {info["id"]}
+            <strong>{name}</strong>
+            <br />@ {info[0]}
           </Profile>
         </Index>
         <ProfileMsg>{new Date().toLocaleDateString()}</ProfileMsg>
@@ -289,8 +315,8 @@ function Home() {
                     <Goalitem
                       key={shortid.generate()}
                       variants={BoxVariants}
-                      goaltitle={goal[0]}
-                      goalperiod={goal[1]}
+                      goaltitle={goal["title"]}
+                      goalperiod={goal["content"]}
                       whileHover="hover"
                       initial="normal"
                       transition={{ type: "tween" }}
@@ -335,5 +361,3 @@ function Home() {
     </Background>
   );
 }
-
-export default Home;
