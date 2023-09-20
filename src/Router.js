@@ -19,7 +19,7 @@ function Router() {
         <Route path="/plan" element={<Plan />} />
         <Route path="/goal" element={<Goal />} />
         <Route path="/profile" element={<ProfilePhotoEdit />} />
-        <Route path="/main" element={<MainPage />} />
+        {/* <Route path="/main" element={<MainPage />} /> */}
         <Route path="/planlist" element={<PlanListPage />} />
         <Route path="/" element={<Login />} />
       </Routes>

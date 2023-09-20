@@ -1,45 +1,73 @@
 import { useForm } from "react-hook-form";
 import styles from "../css/Goal.module.css";
-import { v4 } from "uuid";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useRecoilState } from "recoil";
-import { infoState } from "../atoms.js";
-import docClient from "../components/client";
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { goalIdState, modeState } from "../atoms";
+
+const SendGoal = async (data) => {
+  const tokenstring = document.cookie;
+  const token = tokenstring.split("=")[1];
+  await axios({
+    method: "post",
+    url: "http://3.39.153.9:3000/goal/create",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+    data: {
+      title: data.title,
+      startDatetime: data.startDate,
+      endDatetime: data.endDate,
+      location: data.address,
+      content: data.content,
+    },
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      Authorization: `Bearer ${token}`,
+    },
+    withCredentials: false,
+  }).then((response) => console.log(response));
+};
+const getGoalData = async (event_id) => {
+  const tokenstring = document.cookie;
+  const token = tokenstring.split("=")[1];
+  await axios({
+    method: "GET",
+    url: `http://3.39.153.9:3000/goal/read/${event_id}`,
+    withCredentials: false,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => console.log(response));
+};
 
 function Goal() {
+  const [history, setHistory] = useState({});
+  const navigate = useNavigate();
+  const [mode, setMode] = useRecoilState(modeState);
+  const [goalId, setGoalId] = useRecoilState(goalIdState);
+  if (mode === "update") {
+    getGoalData(goalId).then((response) => {
+      setHistory({
+        title: response.data.title,
+        startDate: response.data.startDatetime,
+        endDate: response.data.endDatetime,
+        location: response.data.location,
+        content: response.data.content,
+        image: response.data.photoURl,
+      });
+    });
+  }
   const changeHandler = (e) => {
     console.log(e);
   };
-  const [info, setInfo] = useRecoilState(infoState);
-  const navigate = useNavigate();
-  const user_uuid2 = v4();
-  async function SendGoal(data) {
-    const command = new PutCommand({
-      TableName: "Records",
-      Item: {
-        UserId: info.uuid,
-        EventId: `Goal${user_uuid2}`,
-        UserName: info.id,
-        Name: info.name,
-        Title: data.title,
-        StartDate: data.startDate,
-        EndDate: data.endDate,
-        Address: data.address,
-        Content: data.content,
-        isDone: data.isDone,
 
-        // Picture: data.picture
-      },
-    });
-    const response = await docClient.send(command);
-    console.log(command);
-  }
   const { register, handleSubmit, formState } = useForm();
   const onSubmit = (data) => {
-    SendGoal(data).then(navigate("/main"));
+    SendGoal(data).then(navigate("/home"));
   };
-
   return (
     <div className={styles.Container}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -61,6 +89,7 @@ function Goal() {
         <div className={styles.Tag}>제목</div>
         <div className={styles.Tag}>
           <input
+            value={history.title}
             maxLength={20}
             className={styles.Input}
             {...register("title", { required: "Please write a title" })}
@@ -73,7 +102,8 @@ function Goal() {
         <div className={styles.Tag}>시작일</div>
         <div className={styles.Tag}>
           <input
-            type="date"
+            value={history.startDate}
+            type="text"
             className={styles.Input}
             {...register("startDate", { required: "Please write a period" })}
             placeholder={
@@ -84,7 +114,8 @@ function Goal() {
         <div className={styles.Tag}>종료일</div>
         <div className={styles.Tag}>
           <input
-            type="date"
+            value={history.endDate}
+            type="text"
             className={styles.Input}
             {...register("endDate", { required: "Please write a period" })}
             placeholder={
@@ -94,11 +125,16 @@ function Goal() {
         </div>
         <div className={styles.Tag}>장소</div>
         <div className={styles.Tag}>
-          <input className={styles.Input} {...register("address")} />
+          <input
+            value={history.location}
+            className={styles.Input}
+            {...register("address")}
+          />
         </div>
         <div className={styles.Tag}>내용</div>
         <div className={styles.Tag}>
           <input
+            value={history.content}
             className={styles.Input}
             {...register("content", { required: "Please write a content" })}
             placeholder={
@@ -107,11 +143,12 @@ function Goal() {
           />{" "}
         </div>
         <div className={styles.Tag}>사진</div>
-        <input type="file" {...register("image")} />
+        <input value={history.image} type="file" {...register("image")} />
         <div className={styles.Tag}>완료</div>
         <div style={{ width: "100%" }}>
           <div className={styles.Tag}>
             <input
+              disabled={mode === "update" ? false : true}
               onClick={changeHandler}
               className={styles.check}
               type="checkbox"

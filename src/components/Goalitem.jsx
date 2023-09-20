@@ -1,6 +1,29 @@
 import styled from "styled-components";
 import omg from "../omg.jpg";
 import { motion } from "framer-motion";
+import { useRecoilState } from "recoil";
+import { goalIdState, modeState } from "../atoms";
+import { useNavigate } from "react-router-dom";
+
+function Goalitem({ goaltitle, goalperiod, event_id }) {
+  const navigate = useNavigate();
+  const [goalId, setGoalId] = useRecoilState(goalIdState);
+  const [mode, setMode] = useRecoilState(modeState);
+  const goalUpdateHandler = () => {
+    setMode("update");
+    setGoalId(event_id);
+    navigate("/goal");
+  };
+  return (
+    <GoalContainer onClick={goalUpdateHandler}>
+      <Img src={omg} alt="goal"></Img>
+      <span className="title">{goaltitle}</span>
+      <span className="period">{goalperiod}</span>
+    </GoalContainer>
+  );
+}
+
+export default Goalitem;
 
 const Img = styled.img`
   width: auto;
@@ -29,14 +52,3 @@ const GoalContainer = styled(motion.div)`
   }
   position: relative;
 `;
-function Goalitem({ goaltitle, goalperiod }) {
-  return (
-    <GoalContainer>
-      <Img src={omg} alt="goal"></Img>
-      <span className="title">{goaltitle}</span>
-      <span className="period">{goalperiod}</span>
-    </GoalContainer>
-  );
-}
-
-export default Goalitem;

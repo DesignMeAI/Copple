@@ -12,9 +12,17 @@ export const infoState = atom({
     effects_UNSTABLE: [persistAtom]
 })
 
-
 export const goalState = atom({
     key: "goal",
     default: [],
 })
 
+export const modeState = atom({
+    key: "mode",
+    default: "create"
+})
+
+export const goalIdState = atom({
+    key: "goalId",
+    default: ""
+})

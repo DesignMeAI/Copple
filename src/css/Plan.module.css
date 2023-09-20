@@ -1,10 +1,9 @@
 .Container {
-  border-radius: 15px;
   display: flex;
   width: 375px;
   height: 100vh;
   flex-direction: column;
-  margin: 10px auto;
+  margin: 0px auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -12,14 +11,14 @@
   font-style: bold;
   width: 98%;
   text-align: start;
-  font-size: 20px;
-  font-weight: 500;
-  padding: 10px 7px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 7px 7px;
   text-align: left;
 }
 .Input {
   width: 100%;
-  height: 100%;
+  height: 80%;
   margin-bottom: 20px;
   color: rgba(0, 0, 0, 0.596);
   border: 1.2px solid rgb(220, 220, 220);
@@ -57,6 +56,7 @@
   color: none;
   border: none;
   padding: 7px 0px;
+  padding-top: 0px;
   margin-right: 20px;
 }
 .Btn a {
@@ -77,6 +77,7 @@
   font-weight: 500;
   border: none;
   padding: 7px 0px;
+  padding-top: 0px;
   margin-right: 30px;
 }
 .Btn:last-child {
