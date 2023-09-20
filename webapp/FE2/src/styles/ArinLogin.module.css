@@ -1,0 +1,21 @@
+.ArinLoginContainer {
+    width: 100%;
+    background-color:#ffd900;
+    display: flex;
+}
+
+.ArinLoginContainerWrap {
+    width: 550px;
+    height: 100vh;
+    background-color: white;
+    border-radius: 20px;
+    margin: auto;
+    position: relative;
+    left: 150px;
+}
+
+.title {
+    font-weight: 700;
+    font-size: 20px;
+    color: #ffd900;
+}

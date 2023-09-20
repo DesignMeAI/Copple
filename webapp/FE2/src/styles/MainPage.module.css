@@ -1,0 +1,98 @@
+.mainWrapper {
+  /* background-image: url('/AiPlanner/myplanner/FE/src/assets/background.png');
+  background-size:cover;
+  background-repeat: no-repeat; */
+  /* background-position: 30px 0px; */
+  background-color: #ffffff;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; 
+}
+
+.mainContainer {
+  width: 375px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden; 
+  max-height: 100vh; 
+  padding: 10px;
+
+  /* left: 220px; */
+}
+
+.scheduleTodoRow {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-direction: column;
+  position: absolute;
+  top: 310px;
+  margin-left: 10px;
+}
+
+.mainSchedule,
+.mainTodo {
+  flex: 1;
+}
+
+.mainweeklyCalendar {
+  position: absolute;
+  top: 25px;
+  left: 15px;
+  padding: 0 10px;
+}
+
+.mainThumbnails {
+  margin-top: 130px;
+  padding-bottom: 20px;
+  position: absolute;
+  top: 180px;
+  margin-right: 25px;
+}
+
+.HeaderContainer {
+  width: 100%;  
+
+}
+
+
+
+
+/* 스마트폰 가로 */
+/* @media screen and (min-width:576px) {
+  .main-container {
+    max-width: 540px;
+  }
+  .schedule-todo-row {
+    flex-direction: row; 
+  }
+} */
+
+/* 타블렛 */
+/* @media screen and (min-width:768px) {
+  .main-container {
+    max-width: 720px;
+  }
+} */
+
+/* 데스크탑 */
+/* @media screen and (min-width:992px) {
+  .main-container {
+    max-width: 960px;
+  }
+} */
+
+/* 큰 데스크탑 */
+/* @media screen and (min-width:1200px) {
+  .main-container {
+    max-width: 1140px;
+  }
+} */

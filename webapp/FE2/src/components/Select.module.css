@@ -1,0 +1,24 @@
+.SelectDiv {
+    width: 95%;
+  }
+  .Container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &:first-child {
+      font-size: 15px;
+      flex: 1;
+    }
+  }
+  .Btn {
+    font-weight: 700;
+    font-size: 17px;
+    color: rgba(0, 255, 255, 0.527);
+    padding-left: 20px;
+    background-color: white;
+    border: none;
+    &:hover {
+      cursor: pointer;
+    }
+  }

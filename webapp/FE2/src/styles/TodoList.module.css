@@ -1,0 +1,150 @@
+/* TodoList.module.css */
+
+.todoList {
+  max-width: 375px;
+  position: relative;
+  padding-right: 130px;
+}
+
+
+
+.noGoalTasks, .goalTasks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 200px;
+
+
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  position: relative;
+  font-size: 12px;
+}
+
+.task.completed {
+  opacity: 0.5;
+}
+
+
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+}
+
+.task input[type="checkbox"] {
+  appearance: none;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 50%; /* 동그라미 모양으로 만들기 위해 */
+  width: 10px; /* 원 크기 조정 */
+  height: 10px; /* 원 크기 조정 */
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  margin-right: 10px;
+
+}
+
+.task input[type="checkbox"]:checked {
+  background-color: #6cd3ff;
+}
+
+.task input[type="checkbox"]:checked:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%; /* 동그라미 모양으로 만들기 위해 */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.task .checkmark {
+  font-size: 6px;
+  display: none;
+  margin-right: 5px;
+  align-self: flex-start; /* 왼쪽 정렬 */
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.task .taskText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.moreOptions {
+  cursor: pointer;
+  position: relative;
+}
+
+.optionList {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.moreOptions:hover .optionList {
+  display: block;
+}
+
+.optionList li {
+  padding: px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.optionList li:hover {
+  background-color: #f5f5f5;
+}
+
+
+/* 목표 제목에 대한 스타일 조정 */
+.goalTitle {
+  font-size: 15px; /* 글꼴 크기 늘림 */
+  font-weight: 700;
+  margin-top: 20px;
+  text-align: center;
+  color: #000000;
+  margin-left: 5px;
+  background-color: #6cd3ff;
+  padding: 5px;
+  border-radius: 10px;
+
+}
+.noGoalTasks, .goalTasks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-height: 90vh;
+}
+
+.todoList::-webkit-scrollbar {
+  width: 3px;
+}
+
+.todoList::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.todoList::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,82 @@
+.app {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+ 
+  color: #333;
+}
+
+.input-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.time-selector {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.add-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.event-list {
+  list-style: none;
+  padding: 0;
+  
+}
+
+.event-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ddd;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.event-time,
+.event-title {
+  margin: 0;
+}
+
+.options {
+  cursor: pointer;
+}
+
+.edit-input,
+.edit-btn,
+.delete-btn,
+.finish-button {
+  margin-left: 10px;
+}
+
+.dropdown-options {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}

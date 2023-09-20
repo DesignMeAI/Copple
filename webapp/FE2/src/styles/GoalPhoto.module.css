@@ -1,0 +1,217 @@
+.goalPhoto {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+}
+
+.goalPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: center;
+}
+
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.menuButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 333;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+}
+
+.title, .titleInput {
+  position: absolute;
+  bottom: 40px;
+  left: 5px;
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+  margin: 10px;
+  width: 100%; 
+  border: none;
+  background: transparent;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: none; 
+  text-align: left;
+}
+
+
+.titleContainer {
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
+  width: 80%;
+}
+
+
+.titleInput {
+  background:rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.date {
+  position: absolute;
+  bottom: 10px;
+  left: 0px;
+  font-size: 19px;
+  color: white;
+  margin: 10px;
+}
+
+
+
+.options {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  display: none;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  z-index: 10;
+  flex-direction: column; 
+}
+
+.options.show {
+  display: flex;
+}
+
+.options button {
+  padding: 5px 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.options button:hover {
+  background-color: #f5f5f5;
+}
+
+
+.dateInputs {
+  position: absolute;
+  bottom: 5px; 
+  left: 20px;   
+  font-size: 19px;
+  color: white;
+  margin: 10px;
+  box-shadow: none;
+  cursor: pointer;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.3);
+
+
+}
+
+.dateInputs label {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3; 
+  cursor: pointer;
+
+}
+
+.dateSeparator {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.placeholder {
+  width: 100vw;
+  height: 70vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ebebeb;
+  cursor: pointer;
+  position: relative;
+}
+
+.placeholder label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  right: 45px;
+  bottom: 20px;
+}
+
+.titleInput::placeholder,
+.dateIputs::placeholder {
+    color: rgb(225, 225, 225);
+}
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+
+.whiteCalendar::-webkit-calendar-picker-indicator {
+  filter: invert(1); 
+  opacity: 1; 
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"></path></svg>') no-repeat; 
+  background-size: 14px; 
+  background-position: center; 
+}
+
+.whiteCalendar::-webkit-calendar-picker-indicator:hover {
+  cursor: pointer;
+}
+
+.saveButton {
+  position: relative;
+  top: 311px;
+  width: 100%;
+  font-size: 16px;
+  background-color: #0099ff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.saveButton:hover {
+  background-color: #ffffff;
+}
+
+.reactDatepickerWrapper,
+.reactDatepicker__inputContainer {
+    
+    position: relative;
+    z-index: 900;
+}
+
