@@ -1,14 +1,9 @@
-
-
-
 .calendarNavigation {
   display: flex;
   align-items: center;
-
   position: relative;
-  right: 15px;
+  right: 25px;
   bottom: 20px;
-
 }
 
 .calendarWrapper {
@@ -18,8 +13,6 @@
   align-items: flex-start;
   box-sizing: border-box;
   position: relative;
-
-  
 }
 
 button {
@@ -27,7 +20,6 @@ button {
   cursor: pointer;
   border-radius: 16px;
   margin: -15px;
-
 }
 
 button:hover {

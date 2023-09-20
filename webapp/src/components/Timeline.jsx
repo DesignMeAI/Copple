@@ -67,33 +67,7 @@ const Timeline = ({ apiEvents = [] }) => {
 
   return (
     <div className={styles.app}>
-      <div className={styles['input-area']}>
-        <div className={styles['time-selector']}>
-          <select onChange={(e) => setHour(e.target.value)} value={hour}>
-            {[...Array(24).keys()].map(hour => (
-              <option key={hour} value={String(hour).padStart(2, '0')}>{String(hour).padStart(2, '0')}</option>
-            ))}
-          </select>
-          <span>시</span>
-          <select onChange={(e) => setMinute(e.target.value)} value={minute}>
-            {[...Array(60).keys()].map(minute => (
-              <option key={minute} value={String(minute).padStart(2, '0')}>{String(minute).padStart(2, '0')}</option>
-            ))}
-          </select>
-          <span>분</span>
-        </div>
-        <input
-          type="text"
-          className={styles['input']}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="일정 제목"
-          onKeyUp={(e) => {
-            if (e.key === 'Enter') addEvent();
-          }}
-        />
-        <button className={styles['add-button']} onClick={addEvent}>+</button>
-      </div>
+     
       <ul className={styles['event-list']}>
         {events.sort((a, b) => a.startDatetime.localeCompare(b.startDatetime)).map((event, index) => (
           <li key={event.event_id} className={styles['event-item']} style={{ backgroundColor: `hsl(${(index * 50) % 360}, 100%, 85%)` }}>

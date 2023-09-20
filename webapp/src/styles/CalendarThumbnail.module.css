@@ -4,7 +4,7 @@
   width: calc(95px * 4); 
   white-space: nowrap;
   margin: 8px;
-  margin-left: 35px;
+  margin-left: 30px;
   margin-top: -137px;
   text-align: center;
 }
@@ -14,10 +14,7 @@
   flex-direction: column;
   cursor: pointer;
   text-align: center;
-  
 }
-
-
 
 .CalendarThumbnailthumbnailBox {
   display: felx;
