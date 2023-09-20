@@ -8,7 +8,7 @@ const { persistAtom } = recoilPersist({
 
 export const infoState = atom({
     key: "infoState",
-    default: [],
+    default: "",
     effects_UNSTABLE: [persistAtom]
 })
 
@@ -19,5 +19,15 @@ export const goalState = atom({
 export const savedGoalsState = atom({
     key: 'savedGoalsState',
     default: [], // 기본값은 빈 배열
-  });
+});
 
+
+export const modeState = atom({
+    key: "mode",
+    default: "create"
+})
+
+export const goalIdState = atom({
+    key: "goalId",
+    default: ""
+})

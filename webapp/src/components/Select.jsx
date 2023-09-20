@@ -3,17 +3,7 @@ import Select from "react-select";
 import styles from "./Select.module.css";
 import { useRecoilState } from "recoil";
 import { goalState } from "../atoms";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
-
-const client = new DynamoDBClient({
-  region: "ap-northeast-2",
-  credentials: {
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  },
-});
-const docClient = DynamoDBDocumentClient.from(client);
+import axios from "axios";
 
 const Selectop = (props) => {
   const [goal, setGoal] = useRecoilState(goalState);
@@ -25,22 +15,31 @@ const Selectop = (props) => {
       selectInputRef.current.clearValue();
     }
   };
-  const command = new ScanCommand({
-    ProjectionExpression: "#Title, Content",
-    ExpressionAttributeNames: { "#Title": "Title" },
-    TableName: "Records",
-  });
   async function getData() {
-    const response = await docClient.send(command);
-    const Items = response.Items;
-    const lists = Items.map((data) => data["Title"]);
+    const tokenstring = document.cookie;
+    const token = tokenstring.split("=")[1];
+    await axios({
+      method: "GET",
+      url: "http://3.39.153.9:3000/goal/read",
+      withCredentials: false, // 쿠키를 사용하므로 true로 설정
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
+      setGoal(response.data);
+      console.log(goal);
+    });
+  }
+  async function setData() {
+    const lists = goal.map((data) => data["title"]);
     const list = lists.map((data) => ({ value: data, label: data }));
     setOptions(list);
   }
   useEffect(() => {
     getData();
+    setData();
   }, []);
-
   return (
     <div className={styles.SelectDiv}>
       <div className={styles.Container}>

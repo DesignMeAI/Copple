@@ -46,7 +46,7 @@ const Container = styled.form`
     border-radius: 10px;
     margin: 17px 0px;
     outline: none;
-   
+
     font-style: normal;
     font-weight: 500;
     font-size: 15px;
@@ -174,7 +174,6 @@ function Signup() {
         } else {
           axios({
             method: "post",
-            // url: 'http://54.180.206.223:8000/account/signup',
             url: "http://3.39.153.9:3000/account/signup",
             data: {
               user_id: data.UserId,

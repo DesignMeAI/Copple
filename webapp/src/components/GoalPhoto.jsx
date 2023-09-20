@@ -1,30 +1,29 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 // import EllipsisSvg from '/AiPlanner/myplanner/FE/src/assets/images/ellipsis.svg';
-import styles from '../styles/GoalPhoto.module.css';
+import styles from "../styles/GoalPhoto.module.css";
 
 function GoalPhoto({ goalId }) {
   const [imageSrc, setImageSrc] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [editedTitle, setEditedTitle] = useState('');
-  const [editedDate, setEditedDate] = useState('');
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedDate, setEditedDate] = useState("");
   const optionsRef = useRef(null);
 
   useEffect(() => {
-
     async function fetchGoalPhoto() {
       try {
-        const response = await fetch(`/api/goal-photo/${goalId}`); 
+        const response = await fetch(`/api/goal-photo/${goalId}`);
         if (response.ok) {
           const data = await response.json();
           setImageSrc(data.imageUrl);
           setEditedTitle(data.title);
           setEditedDate(data.date);
         } else {
-          console.error('Failed to fetch goal photo');
+          console.error("Failed to fetch goal photo");
         }
       } catch (error) {
-        console.error('Error fetching goal photo:', error);
+        console.error("Error fetching goal photo:", error);
       }
     }
 
@@ -53,7 +52,6 @@ function GoalPhoto({ goalId }) {
   return (
     <div className={styles.goalPhoto}>
       {imageSrc ? (
-       
         <>
           <img src={imageSrc} alt="Goal Thumbnail" />
           <div className={styles.overlay}>
@@ -76,7 +74,9 @@ function GoalPhoto({ goalId }) {
               </>
             ) : (
               <div className={styles.titleDateContainer}>
-                <div className={styles.title}>{editedTitle || 'Loading...'}</div>
+                <div className={styles.title}>
+                  {editedTitle || "Loading..."}
+                </div>
                 {editedDate && <div className={styles.date}>{editedDate}</div>}
               </div>
             )}
@@ -85,12 +85,14 @@ function GoalPhoto({ goalId }) {
         </>
       ) : (
         <div className={styles.placeholder}>
-          <label htmlFor="photo-input">사진 추가하기 <br/> &nbsp;Click! </label>
+          <label htmlFor="photo-input">
+            사진 추가하기 <br /> &nbsp;Click!{" "}
+          </label>
           <input
             id="photo-input"
             type="file"
             accept="image/*"
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             onChange={handleImageChange}
           />
         </div>

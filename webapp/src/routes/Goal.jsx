@@ -1,117 +1,155 @@
-import React from "react";
 import { useForm } from "react-hook-form";
+import styles from "../css/Goal.module.css";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useRecoilState } from "recoil";
-import { infoState,  savedGoalsState } from "../atoms.js";
-import styles from "../styles/Goal.module.css";
+import { goalIdState, modeState } from "../atoms";
+
+const SendGoal = async (data) => {
+  const tokenstring = document.cookie;
+  const token = tokenstring.split("=")[1];
+  await axios({
+    method: "post",
+    url: "http://3.39.153.9:3000/goal/create",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      title: data.title,
+      startDatetime: data.startDate,
+      endDatetime: data.endDate,
+      location: data.address,
+      content: data.content,
+    },
+    withCredentials: false,
+  }).then((response) => console.log(response));
+};
 
 function Goal() {
-  const [info, setInfo] = useRecoilState(infoState);
+  const [history, setHistory] = useState({});
   const navigate = useNavigate();
-  const { register, handleSubmit, watch, formState } = useForm();
-  const imageFile = watch("image");
-  
-
-  const onSubmit = async (data) => {
-    const formData = new FormData();
-    Object.keys(data).forEach((key) => formData.append(key, data[key]));
-
-    if (imageFile) {
-      formData.append("image", imageFile[0]);
-    }
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYXJpbiIsImlhdCI6MTY5NTA4MjAyNSwiZXhwIjoxNjk1MTE4MDI1fQ.grUxNuNcq0o7lzX__L_j1jq_mPRHNhJcc4tMrMlkIWM";
-
-    try {
-      const response = await fetch("http://3.39.153.9:3000/goal/create", {
-        method: "POST",
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData,
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        if (result.event_id) {
-          setInfo({...info, goalId: result.event_id});
-          navigate("/main");
-        } else {
-          console.error("Failed to create the goal: ", result);
-        }
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to fetch: ", response.statusText, errorData);
+  const [mode, setMode] = useRecoilState(modeState);
+  const [goalId, setGoalId] = useRecoilState(goalIdState);
+  const getGoalData = async (event_id) => {
+    const tokenstring = document.cookie;
+    const token = tokenstring.split("=")[1];
+    await axios({
+      method: "GET",
+      url: `http://3.39.153.9:3000/goal/read/${event_id}`,
+      withCredentials: false,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
+      if (mode === "update") {
+        setHistory(response.data);
       }
-    } catch (error) {
-      console.error("An error occurred while submitting the form:", error);
-    }
+    });
   };
-
+  const changeHandler = (e) => {
+    console.log(e);
+  };
+  useEffect(() => {
+    getGoalData(goalId);
+  }, []);
+  const { register, handleSubmit, formState } = useForm();
+  const onSubmit = (data) => {
+    SendGoal(data).then(navigate("/home"));
+  };
   return (
     <div className={styles.Container}>
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.Navbar}>
           <button className={styles.selected}>
             <Link to="/goal">목표</Link>
           </button>
           <button className={styles.Btn}>
-            <Link to="/todo">할일</Link>
+            <Link to={"/todo"}>할일</Link>
           </button>
           <button className={styles.Btn}>
-            <Link to="/plan">일정</Link>
+            <Link to={"/plan"}>일정</Link>
           </button>
+          <div></div>
           <button className={styles.Btn} type="submit">
             저장
           </button>
         </div>
         <div className={styles.Tag}>제목</div>
-        <input
-          maxLength={20}
-          className={styles.Input}
-          {...register("title", { required: "Please write a title" })}
-          placeholder={
-            formState.errors.title && formState.errors.title.message
-          }
-        />
+        <div className={styles.Tag}>
+          <input
+            value={history?.title || null}
+            maxLength={20}
+            className={styles.Input}
+            {...register("title", { required: "Please write a title" })}
+            placeholder={
+              formState.errors.title && formState.errors.title.message
+            }
+          />
+        </div>
 
         <div className={styles.Tag}>시작일</div>
-        <input
-          type="date"
-          className={styles.Input}
-          {...register("startDatetime", { required: "Please write a period" })}
-          placeholder={
-            formState.errors.startDatetime && formState.errors.startDatetime.message
-          }
-      />
-      <input
-          type="date"
-          className={styles.Input}
-          {...register("endDatetime", { required: "Please write a period" })}
-          placeholder={
-            formState.errors.endDatetime && formState.errors.endDatetime.message
-          }
-      />
-      <input className={styles.Input} {...register("location")} />
+        <div className={styles.Tag}>
+          <input
+            value={history?.startDatetime || null}
+            type="text"
+            className={styles.Input}
+            {...register("startDate", { required: "Please write a period" })}
+            placeholder={
+              formState.errors.period && formState.errors.startDate.message
+            }
+          />
+        </div>
+        <div className={styles.Tag}>종료일</div>
+        <div className={styles.Tag}>
+          <input
+            value={history?.endDatetime || null}
+            type="text"
+            className={styles.Input}
+            {...register("endDate", { required: "Please write a period" })}
+            placeholder={
+              formState.errors.period && formState.errors.endDate.message
+            }
+          />
+        </div>
+        <div className={styles.Tag}>장소</div>
+        <div className={styles.Tag}>
+          <input
+            value={history?.location || null}
+            className={styles.Input}
+            {...register("address")}
+          />
+        </div>
         <div className={styles.Tag}>내용</div>
-        <input
-          className={styles.Input}
-          {...register("content", { required: "Please write a content" })}
-          placeholder={
-            formState.errors.content && formState.errors.content.message
-          }
-        />
-        <div className={styles.Tag}>완료</div>
-        <input
-          className={styles.Check}
-          type="checkbox"
-          {...register("isDone")}
-        />
+        <div className={styles.Tag}>
+          <input
+            value={history?.content || null}
+            className={styles.Input}
+            {...register("content", { required: "Please write a content" })}
+            placeholder={
+              formState.errors.content && formState.errors.content.message
+            }
+          />{" "}
+        </div>
         <div className={styles.Tag}>사진</div>
         <input type="file" {...register("image")} />
-    </form>
-  </div>
-);
+        <div className={styles.Tag}>완료</div>
+        <div style={{ width: "100%" }}>
+          <div className={styles.Tag}>
+            <input
+              disabled={mode === "update" ? false : history.isCompleted}
+              onClick={changeHandler}
+              className={styles.check}
+              type="checkbox"
+              {...register("isDone")}
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  );
 }
 
 export default Goal;

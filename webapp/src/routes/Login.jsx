@@ -21,8 +21,7 @@ const Background = styled.div`
   justify-content: space-evenly;
   background-color: #fce8a6;
   flex-direction: column;
-  border-radius: 10px;
-  margin: 10px auto;
+  margin: 0px auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
 `;
 const Container = styled.form`
@@ -46,7 +45,7 @@ const Input = styled.input`
   border-radius: 10px;
   margin: 12px 0px;
   outline: none;
- 
+  font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 500;
   font-size: 15px;

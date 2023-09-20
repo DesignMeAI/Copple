@@ -1,31 +1,26 @@
 .categoryRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;  
+  justify-content: space-between;
   margin-bottom: 20px;
-  margin-left: 15px;
-  background-color: none;
 }
 
-
-button {
+button.nonactive {
   background: none;
   border: none;
-  font-size: 20px; 
+  font-size: 20px;
   color: grey;
-  font-weight: 700; 
+  font-weight: 700;
   margin-top: 10px;
   cursor: pointer;
-  outline: none; 
+  outline: none;
   padding: 10px 20px;
-
-
 }
 
 button:hover {
-  background-color: none;
+  background-color: #ffffff;
+  color: #aaa8a8;
 }
-
 
 button.active {
   color: black;
@@ -38,42 +33,38 @@ h3 {
 .schedule-item h3 {
   margin-right: 20px;
   color: #333;
-  
 }
-
 
 .blueButton {
   background-color: rgb(255, 0, 47);
   color: white;
-  border-radius: 30px; 
-  right: 15px;
-  margin-right: 2px;
-
+  border-radius: 30px;
+  right: 10px;
+  margin-right: -10px;
 }
 
+.blueButton:hover {
+  background-color: #d5d5d5;
+  color: #fff;
+}
 
 .blueButton.active {
   background-color: rgb(255, 0, 47);
-  color: white; 
-  display: flex;
-  position: relative;
-  left: 189px;
-
+  color: white;
 }
 
 .scheduleContainer {
-  width: 100%; 
+  width: 100%;
   width: 372px;
   max-height: 370px;
   overflow-y: auto;
-  margin: 0 auto; 
+  margin: 0 auto;
   text-align: left;
 }
 
 .daySchedule h3 {
   margin-top: 10px;
   margin-bottom: 10px;
-  
 }
 
 .scheduleBox {
@@ -85,11 +76,11 @@ h3 {
   border-radius: 8px;
   margin-left: 20px;
   text-align: left;
-  
 }
 
 .placeholder label {
   font-size: 1rem;
+  color: #666;
   font-weight: bold;
-  cursor: pointer; 
+  cursor: pointer;
 }

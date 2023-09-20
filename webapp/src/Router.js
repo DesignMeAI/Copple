@@ -8,8 +8,6 @@ import Goal from "./routes/Goal"
 import ProfilePhotoEdit from './routes/ProfilePhotoEdit.jsx';
 import MainPage from './routes/MainPage.jsx';
 import PlanListPage from './routes/PlanListPage.jsx';
-import ArinLogin from "./routes/ArinLogin";
-
 
 function Router() {
   return (
@@ -21,10 +19,9 @@ function Router() {
         <Route path="/plan" element={<Plan />} />
         <Route path="/goal" element={<Goal />} />
         <Route path="/profile" element={<ProfilePhotoEdit />} />
-        <Route path="/main" element={<MainPage />} />
+        {/* <Route path="/main" element={<MainPage />} /> */}
         <Route path="/planlist" element={<PlanListPage />} />
         <Route path="/" element={<Login />} />
-        <Route path="/ArinLogin" element={<ArinLogin />} />
       </Routes>
     </BrowserRouter>
   );

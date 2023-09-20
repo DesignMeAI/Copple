@@ -1,8 +1,8 @@
-import React from 'react';
-import styles from'../styles/PlanList.module.css';
+import React from "react";
+import styles from "../styles/PlanList.module.css";
 
-import GoalPhoto from '../components/GoalPhoto';
-import GoalSchedule from '../components/GoalSchedule';
+import GoalPhoto from "../components/GoalPhoto";
+import GoalSchedule from "../components/GoalSchedule";
 
 function PlanListPage() {
   return (
