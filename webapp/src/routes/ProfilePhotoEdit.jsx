@@ -31,7 +31,7 @@ function ProfilePhotoEdit() {
           },
           body: {
             user_name: name,
-            user_id: info[0],
+            user_id: info,
           },
         });
         if (response.ok) {

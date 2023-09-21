@@ -2,18 +2,78 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ScanCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
-const client = new DynamoDBClient({
-  region: "ap-northeast-2",
-  credentials: {
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  },
-});
+function Signup() {
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+  // Users table에 아이디, 이름 존재 확인 후 가입 진행
+  const onSubmit = (data) => {
+    axios({
+      method: "post",
+      url: "http://3.39.153.9:3000/account/signup",
+      data: {
+        user_id: data.UserId,
+        password: data.Password,
+        user_name: data.UserName,
+        passwordcheck: data.PasswordCheck,
+      },
+      withCredentials: false,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then(function (response) {
+        if ((response.data.message = "사용자 등록 완료")) {
+          alert("Welcome to Copple!");
+          navigate("/");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
-const docClient = DynamoDBDocumentClient.from(client);
+  return (
+    <Background>
+      <Container onSubmit={handleSubmit(onSubmit)}>
+        <Title>Sign Up</Title>
+        <input
+          className="username"
+          placeholder="Name"
+          {...register("UserName", { required: "Please write your name" })}
+        />
+        <input
+          className="userid"
+          placeholder="ID"
+          {...register("UserId", { required: "Please write your id" })}
+        />
+        <input
+          className="password"
+          type="password"
+          placeholder="Password"
+          autoComplete="off"
+          {...register("Password", { required: "Please write password" })}
+        />
+        <input
+          className="password"
+          type="password"
+          placeholder="PasswordCheck"
+          autoComplete="off"
+          {...register("PasswordCheck", { required: "Please write password" })}
+        />
+        <Button type="submit">Sign up</Button>
+      </Container>
+      <ButtonBig>
+        <Link to="/">Home</Link>
+      </ButtonBig>
+      <Find>
+        <Link to="/find">Forgot your id/password?</Link>
+      </Find>
+    </Background>
+  );
+}
+
+export default Signup;
 
 const Background = styled.div`
   width: 375px;
@@ -134,104 +194,3 @@ const Find = styled.span`
     text-decoration: none;
   }
 `;
-
-// scan command getting userinfo from Users table
-const scancom = new ScanCommand({
-  ProjectionExpression: "#UserName, #UserId",
-  ExpressionAttributeNames: {
-    "#UserName": "UserName",
-    "#UserId": "UserId",
-  },
-  TableName: "Users",
-});
-
-// function to get userid, usernames from Users table
-const getuserinfos = async () => {
-  const usernames = [];
-  const userids = [];
-  const response = await docClient.send(scancom);
-  response.Items.forEach((item) => {
-    usernames.push(item.UserName.S);
-    userids.push(item.UserId.S);
-  });
-  return { usernames: [...usernames], userids: [...userids] };
-};
-
-function Signup() {
-  const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
-  // Users table에 아이디, 이름 존재 확인 후 가입 진행
-  const onSubmit = (data) => {
-    getuserinfos()
-      .then((infos) => {
-        console.log(infos);
-        if (infos.userids.includes(data.UserId)) {
-          alert("이미 존재하는 아이디입니다.");
-          return false;
-        } else if (infos.usernames.includes(data.UserName)) {
-          alert("이미 존재하는 사용자입니다.");
-          return false;
-        } else {
-          axios({
-            method: "post",
-            url: "http://3.39.153.9:3000/account/signup",
-            data: {
-              user_id: data.UserId,
-              password: data.Password,
-              user_name: data.UserName,
-            },
-            withCredentials: false,
-            headers: {
-              "Access-Control-Allow-Origin": "http://3.39.153.9:3000",
-            },
-          })
-            .then(function (response) {
-              console.log(response);
-              if (response["data"] === "회원가입 성공!") {
-                navigate("/");
-              }
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.log("실패:", error);
-        alert("회원가입 실패");
-      });
-  };
-  return (
-    <Background>
-      <Container onSubmit={handleSubmit(onSubmit)}>
-        <Title>Sign Up</Title>
-        <input
-          className="username"
-          placeholder="Name"
-          {...register("UserName", { required: "Please write your name" })}
-        />
-        <input
-          className="userid"
-          placeholder="ID"
-          {...register("UserId", { required: "Please write your id" })}
-        />
-        <input
-          className="password"
-          type="password"
-          placeholder="Password"
-          autoComplete="off"
-          {...register("Password", { required: "Please write password" })}
-        />
-        <Button type="submit">Sign up</Button>
-      </Container>
-      <ButtonBig>
-        <Link to="/">Home</Link>
-      </ButtonBig>
-      <Find>
-        <Link to="/find">Forgot your id/password?</Link>
-      </Find>
-    </Background>
-  );
-}
-
-export default Signup;
