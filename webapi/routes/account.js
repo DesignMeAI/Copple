@@ -311,8 +311,8 @@ app.put("/account/profile", requireLogin, upload.single("profileImage"), async (
 });
 
 
-app.get("/account/profile", requireLogin, async (req, res) => {
-  const { user_id } = req.user; // 로그인된 사용자의 정보는 `req.user`에서 얻을 수 있습니다.
+app.post("/account/profile", requireLogin, async (req, res) => {
+  const { user_id, user_name } = req.body; // 사용자의 정보는 POST 요청의 body에서 받아옵니다.
 
   try {
     // 사용자 프로필 데이터를 가져옵니다.
@@ -320,7 +320,7 @@ app.get("/account/profile", requireLogin, async (req, res) => {
       TableName: 'Account',
       Key: {
         'UserId': { S: user_id }, // 파티션 키 설정
-        'UserName': { S: user_id }, // 정렬 키 설정 (사용자의 정렬 키 값을 적절히 대체)
+        'UserName': { S: user_name }, // 정렬 키 설정
       },
     };
 
@@ -345,7 +345,6 @@ app.get("/account/profile", requireLogin, async (req, res) => {
     return res.status(500).json({ detail: "프로필을 조회하는 중 오류가 발생했습니다." });
   }
 });
-
 
 
 
