@@ -1,12 +1,15 @@
 import { RecoilRoot } from "recoil";
 import Router from "./Router";
 import "./css/App.css";
+import { ProfileProvider } from "./context/ProfileContext";
 function App() {
   return (
     <>
-      <RecoilRoot>
-        <Router />
-      </RecoilRoot>
+      <ProfileProvider>
+        <RecoilRoot>
+          <Router />
+        </RecoilRoot>
+      </ProfileProvider>
     </>
   );
 }

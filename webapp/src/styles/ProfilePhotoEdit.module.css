@@ -1,55 +1,54 @@
-
 .profileEditWrap {
-    background-color: rgb(247, 247, 247);
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; 
+  background-color: rgb(247, 247, 247);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .profileEdit {
-    width: 375px;
-    height: 100vh;
-    max-height: 100vh; 
-    margin: 0 auto;
-    padding-top: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);  
-    overflow: scroll; 
+  width: 375px;
+  height: 100vh;
+  max-height: 100vh;
+  margin: 0 auto;
+  padding-top: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
+  overflow: scroll;
 }
 
 .profileheader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;  
-    margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  margin: 10px;
 }
 
 .profileheader h1 {
-    font-size: 1.2em;  
-    margin: 0;        
-    padding: 0 20px;  
+  font-size: 1.2em;
+  margin: 0;
+  padding: 0 20px;
 }
 
 .profilecompleteBtn {
-    background-color: rgb(0, 183, 255);
-    border: none;
-    border-radius: 5px;
-    color: white;
-    padding: 10px 10px;
-    cursor: pointer;
-    font-size: 15px;
-    width: 60px;
-    margin-right: 20px;
-    margin-bottom: 8px;
+  background-color: rgb(0, 183, 255);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 10px 10px;
+  cursor: pointer;
+  font-size: 15px;
+  width: 60px;
+  margin-right: 20px;
+  margin-bottom: 8px;
 }
 
 .profileImageSection {
-    display: flex;
-    align-items: center;
-    margin: 20px 20px;
+  display: flex;
+  align-items: center;
+  margin: 20px 20px;
 }
 
 .imageCircle {
@@ -61,61 +60,69 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background-size: cover;  
-  background-position: center;  
+  background-size: cover;
+  background-position: center;
   margin-right: 20px;
 }
 
 .imageAction {
-    display: flex;
-    flex-direction: column;
-    margin-left: 20px;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-bottom: 20px;
 }
 
-.profileinput, .profiletextarea {
-    margin-bottom: 10px;
-    padding: 13px;
-    width: 300px;
-    border: 1px solid gray;
-    border-radius: 5px;
+.profileinput,
+.profiletextarea {
+  margin-bottom: 10px;
+  padding: 13px;
+  width: 300px;
+  border: 1px solid gray;
+  border-radius: 5px;
 }
 
 .profileinput {
-    pointer-events: none;
-    user-select: none;
-    background-color: rgb(243, 243, 243);
-    color: rgb(122, 122, 122);
+  pointer-events: none;
+  user-select: none;
+  background-color: rgb(243, 243, 243);
+  color: rgb(122, 122, 122);
 }
 
-.profiletextarea  {
+.profiletextarea {
   height: 100px;
-  resize: none; 
+  resize: none;
 }
-
+.profileinputBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & div {
+    width: 100%;
+  }
+}
 .profilephotoBtn {
-    width: 100px;
-    margin-top: 25px;
-    margin-right: 30px;
-    padding: 8px;
-    border: 1px solid gray;
-    border-radius: 5px;
-    font-size: 13px;
+  width: 100px;
+  margin-top: 25px;
+  margin-right: 30px;
+  padding: 8px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  font-size: 13px;
 }
 
 .logoutBtn {
-    width: 300px;
-    margin-top: 80px;
-    padding: 10px;
-    border: 1px solid gray;
-    border-radius: 5px;
-    font-size: 15px;
-    margin-bottom: 30px;
-    background-color: rgb(240, 240, 240);
+  width: 300px;
+  margin-top: 80px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  font-size: 15px;
+  margin-bottom: 30px;
+  background-color: rgb(240, 240, 240);
 }
 
 .profileinputBox h6 {
-    margin-left: 30px;
-    margin-bottom: 10px;
-    text-align: left;
+  margin-left: 30px;
+  margin-bottom: 10px;
+  text-align: left;
 }

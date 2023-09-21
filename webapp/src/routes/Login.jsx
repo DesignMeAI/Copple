@@ -7,6 +7,78 @@ import { infoState } from "../atoms";
 import omg from "../omg.jpg";
 import axios from "axios";
 
+function Login() {
+  const [info, setInfo] = useRecoilState(infoState);
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+
+  useEffect(() => {
+    if (localStorage.getItem("id") !== null) {
+      navigate("/home");
+      console.log(localStorage.getItem("id"));
+    } else {
+      navigate("/");
+    }
+  }, [navigate]);
+
+  const onSubmit = (data) => {
+    axios({
+      method: "post",
+      url: "http://3.39.153.9:3000/account/login",
+      data: {
+        user_id: data.UserId,
+        password: data.Password,
+      },
+      withCredentials: false,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then(function (response) {
+        if (response.data !== null) {
+          const info = data.UserId;
+          setInfo(info);
+          const setCookie = response.data["token"];
+          navigate("/home");
+          console.log(info);
+          document.cookie = `token=${setCookie}`;
+        } else if (response["data"] === "failed") {
+          alert("올바르지 않은 회원정보입니다.");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  return (
+    <Background>
+      <Container onSubmit={handleSubmit(onSubmit)}>
+        <Img src={omg} alt="adorable"></Img>
+        <Title>Copple</Title>
+        <Input
+          placeholder="ID"
+          {...register("UserId", { required: "Please write ID" })}
+        ></Input>
+        <Input
+          type="password"
+          placeholder="Password"
+          {...register("Password", { required: "Please write password" })}
+        ></Input>
+        <Button type="submit">login</Button>
+      </Container>
+      <ButtonBig>
+        <Link to="/signup">Sign up</Link>
+      </ButtonBig>
+      <Find>
+        <Link to="/find">Forgot your id/password?</Link>
+      </Find>
+    </Background>
+  );
+}
+
+export default Login;
+
 const Img = styled.img`
   width: 170px;
   height: auto;
@@ -128,75 +200,3 @@ const Find = styled.span`
     text-decoration: none;
   }
 `;
-
-function Login() {
-  const [info, setInfo] = useRecoilState(infoState);
-  const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
-
-  useEffect(() => {
-    if (localStorage.getItem("id") !== null) {
-      navigate("/home");
-      console.log(localStorage.getItem("id"));
-    } else {
-      navigate("/");
-    }
-  }, [navigate]);
-
-  const onSubmit = (data) => {
-    axios({
-      method: "post",
-      url: "http://3.39.153.9:3000/account/login",
-      data: {
-        user_id: data.UserId,
-        password: data.Password,
-      },
-      withCredentials: false,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-      .then(function (response) {
-        if (response.data !== null) {
-          const info = data.UserId;
-          setInfo([info]);
-          const setCookie = response.data["token"];
-          navigate("/home");
-          console.log(info);
-          document.cookie = `token=${setCookie}`;
-        } else if (response["data"] === "failed") {
-          alert("올바르지 않은 회원정보입니다.");
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  return (
-    <Background>
-      <Container onSubmit={handleSubmit(onSubmit)}>
-        <Img src={omg} alt="adorable"></Img>
-        <Title>Copple</Title>
-        <Input
-          placeholder="ID"
-          {...register("UserId", { required: "Please write ID" })}
-        ></Input>
-        <Input
-          type="password"
-          placeholder="Password"
-          {...register("Password", { required: "Please write password" })}
-        ></Input>
-        <Button type="submit">login</Button>
-      </Container>
-      <ButtonBig>
-        <Link to="/signup">Sign up</Link>
-      </ButtonBig>
-      <Find>
-        <Link to="/find">Forgot your id/password?</Link>
-      </Find>
-    </Background>
-  );
-}
-
-export default Login;

@@ -5,12 +5,35 @@ import { Link } from "react-router-dom";
 import { infoState } from "../atoms.js";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { goalState } from "../atoms";
+import axios from "axios";
 
 function Plan() {
-  const [info, setInfo] = useRecoilState(infoState);
   const goal = useRecoilValue(goalState);
+  const SendEvent = async (data) => {
+    const tokenstring = document.cookie;
+    const token = tokenstring.split("=")[1];
+    await axios({
+      method: "post",
+      url: "http://3.39.153.9:3000/event/create",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        title: data.title,
+        startDatetime: data.startDate,
+        endDatetime: data.endDate,
+        goal: goal,
+        location: data.address,
+        content: data.content,
+      },
+      withCredentials: false,
+    }).then((response) => console.log(response));
+  };
 
-  const onSubmit = (data) => {};
+  const onSubmit = (data) => {
+    SendEvent(data);
+  };
 
   const { register, handleSubmit } = useForm();
   return (

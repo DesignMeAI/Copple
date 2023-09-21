@@ -6,7 +6,7 @@ import styled from "styled-components";
 import Goalitem from "../components/Goalitem";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { infoState, goalState, modeState } from "../atoms.js";
+import { infoState, goalState, modeState, nameState } from "../atoms.js";
 import NavBar from "../components/Navbar";
 
 export default function Home() {
@@ -16,7 +16,7 @@ export default function Home() {
   const [leaving, setLeaving] = useState(false);
   const [index, setIndex] = useState(0);
   const [done, setDone] = useState(false);
-  const [name, setName] = useState("");
+  const [name, setName] = useRecoilState(nameState);
   const [bio, setBio] = useState("");
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
@@ -81,7 +81,7 @@ export default function Home() {
     }
     fetchUserProfile();
     getData();
-    getName(info[0]);
+    getName(info);
   }, []);
 
   const offset = 4;
@@ -110,7 +110,7 @@ export default function Home() {
           </ProfileImageSection>
           <Profile>
             <strong>{name}</strong>
-            <br />@ {info[0]}
+            <br />@ {info}
           </Profile>
         </Index1>
         <ProfileMsg>{bio}</ProfileMsg>

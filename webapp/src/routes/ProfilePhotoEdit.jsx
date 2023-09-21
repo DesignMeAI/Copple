@@ -2,9 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ProfilePhotoEdit.module.css";
 import { useProfile } from "../context/ProfileContext";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { infoState, nameState } from "../atoms";
 
 function ProfilePhotoEdit() {
   const { profileImage, setProfileImage } = useProfile();
+  const info = useRecoilValue(infoState);
+  const name = useRecoilValue(nameState);
   const fileInput = useRef(null);
   const [imageURL, setImageURL] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -15,14 +19,19 @@ function ProfilePhotoEdit() {
 
   useEffect(() => {
     async function fetchUserProfile() {
+      console.log(name, info);
       try {
         const tokenstring = document.cookie;
         const token = tokenstring.split("=")[1];
         const response = await fetch("http://3.39.153.9:3000/account/profile", {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
+          },
+          body: {
+            user_name: name,
+            user_id: info[0],
           },
         });
         if (response.ok) {
@@ -187,21 +196,28 @@ function ProfilePhotoEdit() {
           </div>
         </div>
         <div className={styles.profileinputBox}>
-          <h6>ID</h6>
+          <div>
+            <h6>ID</h6>
+          </div>
           <input
             placeholder="ID"
             value={id}
             readOnly
             className={styles.profileinput}
           />
-          <h6>USER NAME</h6>
+          <div>
+            <h6>USER NAME</h6>
+          </div>
           <input
             placeholder="유저 이름"
             value={username}
             readOnly
             className={styles.profileinput}
           />
-          <h6>BIO</h6>
+          <div>
+            {" "}
+            <h6>BIO</h6>
+          </div>
           <textarea
             placeholder="자기소개"
             value={bio}

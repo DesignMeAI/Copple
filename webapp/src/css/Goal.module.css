@@ -29,10 +29,8 @@ form {
   margin: 0px;
 }
 .Container {
-  display: flex;
   width: 375px;
   height: 100vh;
-  flex-direction: column;
   margin: 0px auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.15);
 }
@@ -66,6 +64,8 @@ form {
 }
 .Navbar {
   display: flex;
+  padding: 1.2rem 0;
+  padding-left: 1.2rem;
   width: 95%;
   justify-content: space-around;
   flex-direction: row;
@@ -87,7 +87,6 @@ form {
   font-size: 23px;
   letter-spacing: 1px;
   font-style: bold;
-  border-radius: 30px;
   background-color: white;
   color: none;
   border: none;

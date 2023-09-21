@@ -39,6 +39,8 @@
 .Navbar {
   margin-bottom: 10px;
   display: flex;
+  padding: 1.2rem 0;
+  padding-left: 1.2rem;
   width: 95%;
   justify-content: space-around;
   flex-direction: row;
