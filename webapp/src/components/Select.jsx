@@ -32,9 +32,11 @@ const Selectop = (props) => {
     });
   }
   async function setData() {
-    const lists = goal.map((data) => data["title"]);
-    const list = lists.map((data) => ({ value: data, label: data }));
-    setOptions(list);
+    if (goal.length > 1) {
+      const lists = goal.map((data) => data["title"]);
+      const list = lists.map((data) => ({ value: data, label: data }));
+      setOptions(list);
+    }
   }
   useEffect(() => {
     getData();
