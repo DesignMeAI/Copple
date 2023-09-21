@@ -139,6 +139,7 @@ export default function Home() {
               key={index}
             >
               {done === false &&
+                goals.lenght > 1 &&
                 goals
                   .slice(offset * index, offset * index + offset)
                   .map((goal) => (
