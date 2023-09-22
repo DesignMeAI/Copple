@@ -19,8 +19,14 @@ export const nameState = atom({
 })
 export const goalState = atom({
     key: "goal",
+    default: "",
+})
+
+export const goalListState = atom({
+    key: "listofgoal",
     default: [],
 })
+
 export const savedGoalsState = atom({
     key: 'savedGoalsState',
     default: [], // 기본값은 빈 배열

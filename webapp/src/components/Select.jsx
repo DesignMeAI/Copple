@@ -2,11 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
 import styles from "./Select.module.css";
 import { useRecoilState } from "recoil";
-import { goalState } from "../atoms";
+import { goalListState, goalState } from "../atoms";
 import axios from "axios";
 
-const Selectop = (props) => {
+const Selectop = () => {
   const [goal, setGoal] = useRecoilState(goalState);
+  const [goalList, setGoalList] = useRecoilState(goalListState);
   const [selectValue, setSelectValue] = useState("");
   const selectInputRef = useRef(null);
   const [options, setOptions] = useState([]);
@@ -26,15 +27,17 @@ const Selectop = (props) => {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
       },
-    }).then((response) => {
-      setGoal(response.data);
+    }).then(async (response) => {
+      await setGoalList(response.data);
       console.log(goal);
     });
   }
-  async function setData() {
-    if (goal.length > 1) {
-      const lists = goal.map((data) => data["title"]);
-      const list = lists.map((data) => ({ value: data, label: data }));
+  function setData() {
+    if (goalList.length > 0) {
+      const list = goalList.map((data) => ({
+        value: data["event_id"],
+        label: data["title"],
+      }));
       setOptions(list);
     }
   }
@@ -49,19 +52,13 @@ const Selectop = (props) => {
           style={{ padding: "0" }}
           ref={selectInputRef}
           onChange={(e) => {
-            if (e) {
-              setSelectValue(e.value);
-              setGoal(e.value);
-            } else {
-              setSelectValue("");
-            }
+            console.log(e);
+            setGoal(e.value);
+            setSelectValue(e.value);
           }}
           options={options}
           placeholder="목표를 선택하세요."
         />
-        <button className={styles.Btn} onClick={() => onClearSelect()}>
-          없음
-        </button>
       </div>
     </div>
   );

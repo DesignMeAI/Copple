@@ -98,6 +98,7 @@ const Container = styled.form`
   gap: 12px;
   border-radius: 15px;
   margin: 25px 0px;
+  margin-bottom: 5px;
   input {
     width: 220px;
     padding-left: 20px;
@@ -146,6 +147,7 @@ const Button = styled.button`
   font-size: 15px;
   font-weight: 400px;
   margin: 30px 0;
+  margin-bottom: 15px;
   color: #cccbc7;
   padding: 7px 7px;
   &:hover {
@@ -165,7 +167,7 @@ const ButtonBig = styled.button`
   width: 320px;
   height: 65px;
   padding: 15px;
-  margin-top: 15px;
+  margin-top: 5px;
   background-color: white;
   border-radius: 15px;
   border: none;
@@ -188,7 +190,7 @@ const Find = styled.span`
   text-align: center;
   color: #696969;
   display: block;
-  margin-bottom: 70px;
+  margin-bottom: 20px;
   a {
     color: #696969;
     text-decoration: none;

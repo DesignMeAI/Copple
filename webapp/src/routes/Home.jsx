@@ -6,20 +6,28 @@ import styled from "styled-components";
 import Goalitem from "../components/Goalitem";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { infoState, goalState, modeState, nameState } from "../atoms.js";
+import {
+  infoState,
+  modeState,
+  nameState,
+  goalListState,
+  goalState,
+} from "../atoms.js";
 import NavBar from "../components/Navbar";
 
 export default function Home() {
   const [imageURL, setImageURL] = useState(null);
-  const info = useRecoilValue(infoState);
   const [goals, setGoals] = useRecoilState(goalState);
+  const [goalList, setGoalList] = useRecoilState(goalListState);
   const [leaving, setLeaving] = useState(false);
   const [index, setIndex] = useState(0);
   const [done, setDone] = useState(false);
+  const info = useRecoilValue(infoState);
   const [name, setName] = useRecoilState(nameState);
   const [bio, setBio] = useState("");
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
+
   const getName = async (id) => {
     await axios({
       method: "post",
@@ -36,6 +44,7 @@ export default function Home() {
 
   const doneHandler = (e) => {
     e.target.textContent === "지금 진행중" ? setDone(true) : setDone(false);
+
     console.log(done);
   };
 
@@ -52,6 +61,7 @@ export default function Home() {
       },
     }).then((response) => {
       setGoals(response.data);
+      setGoalList(response.data);
       console.log(response);
     });
   }
@@ -61,17 +71,22 @@ export default function Home() {
       try {
         const tokenstring = document.cookie;
         const token = tokenstring.split("=")[1];
-        const response = await fetch("http://3.39.153.9:3000/account/profile", {
-          method: "GET",
+        await axios({
+          method: "POST",
+          url: "http://3.39.153.9:3000/account/profile",
+          withCredentials: false, // 쿠키를 사용하므로 true로 설정
           headers: {
-            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,
           },
+          data: {
+            user_id: info,
+            user_name: name,
+          },
+        }).then((response) => {
+          setBio(response.data.introduction);
+          console.log(response);
         });
-        if (response.ok) {
-          const data = await response.json();
-          setBio(data.information);
-        }
       } catch (error) {
         console.error(
           "An error occurred while fetching user information:",
@@ -87,9 +102,9 @@ export default function Home() {
   const offset = 4;
   // 파일 선택창 열기
   const increaseIndex = () => {
-    if (goals) {
+    if (goalList) {
       toggleLeaving();
-      const totlaGoals = goals.length;
+      const totlaGoals = goalList.length;
       const maxIndex = Math.ceil(totlaGoals / offset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
@@ -139,8 +154,8 @@ export default function Home() {
               key={index}
             >
               {done === false &&
-                goals.lenght > 1 &&
-                goals
+                goalList.length > 0 &&
+                goalList
                   .slice(offset * index, offset * index + offset)
                   .map((goal) => (
                     <Goalitem
@@ -177,7 +192,7 @@ const StyledButton = styled.button`
   display: inline;
   position: absolute;
   bottom: 315px;
-  right: 10px;
+  right: 20px;
   background-color: transparent;
   border: none;
   &:hover {

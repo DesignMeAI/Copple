@@ -4,12 +4,13 @@ import styles from "../styles/ProfilePhotoEdit.module.css";
 import { useProfile } from "../context/ProfileContext";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { infoState, nameState } from "../atoms";
+import axios from "axios";
 
 function ProfilePhotoEdit() {
   const { profileImage, setProfileImage } = useProfile();
+  const fileInput = useRef(null);
   const info = useRecoilValue(infoState);
   const name = useRecoilValue(nameState);
-  const fileInput = useRef(null);
   const [imageURL, setImageURL] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [id, setId] = useState("");
@@ -19,30 +20,27 @@ function ProfilePhotoEdit() {
 
   useEffect(() => {
     async function fetchUserProfile() {
-      console.log(name, info);
       try {
         const tokenstring = document.cookie;
         const token = tokenstring.split("=")[1];
-        const response = await fetch("http://3.39.153.9:3000/account/profile", {
+        await axios({
           method: "POST",
+          url: "http://3.39.153.9:3000/account/profile",
+          withCredentials: false, // 쿠키를 사용하므로 true로 설정
           headers: {
-            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,
           },
-          body: {
-            user_name: name,
+          data: {
             user_id: info,
+            user_name: name,
           },
+        }).then((response) => {
+          setId(response.data.user_id);
+          setUsername(response.data.user_name);
+          setBio(response.data.introduction || "");
+          setImageURL(response.data.profileImageUrl || "");
         });
-        if (response.ok) {
-          const data = await response.json();
-          setId(data.user_id);
-          setUsername(data.user_name);
-          setBio(data.introduction || "");
-          setImageURL(data.profileImageUrl || "");
-        } else {
-          console.error("Failed to fetch user information.");
-        }
       } catch (error) {
         console.error(
           "An error occurred while fetching user information:",

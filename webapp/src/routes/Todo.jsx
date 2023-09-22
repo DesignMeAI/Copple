@@ -1,19 +1,70 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Selectop from "../components/Select";
-import { useForm } from "react-hook-form";
+import axios from "axios";
 import styles from "../css/Todo.module.css";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { goalState, infoState } from "../atoms";
+import { goalState } from "../atoms";
+import { useState } from "react";
 
 function Todo() {
-  const [info, setInfo] = useRecoilState(infoState);
-  const goal = useRecoilValue(goalState);
+  const selectedgoal = useRecoilValue(goalState);
+  const navigate = useNavigate();
+  const todoState = {
+    title: "",
+    isCompleted: "",
+    goal: selectedgoal,
+    location: "",
+    content: "",
+  };
+  const [todoinfo, setTodoinfo] = useState(todoState);
+  const { title, location, goal, content, isCompleted } = todoinfo;
 
-  const { register, handleSubmit, formState } = useForm();
-  const onSubmit = (data) => {};
+  const SendTodo = async (data) => {
+    const tokenstring = document.cookie;
+    const token = tokenstring.split("=")[1];
+    await axios({
+      method: "post",
+      url: "http://3.39.153.9:3000/event/create",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        title: data.title,
+        isCompleted: data.isCompleted,
+        goal: selectedgoal,
+        location: data.location,
+        content: data.content,
+      },
+      withCredentials: false,
+    }).then((response) => console.log(response));
+  };
+
+  const TitleHandler = (e) => {
+    setTodoinfo({ ...todoinfo, title: e.target.value });
+  };
+  const LocationHandler = (e) => {
+    setTodoinfo({ ...todoinfo, location: e.target.value });
+  };
+  const ContentHandler = (e) => {
+    setTodoinfo({ ...todoinfo, content: e.target.value });
+  };
+  const IsCompletedHandler = (e) => {
+    setTodoinfo({ ...todoinfo, isCompleted: e.target.value });
+  };
+
+  const onSubmit = async () => {
+    await setTodoinfo({ ...todoinfo, goal: selectedgoal });
+    setTimeout(() => {
+      console.log(selectedgoal);
+      SendTodo(todoinfo);
+    }, 1500);
+    navigate("/home");
+    console.log(selectedgoal);
+  };
   return (
     <div className={styles.Container}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <div className={styles.Navbar}>
           <button className={styles.Btn}>
             <Link to="/goal">목표</Link>
@@ -33,11 +84,9 @@ function Todo() {
         <div className={styles.Tag}>
           <input
             maxLength={20}
+            value={title}
+            onChange={TitleHandler}
             className={styles.Input}
-            {...register("title", { required: "Please write title" })}
-            placeholder={
-              formState.errors.title && formState.errors.title.message
-            }
           ></input>
         </div>
         <span></span>
@@ -48,11 +97,19 @@ function Todo() {
         <div className={styles.Tag}>내용</div>
         <div className={styles.Tag}>
           <input
+            style={{ height: "90px" }}
+            value={content}
+            onChange={ContentHandler}
             className={styles.Input}
-            {...register("content", { required: "Please write contents" })}
-            placeholder={
-              formState.errors.content && formState.errors.content.message
-            }
+          ></input>
+        </div>
+        <div className={styles.Tag}>장소</div>
+        <div className={styles.Tag}>
+          <input
+            maxLength={20}
+            value={location}
+            onChange={LocationHandler}
+            className={styles.Input}
           ></input>
         </div>
         <div style={{ width: "100%" }}>
@@ -60,8 +117,9 @@ function Todo() {
           <div className={styles.Tag}>
             <input
               className={styles.check}
+              value={isCompleted}
+              onChange={IsCompletedHandler}
               type="checkbox"
-              {...register("isDone")}
             />
           </div>
         </div>

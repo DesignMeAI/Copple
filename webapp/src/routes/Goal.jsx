@@ -1,4 +1,3 @@
-import { useForm } from "react-hook-form";
 import styles from "../css/Goal.module.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,32 +5,43 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { goalIdState, modeState } from "../atoms";
 
-const SendGoal = async (data) => {
+const SendGoal = async (goal) => {
   const tokenstring = document.cookie;
   const token = tokenstring.split("=")[1];
   await axios({
-    method: "post",
+    method: "POST",
     url: "http://3.39.153.9:3000/goal/create",
     headers: {
       "Access-Control-Allow-Origin": "*",
       Authorization: `Bearer ${token}`,
     },
     data: {
-      title: data.title,
-      startDatetime: data.startDate,
-      endDatetime: data.endDate,
-      location: data.address,
-      content: data.content,
+      title: goal.title,
+      startDatetime: goal.startDatetime,
+      endDatetime: "none",
+      location: goal.location,
+      content: goal.content,
     },
     withCredentials: false,
   }).then((response) => console.log(response));
 };
 
 function Goal() {
+  const goalState = {
+    title: "",
+    startDatetime: "",
+    location: "",
+    content: "",
+    photoUrl: "",
+    isCompleted: false,
+  };
   const [history, setHistory] = useState({});
   const navigate = useNavigate();
   const [mode, setMode] = useRecoilState(modeState);
   const [goalId, setGoalId] = useRecoilState(goalIdState);
+  const [goalinfo, sestGoalinfo] = useState(goalState);
+  const { title, startDatetime, location, content, photoUrl, isCompleted } =
+    goalinfo;
   const getGoalData = async (event_id) => {
     const tokenstring = document.cookie;
     const token = tokenstring.split("=")[1];
@@ -45,23 +55,39 @@ function Goal() {
       },
     }).then((response) => {
       if (mode === "update") {
-        setHistory(response.data);
+        sestGoalinfo(response.data);
+        setMode(null);
+        // sestGoalinfo(history);
       }
     });
   };
-  const changeHandler = (e) => {
-    console.log(e);
+  const TitleHandler = (e) => {
+    sestGoalinfo({ ...goalinfo, title: e.target.value });
   };
+  const PeriodHandler = (e) => {
+    sestGoalinfo({ ...goalinfo, startDatetime: e.target.value });
+  };
+  const LocationHandler = (e) => {
+    sestGoalinfo({ ...goalinfo, location: e.target.value });
+  };
+  const CompleteHandler = (e) => {
+    sestGoalinfo({ ...goalinfo, isCompleted: e.target.value });
+  };
+  const ContentHandler = (e) => {
+    sestGoalinfo({ ...goalinfo, content: e.target.value });
+  };
+
   useEffect(() => {
     getGoalData(goalId);
   }, []);
-  const { register, handleSubmit, formState } = useForm();
-  const onSubmit = (data) => {
-    SendGoal(data).then(navigate("/home"));
+
+  const onSubmit = () => {
+    console.log(goalinfo);
+    SendGoal(goalinfo).then(navigate("/home"));
   };
   return (
     <div className={styles.Container}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <div className={styles.Navbar}>
           <button className={styles.selected}>
             <Link to="/goal">목표</Link>
@@ -80,70 +106,49 @@ function Goal() {
         <div className={styles.Tag}>제목</div>
         <div className={styles.Tag}>
           <input
-            value={history?.title || null}
+            value={title}
+            onChange={TitleHandler}
             maxLength={20}
             className={styles.Input}
-            {...register("title", { required: "Please write a title" })}
-            placeholder={
-              formState.errors.title && formState.errors.title.message
-            }
           />
         </div>
 
-        <div className={styles.Tag}>시작일</div>
+        <div className={styles.Tag}>기간</div>
         <div className={styles.Tag}>
           <input
-            value={history?.startDatetime || null}
+            value={startDatetime}
+            onChange={PeriodHandler}
             type="text"
             className={styles.Input}
-            {...register("startDate", { required: "Please write a period" })}
-            placeholder={
-              formState.errors.period && formState.errors.startDate.message
-            }
-          />
-        </div>
-        <div className={styles.Tag}>종료일</div>
-        <div className={styles.Tag}>
-          <input
-            value={history?.endDatetime || null}
-            type="text"
-            className={styles.Input}
-            {...register("endDate", { required: "Please write a period" })}
-            placeholder={
-              formState.errors.period && formState.errors.endDate.message
-            }
           />
         </div>
         <div className={styles.Tag}>장소</div>
         <div className={styles.Tag}>
           <input
-            value={history?.location || null}
+            value={location}
+            onChange={LocationHandler}
             className={styles.Input}
-            {...register("address")}
           />
         </div>
         <div className={styles.Tag}>내용</div>
         <div className={styles.Tag}>
           <input
-            value={history?.content || null}
+            style={{ height: "90px" }}
+            value={content}
+            onChange={ContentHandler}
             className={styles.Input}
-            {...register("content", { required: "Please write a content" })}
-            placeholder={
-              formState.errors.content && formState.errors.content.message
-            }
           />{" "}
         </div>
         <div className={styles.Tag}>사진</div>
-        <input type="file" {...register("image")} />
+        <input type="file" value={photoUrl} />
         <div className={styles.Tag}>완료</div>
         <div style={{ width: "100%" }}>
           <div className={styles.Tag}>
             <input
               disabled={mode === "update" ? false : history.isCompleted}
-              onClick={changeHandler}
+              onChange={CompleteHandler}
               className={styles.check}
               type="checkbox"
-              {...register("isDone")}
             />
           </div>
         </div>

@@ -1,15 +1,27 @@
 import styles from "../css/Plan.module.css";
-import { useForm } from "react-hook-form";
 import Selectop from "../components/Select";
-import { Link } from "react-router-dom";
-import { infoState } from "../atoms.js";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { goalState } from "../atoms";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { goalListState, goalState } from "../atoms";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 function Plan() {
-  const goal = useRecoilValue(goalState);
-  const SendEvent = async (data) => {
+  const selectedgoal = useRecoilValue(goalState);
+  const navigate = useNavigate();
+  const planState = {
+    title: "",
+    startDatetime: "",
+    endDatetime: "",
+    goal: selectedgoal,
+    location: "",
+    content: "",
+  };
+  const [planinfo, setPlaninfo] = useState(planState);
+  const { title, endDatetime, startDatetime, location, goal, content } =
+    planinfo;
+
+  const SendPlan = async (data) => {
     const tokenstring = document.cookie;
     const token = tokenstring.split("=")[1];
     await axios({
@@ -21,24 +33,43 @@ function Plan() {
       },
       data: {
         title: data.title,
-        startDatetime: data.startDate,
-        endDatetime: data.endDate,
-        goal: goal,
-        location: data.address,
+        startDatetime: data.startDatetime,
+        endDatetime: data.endDatetime,
+        goal: data.goal,
+        location: data.location,
         content: data.content,
       },
       withCredentials: false,
     }).then((response) => console.log(response));
   };
-
-  const onSubmit = (data) => {
-    SendEvent(data);
+  const TitleHandler = (e) => {
+    setPlaninfo({ ...planinfo, title: e.target.value });
+  };
+  const startDatetimeHandler = (e) => {
+    setPlaninfo({ ...planinfo, startDatetime: e.target.value });
+  };
+  const endDatetimeHandler = (e) => {
+    setPlaninfo({ ...planinfo, endDatetime: e.target.value });
+  };
+  const LocationHandler = (e) => {
+    setPlaninfo({ ...planinfo, location: e.target.value });
+  };
+  const ContentHandler = (e) => {
+    setPlaninfo({ ...planinfo, content: e.target.value });
   };
 
-  const { register, handleSubmit } = useForm();
+  const onSubmit = async () => {
+    await setPlaninfo({ ...planinfo, goal: selectedgoal });
+    setTimeout(() => {
+      SendPlan(planinfo);
+    }, 1500);
+    navigate("/home");
+    console.log(selectedgoal);
+  };
+
   return (
     <div className={styles.Container}>
-      <form className={styles.Form} onSubmit={handleSubmit(onSubmit)}>
+      <form className={styles.Form} onSubmit={onSubmit}>
         <nav className={styles.Navbar}>
           <button className={styles.Btn}>
             <Link to="/goal">목표</Link>
@@ -58,35 +89,48 @@ function Plan() {
         <div className={styles.Tag}>
           <input
             className={styles.Input}
+            value={title}
+            onChange={TitleHandler}
             maxLength={20}
-            {...register("title", { required: "Please write title" })}
           ></input>
         </div>
         <div className={styles.Tag}>시작일</div>
         <div className={styles.Tag}>
           <input
             className={styles.Input}
-            type="date"
-            {...register("startDate", { required: "Please write period" })}
+            value={startDatetime}
+            onChange={startDatetimeHandler}
+            type="text"
           ></input>
         </div>
         <div className={styles.Tag}>종료일</div>
         <div className={styles.Tag}>
           <input
             className={styles.Input}
-            type="date"
-            {...register("endDate", { required: "Please write period" })}
+            value={endDatetime}
+            onChange={endDatetimeHandler}
+            type="text"
           ></input>
         </div>
         <div className={styles.Tag}>목표</div>
         <div className={styles.Tag}>
           <Selectop />
         </div>
+        <div className={styles.Tag}>내용</div>
+        <div className={styles.Tag}>
+          <input
+            style={{ height: "90px" }}
+            value={content}
+            onChange={ContentHandler}
+            className={styles.Input}
+          ></input>
+        </div>
         <div className={styles.Tag}>장소</div>
         <div className={styles.Tag}>
           <input
             className={styles.Input}
-            {...register("address", { required: "Please write address" })}
+            value={location}
+            onChange={LocationHandler}
           ></input>
         </div>
       </form>
