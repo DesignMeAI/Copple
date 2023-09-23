@@ -12,6 +12,8 @@ const app = express();
 const AWS_REGION = 'ap-northeast-2';
 const s3Client = new S3Client({ region: AWS_REGION });
 const dynamodbClient = new DynamoDBClient({ region: AWS_REGION });
+const { format } = require('date-fns')
+
 // 쿠키 파서 및 다른 미들웨어 설정
 app.use(cors());
 app.use(express.json());
@@ -706,13 +708,19 @@ app.get("/event/readByDate/:date", requireLogin, async (req, res) => {
   const user = req.user;
   const date = req.params.date; // 클라이언트에서 전달된 날짜
   // 날짜 범위를 설정합니다. 여기서는 날짜 범위를 해당 날짜의 00:00:00부터 23:59:59까지로 가정합니다.
+  let currentDate = new Date(date)
+  const tomorrow = format(new Date(currentDate.setDate(currentDate.getDate() + 1)), "yyyy-MM-dd HH:mm:ss") 
+  currentDate = format(new Date(date), "yyyy-MM-dd HH:mm:ss")
+  
+  console.log(currentDate, tomorrow)
   const params = {
     TableName: 'Event',
-    FilterExpression: 'UserId = :userId AND EventType = :eventType AND StartDatetime <= :date AND EndDatetime >= :date',
+    FilterExpression: 'UserId = :userId AND EventType = :eventType AND StartDatetime >= :first AND EndDatetime < :second',
     ExpressionAttributeValues: {
       ':userId': { S: user.user_id },
       ':eventType': { S: 'Event' },
-      ':date': { S: date },
+      ':first': { S: currentDate},
+      ':second': { S: tomorrow}
     }
   };
   try {
