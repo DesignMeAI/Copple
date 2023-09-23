@@ -1,81 +1,60 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 import WeeklyCalendar from "../components/WeeklyCalendar.jsx";
 import CalendarThumbnail from "../components/CalendarThumbnail.jsx";
 import styles from "../styles/MainPage.module.css";
 import Category from "../components/Category.jsx";
 import Navbar from "../components/Navbar.jsx";
+import { infoState, nameState } from "../atoms";
+import { useRecoilValue } from "recoil";
 
 export const CalendarContext = createContext();
 export const useCalendar = () => useContext(CalendarContext);
 
 const MainPage = () => {
+  const name = useRecoilValue(nameState);
+  const info = useRecoilValue(infoState);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState([]);
   const [goals, setGoals] = useState({});
+  const [eventsProp, setEventsProp] = useState([]);
   const [dataForSelectedDate, setDataForSelectedDate] = useState({
     events: [],
     todos: [],
     goals: [],
   });
 
+  const [eventsForSelectedDate, setEventsForSelectedDate] = useState([]);
+
   useEffect(() => {
     if (selectedDate) {
-      const selectedDateString = selectedDate.toISOString().split("T")[0];
-
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYXJpbiIsImlhdCI6MTY5NTEzODc2MiwiZXhwIjoxNjk1MTc0NzYyfQ.YyUze1XmaiijtruyEOcPtLBsdzzQjmsKn5xO1P66dMQ";
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      fetch(`http://3.39.153.9:3000/goal/client/read`, {
-        method: "GET",
-        headers,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Goal Data:", data);
-          setDataForSelectedDate((prevData) => ({
-            ...prevData,
-            goals: data,
-          }));
-        });
-
-      // Events 요청
-      fetch(``, {
-        method: "GET",
-        headers,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Events Data:", data);
-          setDataForSelectedDate((prevData) => ({
-            ...prevData,
-            events: data,
-          }));
-        });
-
-      // Todos 요청
-      fetch(`http://3.39.153.9:300/todo/read`, {
-        method: "GET",
-        headers,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setDataForSelectedDate((prevData) => ({
-            ...prevData,
-            todos: data,
-          }));
-        });
+      fetchEventsForSelectedDate();
     }
   }, [selectedDate]);
+
+  const fetchEventsForSelectedDate = async () => {
+    try {
+      const tokenstring = document.cookie;
+      const token = tokenstring.split("=")[1];
+      const selectedDateString = selectedDate.toISOString().split("T")[0];
+      const response = await axios.get("http://3.39.153.9:3000/event/read", {
+        params: { date: selectedDateString },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setEventsForSelectedDate(response.data);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
+  };
 
   const contextValue = {
     selectedDate,
     setSelectedDate,
     dataForSelectedDate,
     setDataForSelectedDate,
+    eventsForSelectedDate,
+    fetchEventsForSelectedDate,
   };
 
   return (
@@ -84,19 +63,24 @@ const MainPage = () => {
         <div className={styles.mainContainer}>
           <div className={styles.mainweeklyCalendar}>
             <WeeklyCalendar
+              events={eventsProp}
+              setEvents={setEventsProp}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               setGoals={setGoals}
             />
           </div>
           <div className={styles.mainThumbnails}>
-            <CalendarThumbnail />
+            <CalendarThumbnail goals={goals} />
           </div>
           <div className={styles.scheduleTodoRow}>
-            <Category dataForSelectedDate={dataForSelectedDate} />
+            <Category
+              dataForSelectedDate={dataForSelectedDate}
+              eventsProp={eventsProp}
+            />
           </div>
           <div>
-            <Navbar className={styles.NavBarContainer} />
+            <Navbar className={styles.NavbarContainer} />
           </div>
         </div>
       </div>

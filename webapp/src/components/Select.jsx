@@ -10,12 +10,13 @@ const Selectop = () => {
   const [goalList, setGoalList] = useRecoilState(goalListState);
   const [selectValue, setSelectValue] = useState("");
   const selectInputRef = useRef(null);
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState([{ value: null, label: "선택 안함" }]);
   const onClearSelect = () => {
     if (selectInputRef.current) {
       selectInputRef.current.clearValue();
     }
   };
+
   async function getData() {
     const tokenstring = document.cookie;
     const token = tokenstring.split("=")[1];
@@ -32,19 +33,23 @@ const Selectop = () => {
       console.log(goal);
     });
   }
+
   function setData() {
     if (goalList.length > 0) {
       const list = goalList.map((data) => ({
         value: data["event_id"],
         label: data["title"],
       }));
-      setOptions(list);
+      setOptions((prev) => [...prev, ...list]);
+      console.log(options);
     }
   }
+
   useEffect(() => {
     getData();
     setData();
   }, []);
+
   return (
     <div className={styles.SelectDiv}>
       <div className={styles.Container}>

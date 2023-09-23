@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/Category.module.css";
 import Timeline from "./Timeline";
 import TodoList from "./TodoList";
-import { useCalendar } from "../routes/MainPage";
+import { useRecoilValue } from "recoil";
+import { eventsPropState } from "../atoms";
 
-const Category = () => {
+const Category = ({ dataForSelectedDate }) => {
   const [selectedCategory, setSelectedCategory] = useState("일정");
-  const { dataForSelectedDate } = useCalendar();
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
-  // dataForSelectedDate가 없을 수 있으므로 초기 값을 null로 설정
-  const events = (dataForSelectedDate && dataForSelectedDate.events) || [];
-  const todos = (dataForSelectedDate && dataForSelectedDate.todos) || [];
+  const eventsProp = useRecoilValue(eventsPropState);
 
   return (
     <div className={styles.centeredContainer}>
@@ -34,8 +33,12 @@ const Category = () => {
         </ul>
       </nav>
       <div className={styles.content}>
-        {selectedCategory === "일정" && <Timeline events={events} />}
-        {selectedCategory === "할일" && <TodoList todos={todos} />}
+        {selectedCategory === "일정" && <Timeline eventsProp={eventsProp} />}
+        {selectedCategory === "할일" && (
+          <TodoList
+            todos={(dataForSelectedDate && dataForSelectedDate.todos) || []}
+          />
+        )}
       </div>
     </div>
   );

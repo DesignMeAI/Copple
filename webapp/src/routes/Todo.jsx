@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Selectop from "../components/Select";
 import axios from "axios";
 import styles from "../css/Todo.module.css";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { goalState } from "../atoms";
 import { useState } from "react";
 
@@ -20,11 +20,12 @@ function Todo() {
   const { title, location, goal, content, isCompleted } = todoinfo;
 
   const SendTodo = async (data) => {
+    console.log(todoinfo, selectedgoal);
     const tokenstring = document.cookie;
     const token = tokenstring.split("=")[1];
     await axios({
       method: "post",
-      url: "http://3.39.153.9:3000/event/create",
+      url: "http://3.39.153.9:3000/todo/create",
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
@@ -50,17 +51,19 @@ function Todo() {
     setTodoinfo({ ...todoinfo, content: e.target.value });
   };
   const IsCompletedHandler = (e) => {
-    setTodoinfo({ ...todoinfo, isCompleted: e.target.value });
+    setTodoinfo({ ...todoinfo, isCompleted: e.target.checked });
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     await setTodoinfo({ ...todoinfo, goal: selectedgoal });
-    setTimeout(() => {
+    try {
+      await SendTodo(todoinfo);
+      navigate("/home");
       console.log(selectedgoal);
-      SendTodo(todoinfo);
-    }, 1500);
-    navigate("/home");
-    console.log(selectedgoal);
+    } catch (error) {
+      console.error("SendTodo 함수 호출 중 에러 발생:", error);
+    }
   };
   return (
     <div className={styles.Container}>

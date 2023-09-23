@@ -42,3 +42,13 @@ export const goalIdState = atom({
     key: "goalId",
     default: ""
 })
+
+export const eventsPropState = atom({
+    key: 'eventsProp',
+    default: [],
+});
+
+export const selectedDateState = atom({
+    key: 'selectedDateState',
+    default: null,
+});

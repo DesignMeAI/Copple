@@ -26,11 +26,14 @@ function Goalitem({ goaltitle, goalperiod, event_id }) {
 export default Goalitem;
 
 const Img = styled.img`
-  width: auto;
+  width: 150px;
   height: 146px;
   border-radius: 5px;
   background-color: transparent;
   border: none;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 const GoalContainer = styled(motion.div)`
   display: flex;

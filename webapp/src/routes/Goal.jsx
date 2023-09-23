@@ -5,12 +5,16 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { goalIdState, modeState } from "../atoms";
 
-const SendGoal = async (goal) => {
+const SendGoal = async (goal, event, method, goalId) => {
+  console.log(event, method);
   const tokenstring = document.cookie;
   const token = tokenstring.split("=")[1];
+  const url = goalId
+    ? `http://3.39.153.9:3000/goal/${event}/${goalId}`
+    : `http://3.39.153.9:3000/goal/${event}`;
   await axios({
-    method: "POST",
-    url: "http://3.39.153.9:3000/goal/create",
+    method: method,
+    url: url,
     headers: {
       "Access-Control-Allow-Origin": "*",
       Authorization: `Bearer ${token}`,
@@ -46,7 +50,7 @@ function Goal() {
     const tokenstring = document.cookie;
     const token = tokenstring.split("=")[1];
     await axios({
-      method: "GET",
+      method: "get",
       url: `http://3.39.153.9:3000/goal/read/${event_id}`,
       withCredentials: false,
       headers: {
@@ -56,7 +60,6 @@ function Goal() {
     }).then((response) => {
       if (mode === "update") {
         sestGoalinfo(response.data);
-        setMode(null);
         // sestGoalinfo(history);
       }
     });
@@ -71,7 +74,7 @@ function Goal() {
     sestGoalinfo({ ...goalinfo, location: e.target.value });
   };
   const CompleteHandler = (e) => {
-    sestGoalinfo({ ...goalinfo, isCompleted: e.target.value });
+    sestGoalinfo({ ...goalinfo, isCompleted: e.target.checked });
   };
   const ContentHandler = (e) => {
     sestGoalinfo({ ...goalinfo, content: e.target.value });
@@ -82,9 +85,19 @@ function Goal() {
   }, []);
 
   const onSubmit = () => {
-    console.log(goalinfo);
-    SendGoal(goalinfo).then(navigate("/home"));
+    if (mode === "update") {
+      const method = "PUT";
+      const event = "update";
+      console.log(goalinfo);
+      SendGoal(goalinfo, event, method, goalId).then(navigate("/home"));
+    } else {
+      const method = "POST";
+      const event = "create";
+      console.log(goalinfo);
+      SendGoal(goalinfo, event, method).then(navigate("/home"));
+    }
   };
+
   return (
     <div className={styles.Container}>
       <form onSubmit={onSubmit}>

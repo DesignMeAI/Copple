@@ -9,8 +9,10 @@ import {
 } from "date-fns";
 import styles from "../styles/WeeklyCalendar.module.css";
 import { isEqual } from "date-fns";
-import { useCalendar } from "../routes/MainPage";
+import { useRecoilState } from "recoil";
+import { eventsPropState, selectedDateState } from "../atoms";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function WeeklyCalendar() {
   const currentYear = new Date().getFullYear();
@@ -25,40 +27,41 @@ function WeeklyCalendar() {
   const yearModalRef = useRef(null);
   const monthModalRef = useRef(null);
   const [showMonthlyModal, setShowMonthlyModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState();
-  const [goals, setGoals] = useState({});
   const navigate = useNavigate();
   const [showAddModal, setShowAddModal] = useState(false);
   const addModalRef = useRef(null);
+  const [eventsProp, setEventsProp] = useRecoilState(eventsPropState);
+  const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
 
   useEffect(() => {
-    if (selectedDate) {
-      const formattedDay = format(selectedDate, "yyyy-MM-dd");
-      const startDatetime = `${formattedDay}T00:00:00`;
-      const endDatetime = `${formattedDay}T23:59:59`;
+    setSelectedDate(startDate);
+  }, [startDate, setSelectedDate]);
 
-      // 백엔드 API URL 및 필요한 인증 정보
-      fetch(
-        `http://3.39.153.9:3000/goal/read?startDatetime=${startDatetime}&endDatetime=${endDatetime}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYXJpbiIsImlhdCI6MTY5NTEzODc2MiwiZXhwIjoxNjk1MTc0NzYyfQ.YyUze1XmaiijtruyEOcPtLBsdzzQjmsKn5xO1P66dMQ"}`, // YOUR_ACCESS_TOKEN은 실제 액세스 토큰으로 대체해야 합니다.
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Data:", data);
-          setGoals({
-            ...goals,
-            [formattedDay]: data,
+  useEffect(() => {
+    async function fetchUserEvents() {
+      try {
+        const tokenstring = document.cookie;
+        const token = tokenstring.split("=")[1];
+        const formattedDay = selectedDate
+          ? format(selectedDate, "yyyy-MM-dd")
+          : null;
+
+        if (formattedDay) {
+          const response = await axios({
+            method: "GET",
+            url: `http://3.39.153.9:3000/event/read?date=${formattedDay}`,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
-        })
-        .catch((error) => {
-          console.log("Error:", error);
-        });
+          console.log(response.data);
+          setEventsProp(response.data);
+        }
+      } catch (error) {
+        console.error("An error occurred while fetching user events:", error);
+      }
     }
+    fetchUserEvents();
   }, [selectedDate]);
 
   useEffect(() => {

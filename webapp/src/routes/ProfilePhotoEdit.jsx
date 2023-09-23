@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ProfilePhotoEdit.module.css";
 import { useProfile } from "../context/ProfileContext";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { infoState, nameState } from "../atoms";
 import axios from "axios";
+import { infoState, nameState } from "../atoms";
+import { useRecoilValue } from "recoil";
 
 function ProfilePhotoEdit() {
   const { profileImage, setProfileImage } = useProfile();
   const fileInput = useRef(null);
-  const info = useRecoilValue(infoState);
-  const name = useRecoilValue(nameState);
   const [imageURL, setImageURL] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [id, setId] = useState("");
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
+  const name = useRecoilValue(nameState);
+  const info = useRecoilValue(infoState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function ProfilePhotoEdit() {
         await axios({
           method: "POST",
           url: "http://3.39.153.9:3000/account/profile",
-          withCredentials: false, // 쿠키를 사용하므로 true로 설정
+          withCredentials: false,
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,
@@ -40,6 +40,7 @@ function ProfilePhotoEdit() {
           setUsername(response.data.user_name);
           setBio(response.data.introduction || "");
           setImageURL(response.data.profileImageUrl || "");
+          console.log(response);
         });
       } catch (error) {
         console.error(
@@ -69,16 +70,17 @@ function ProfilePhotoEdit() {
   // 이미지 파일이 선택되면 미리보기를 생성
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-
     if (file) {
+      const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result;
+        console.log("File Reader Result: ", result);
         setImageURL(result);
-        setProfileImage(result);
       };
       reader.readAsDataURL(file);
       setImageFile(file);
+    } else {
+      console.error("No File Selected");
     }
   };
 
@@ -86,47 +88,36 @@ function ProfilePhotoEdit() {
   const handleRemoveImage = () => {
     console.log("Removing image...");
     setImageURL(null);
-    setImageFile(null); // 추가된 이미지 파일 상태도 초기화 (위에서 추가한 상태 변수)
+    setImageFile(null);
     fileInput.current.value = null;
   };
 
   // 프로필 정보를 업데이트하는 함수
   const updateProfileInfo = async () => {
     console.log("Updating profile info...");
-    if (!bio) {
-      alert("자기소개를 입력해 주세요.");
-      return;
-    }
-
     const formData = new FormData();
     formData.append("user_id", id);
     formData.append("user_name", username);
     formData.append("introduction", bio);
-
     if (imageFile) {
-      formData.append("profileImageURL", imageFile);
-    } else {
-      // 만약 서버가 'null'을 받아서 이미지를 지우는 기능을 지원한다면
-      formData.append("profileImageURL", "null"); // 또는 formData.append("profileImage", null);
+      formData.append("profileImage", imageFile, imageFile.name);
     }
-
-    // if (imageURL) {
-    //     formData.append("profileImage", imageURL);
-    // }
 
     try {
       const tokenstring = document.cookie;
       const token = tokenstring.split("=")[1];
-      const response = await fetch("http://3.39.153.9:3000/account/profile", {
+      const response = await axios({
         method: "PUT",
+        url: "http://3.39.153.9:3000/account/profile",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        body: formData,
+        data: formData,
       });
-      if (response.ok) {
-        const data = await response.json();
-        alert(data.message);
+
+      if (response.status === 200) {
+        alert(response.data.message);
       } else {
         console.error("Failed to update profile.");
       }
@@ -194,28 +185,21 @@ function ProfilePhotoEdit() {
           </div>
         </div>
         <div className={styles.profileinputBox}>
-          <div>
-            <h6>ID</h6>
-          </div>
+          <h6>ID</h6>
           <input
             placeholder="ID"
             value={id}
             readOnly
             className={styles.profileinput}
           />
-          <div>
-            <h6>USER NAME</h6>
-          </div>
+          <h6>USER NAME</h6>
           <input
             placeholder="유저 이름"
             value={username}
             readOnly
             className={styles.profileinput}
           />
-          <div>
-            {" "}
-            <h6>BIO</h6>
-          </div>
+          <h6>BIO</h6>
           <textarea
             placeholder="자기소개"
             value={bio}

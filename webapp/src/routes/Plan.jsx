@@ -1,10 +1,10 @@
 import styles from "../css/Plan.module.css";
 import Selectop from "../components/Select";
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { goalListState, goalState } from "../atoms";
+import { useRecoilValue } from "recoil";
+import { goalState } from "../atoms";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function Plan() {
   const selectedgoal = useRecoilValue(goalState);
@@ -57,14 +57,26 @@ function Plan() {
   const ContentHandler = (e) => {
     setPlaninfo({ ...planinfo, content: e.target.value });
   };
+  //에러나는 함수(try catch가 없을 때)
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   await setPlaninfo({ ...planinfo, goal: selectedgoal });
+  //   await SendPlan(planinfo);
+  //   navigate("/home");
+  //   console.log(selectedgoal);
+  // };
 
-  const onSubmit = async () => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     await setPlaninfo({ ...planinfo, goal: selectedgoal });
-    setTimeout(() => {
-      SendPlan(planinfo);
-    }, 1500);
-    navigate("/home");
-    console.log(selectedgoal);
+
+    try {
+      await SendPlan(planinfo);
+      navigate("/home");
+      console.log(selectedgoal);
+    } catch (error) {
+      console.error("SendPlan 함수 호출 중 에러 발생:", error);
+    }
   };
 
   return (
@@ -100,7 +112,7 @@ function Plan() {
             className={styles.Input}
             value={startDatetime}
             onChange={startDatetimeHandler}
-            type="text"
+            type="date"
           ></input>
         </div>
         <div className={styles.Tag}>종료일</div>
@@ -109,7 +121,7 @@ function Plan() {
             className={styles.Input}
             value={endDatetime}
             onChange={endDatetimeHandler}
-            type="text"
+            type="date"
           ></input>
         </div>
         <div className={styles.Tag}>목표</div>
