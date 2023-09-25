@@ -5,10 +5,10 @@
   overflow: hidden;
 }
 
-.goalPhoto img {
+.goalPhoto > img {
   width: 100%;
   height: 100%;
-  object-fit: center;
+  object-fit: cover;
 }
 
 
@@ -48,8 +48,8 @@
   position: absolute;
   bottom: 40px;
   left: 5px;
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 30px;
+  font-weight: 700;
   color: white;
   margin: 10px;
   width: 100%; 
@@ -77,9 +77,9 @@
 
 .date {
   position: absolute;
-  bottom: 10px;
-  left: 0px;
-  font-size: 19px;
+  bottom: 12px;
+  left: 5px;
+  font-size: 16px;
   color: white;
   margin: 10px;
 }
@@ -213,5 +213,19 @@
     
     position: relative;
     z-index: 900;
+}
+
+.actionButtons {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.actionButtons button {
+  background-color: #f8f8f8;
+  border: none;
+  padding: 5px;
+  margin-left: 5px;
+  cursor: pointer;
 }
 

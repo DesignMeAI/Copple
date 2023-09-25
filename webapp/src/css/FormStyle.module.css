@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream:webapp/src/css/FormStyle.module.css
 
 form {
   width: 375px;
@@ -5,6 +6,20 @@ form {
   display: flex;
   align-items: center;
   flex-direction: column;
+=======
+/* label {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #fff;
+  vertical-align: middle;
+  background-color: #999999;
+  cursor: pointer;
+  height: 22px;
+  margin-left: 10px;
+}
+.dis {
+  display: none;
+>>>>>>> Stashed changes:webapp/src/css/Todo.module.css
 }
 .None {
   position: absolute;
@@ -78,9 +93,15 @@ form {
 }
 .Navbar {
   display: flex;
+<<<<<<< Updated upstream:webapp/src/css/FormStyle.module.css
   padding: 0.8rem 0;
   padding-top : 0;
   width: 100%;
+=======
+  width: 95%;
+  padding: 1.2rem 0;
+  padding-left: 1.2rem;
+>>>>>>> Stashed changes:webapp/src/css/Todo.module.css
   justify-content: space-around;
   flex-direction: row;
   margin-bottom: 10px;
@@ -146,4 +167,4 @@ form {
   width: 20px;
   display: inline;
   text-align: left;
-}
+} */

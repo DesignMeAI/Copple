@@ -1,0 +1,111 @@
+.categoryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  margin-left: 10px;
+  background-color: none;
+  height: 50px;
+}
+  
+  
+button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: grey;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  margin-left: 15px;
+}
+  
+button:hover {
+  background-color: none;
+}
+
+button.active {
+  color: black;
+  font-weight: bold;
+}
+
+h3 {
+  margin-left: 22px;
+}
+
+.schedule-item h3 {
+  margin-right: 10px;
+  margin-left: 22px;
+  color: #333;
+}
+
+.daySchedule h3 {
+  margin-bottom: 10px;
+  margin-top: 30px;
+}
+
+.blueButton {
+  background-color: rgb(0, 170, 255);
+  color: white;
+  display: flex;
+  position: relative;
+  border-radius: 30px;
+  width: 60px;
+  font-size: 14px;
+  padding: 7px;
+  padding-left: 10px;
+}
+
+.blueButton.active {
+  background-color: rgb(0, 170, 255);
+  color: white;
+  display: flex;
+  position: relative;
+  border-radius: 30px;
+  width: 60px;
+  font-size: 14px;
+  padding: 7px;
+  padding-left: 10px;
+}
+
+
+
+.scheduleContainer {
+  width: 100%;
+  max-width: 100%; 
+  max-height: 100vh;
+  margin: 0 auto;
+  text-align: left;
+  margin: 4px;
+  white-space: nowrap;
+
+}
+
+.scheduleBox {
+  border: 1px solid #aeaeae;
+  margin-bottom: 10px;
+  padding: 10px;
+  padding-left: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin-left: 15px;
+  margin-right: 10px;
+  text-align: left;
+}
+
+.placeholder label {
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.category2 {
+  display: flex;
+}
+
+.scrollableContainer {
+  max-height: 650px; /* or adjust this value based on other elements on your page */
+  overflow-y: scroll;
+}
+

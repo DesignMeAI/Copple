@@ -14,12 +14,15 @@ const client = new DynamoDBClient({
   },
 });
 const docClient = DynamoDBDocumentClient.from(client);
+import { goalListState, goalState } from "../atoms";
+import axios from "axios";
 
-const Selectop = (props) => {
+const Selectop = () => {
   const [goal, setGoal] = useRecoilState(goalState);
+  const [goalList, setGoalList] = useRecoilState(goalListState);
   const [selectValue, setSelectValue] = useState("");
   const selectInputRef = useRef(null);
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState([{ value: null, label: "선택 안함" }]);
   const onClearSelect = () => {
     if (selectInputRef.current) {
       selectInputRef.current.clearValue();
@@ -37,6 +40,7 @@ const Selectop = (props) => {
     const list = lists.map((data) => ({ value: data, label: data }));
     setOptions(list);
   }
+
   useEffect(() => {
     getData();
   }, []);
@@ -48,19 +52,13 @@ const Selectop = (props) => {
           style={{ padding: "0" }}
           ref={selectInputRef}
           onChange={(e) => {
-            if (e) {
-              setSelectValue(e.value);
-              setGoal(e.value);
-            } else {
-              setSelectValue("");
-            }
+            console.log(e);
+            setGoal(e.value);
+            setSelectValue(e.value);
           }}
           options={options}
           placeholder="목표를 선택하세요."
         />
-        <button className={styles.Btn} onClick={() => onClearSelect()}>
-          없음
-        </button>
       </div>
     </div>
   );

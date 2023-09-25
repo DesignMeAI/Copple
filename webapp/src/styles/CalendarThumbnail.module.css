@@ -1,0 +1,108 @@
+.CalendarThumbnailContainer {
+  display: flex;
+  overflow-x: auto;
+  width: calc(95px * 4); 
+  white-space: nowrap;
+  margin: 8px;
+  margin-left: 55px;
+  margin-top: -137px;
+  text-align: center;
+}
+
+.CalendarThumbnailbigBox {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  text-align: center;
+}
+
+.CalendarThumbnailthumbnailBox {
+  display: felx;
+  flex: 0 0 auto;
+  width: 110px;
+  height: 110px;
+  margin-right: 5px;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 2px solid #f7f7f7; 
+  cursor: pointer;
+  text-align: center;
+
+}
+
+.CalendarThumbnailthumbnailBox:hover {
+  border: solid 2px  #ffd900;
+}
+
+.CalendarThumbnailthumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+}
+
+
+.CalendarThumbnailloadMore {
+  flex: 0 0 auto;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background-color: #f7f7f7;
+  border: 2px solid #f7f7f7;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 3px;
+}
+
+.CalendarThumbnailloadMore:hover {
+  background-color: #e0e0e0;
+}
+
+.CalendarThumbnailgoalInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  margin-top: 9px;
+  text-align: center;
+
+}
+
+/* 제목과 기간의 공통 폰트 크기 */
+.CalendarThumbnailgoalTitle, .CalendarThumbnailgoalPeriod {
+  font-size: 12px;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  max-width: 100px;
+  margin-right: 6px;
+}
+
+.CalendarThumbnailgoalTitle {
+  font-weight: bold;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+  margin-top: 2px;
+}
+
+.CalendarThumbnailgoalPeriod {
+  margin-top: 2px;
+}
+
+
+.CalendarThumbnailDeleteButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  z-index: 1000; 
+}

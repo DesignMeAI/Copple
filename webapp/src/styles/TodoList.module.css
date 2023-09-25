@@ -1,0 +1,83 @@
+.todoList {
+  width: 337px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  margin-left: 6px;
+  margin-top: 10px;
+  overflow-y: scroll;
+  max-height: 300px;
+}
+
+.goalTitle {
+  background-color: #f0f0f0;
+  padding: 5px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.completed {
+  color: gray;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.taskText {
+  flex-grow: 1;
+}
+
+.todolistbutton {
+  margin-right: 5px;
+  margin-left: 5px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 3px;
+  font-size: 13px;
+  z-index: 100;
+  position: relative;
+  width: auto; 
+  padding: 5px 10px;
+}
+
+.todolistbutton1 {
+  position: relative;
+  bottom: 5px;
+}
+
+.optionButtons {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  z-index: 1000; 
+}
+
+
+.editButtons {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  z-index: 1000;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
