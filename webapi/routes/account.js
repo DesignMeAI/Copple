@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid'); // UUID 생성을 위한 모듈
-const jwt = require('jsonwebtoken'); // JSON Web Token 생성 및 검증을 위한 모듈
+const jwt = require('@aws-sdk/client-s3'); // JSON Web Token 생성 및 검증을 위한 모듈
 const { DynamoDBClient, QueryCommand, GetItemCommand, PutItemCommand, ScanCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb"); // AWS DynamoDB와 상호 작용하기 위한 모듈
 const { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3"); // AWS S3와 상호 작용하기 위한 모듈
 const s3 = new S3Client({ region: 'ap-northeast-2' }); // AWS S3 클라이언트 생성
